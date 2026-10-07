@@ -420,7 +420,7 @@ const DAYS = [
    {t:'10:15', txt:'Départ de Porto-Vecchio'},
    {drive:'🚗 Porto-Vecchio → Col de Bavella via Zonza : ~1 h 15 (50 km)'},
    {t:'11:30', txt:'Arrivée Col de Bavella (parking)', p:'bav', more:["Col à 1 218 m, statue de Notre-Dame-des-Neiges, vue directe sur les aiguilles de granit rouge.", "Parking payant au col, souvent plein en milieu de journée : se garer le long de la route si besoin. Cochons et vaches en liberté : ne pas les nourrir.", "Il fait 6 à 8 °C de moins qu'à Porto-Vecchio : prendre une polaire."]},
-   {t:'12:15', end:'15:00', txt:'Montée jusqu\'au Trou de la Bombe (aller-retour)', p:'trou', dur:'2 h 46', img:'photos/j3-rando-bombe.jpg', imgLabel:'🗺️ Carte de la rando', more:["✅ Fait : 5,33 km en 2 h 46, aller et retour par deux sentiers différents (via la Bocca Furesta et la Bocca di Velaco).", "Fin de montée rocheuse sous la crête, au pied de l'arche."]},
+   {t:'12:15', end:'15:00', txt:'Montée jusqu\'au Trou de la Bombe (aller-retour)', p:'trou', dur:'2 h 46', img:'photos/j3-rando-bombe.jpg', imgLabel:'🗺️ Carte de la rando', more:["✅ Fait : 5,33 km en 2 h 46, aller et retour par deux sentiers différents (via la Bocca Furesta et la Bocca di Velaco).", "🥪 Pique-nique en chemin, sur le parcours de la rando.", "Fin de montée rocheuse sous la crête, au pied de l'arche."]},
    {t:'15:00', txt:'Retour au col de Bavella'},
    {drive:'🚗 Bavella → route de la côte → vallée du Cavu'},
    {t:'17:00', txt:'Arrêt au bord d\'une rivière en route', img:'photos/j3-riviere.jpg', imgLabel:'📸 Photo de l\'arrêt', more:["Vasques de granit et eau limpide, pins et rochers autour. Position à confirmer."]},
@@ -515,7 +515,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v17'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v18'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
