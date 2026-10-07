@@ -380,7 +380,6 @@ const P = {
   bat:  {name:'Balade en bateau — falaises et calanques de Bonifacio', lat:41.3870, lon:9.1700, img:wm('Corsica Bonifacio Grotte Marine de Sdragonato.jpg'), cap:'Falaises calcaires, grottes marines et calanques vues depuis la mer', d:{"desc":"Sortie d'environ 1 h au départ du port de Bonifacio : falaises calcaires, grottes marines et calanques, vues depuis la mer."}},
   fazz: {name:'Plage de Fazzio', lat:41.3935, lon:9.1370, img:wm('20169 Bonifacio, France - panoramio.jpg'), cap:'Anse à l\'ouest de Bonifacio, atteinte à pied', d:{"desc":"Petite plage à l'ouest de Bonifacio, atteinte par une randonnée à pied depuis la ville."}},
   sol:  {name:'La Solenzara — arrêt au bord de la rivière', lat:41.83427, lon:9.31907, img:'photos/j3-riviere.jpg', cap:'Vasques de granit et eau limpide, sur la route de Bavella vers la côte (votre photo)', d:{"desc":"Arrêt sur la Strada di Bavella (D268), au bord de la Solenzara, entre le col de Bavella et la côte.","tips":["Eau claire dans les vasques de granit : baignade possible l'été, fraîche en octobre"]}},
-  sie:  {name:'Plage de la Siesta (Favone)', lat:41.7732, lon:9.3967, img:'', cap:'Plage de Favone, avec la paillote La Siesta — position à confirmer', d:{"desc":"Plage de Favone, sur la côte est, avec le restaurant de plage La Siesta. Position repérée sur OpenStreetMap : à confirmer sur place.","tips":["Coucher du soleil vers 18 h 54 : prévoir le retour avant la nuit sur la route côtière"]}},
   cim:  {name:'Cimetière marin', lat:41.38672, lon:9.15038, img:wm('Cimetière marin (Bonifacio).jpg'), cap:'Chapelles funéraires face à la mer', d:{"desc":"Chapelles et caveaux à l'extrémité ouest du plateau, face à la mer.","facts":{"duree":"30 min","acces":"À pied depuis la haute-ville","marche":"Env. 10 min depuis la haute-ville","cout":"Gratuit (horaires à vérifier)"},"dontMiss":["La vue sur les falaises et la Sardaigne","Les chapelles funéraires face à la mer"],"tips":["Cimetière en activité : rester respectueux","Se rend à pied depuis la haute-ville (env. 10 min)"]}},
 };
 
@@ -415,9 +414,9 @@ const DAYS = [
   rain:[{p:"etend",t:"Bastion de l'Étendard (musée)"},{p:"aqua",t:"Aquarium sur le port"}],
   restos:['La Minute Moule Bonifacio','Del Ferro Bonifacio','Les Quatre Vents Bonifacio']},
 
- {id:'j3', walk:'~5,3 km · 2 h 46 (Trou de la Bombe, réalisé)', d:'Mercredi 7 octobre', title:'Aiguilles de Bavella • Trou de la Bombe', meteo:['🌦️','18°C / 12°C','Sec le matin, averses en fin de journée'],
-  alert:'✅ Trou de la Bombe fait (5,33 km en 2 h 46). Fin de journée : averses possibles et vent qui monte, prudence sur la route de montagne. Coucher du soleil vers 18 h 54.',
-  stops:['bav','trou','sol','sie'], cover:'bav',
+ {id:'j3', walk:'~5,3 km · 2 h 46 (Trou de la Bombe, réalisé)', d:'Mercredi 7 octobre', title:'Aiguilles de Bavella • Trou de la Bombe', done:true, meteo:['🌦️','18°C / 12°C','Sec le matin, averses en fin de journée'],
+  alert:'✅ Trou de la Bombe fait (5,33 km en 2 h 46). Orage violent en fin de journée : plage annulée, retour au gîte.',
+  stops:['bav','trou','sol'], cover:'bav',
   steps:[
    {t:'10:15', txt:'Départ de Porto-Vecchio'},
    {drive:'🚗 Porto-Vecchio → Col de Bavella via Zonza : ~1 h 15 (50 km)'},
@@ -426,8 +425,8 @@ const DAYS = [
    {t:'15:00', txt:'Retour au col de Bavella'},
    {drive:'🚗 Bavella → route de la côte (Solenzara)'},
    {t:'17:00', txt:'Arrêt au bord de la Solenzara', p:'sol', img:'photos/j3-riviere.jpg', imgLabel:'📸 Photo de l\'arrêt', more:["Vasques de granit et eau limpide, pins et rochers autour, sur la route de Bavella vers la côte."]},
-   {t:'17:30', end:'18:30', txt:'Plage de la Siesta (Favone)', p:'sie', dur:'1 h', cond:'Baignade selon la mer et le vent', more:["Plage de la côte est, avec la paillote La Siesta : détente et coucher de soleil.", "Prévoir le retour avant la nuit (soleil vers 18 h 54)."]},
-   {t:'18:30', txt:'Retour au gîte (~40 min)'},
+   {t:'17:30', txt:'⛈️ Orage violent : plage de la Siesta annulée, retour au gîte', more:["Plan abandonné à cause de l'orage : retour direct à Porto-Vecchio."]},
+   {t:'18:15', txt:'Retour au gîte'},
   ],
   rain:[{p:"sart",t:"Sartène : place Porta, caves"},{p:"prop",t:"Propriano : port et front de mer"}],
   restos:['Auberge du Col de Bavella']},
@@ -517,7 +516,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v20'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v21'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
