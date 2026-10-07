@@ -163,6 +163,7 @@ h3.sub{font-size:22px;font-weight:600;letter-spacing:-.2px;margin:0 0 12px}
 .stop .facts{display:flex;flex-wrap:wrap;margin-top:4px}
 .stop .facts .tag{display:inline-block;font:600 12px var(--font);border-radius:9999px;padding:3px 10px;margin:6px 6px 0 0;background:var(--surface-strong);color:var(--ink)}
 .stop .warnline{margin-top:8px;font-size:13px;color:var(--warn)}
+.track{width:100%;max-height:70vh;object-fit:contain;border-radius:var(--r-sm);margin-bottom:8px;display:block}
 .ph-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:6px;padding-bottom:8px}
 .ph-grid a{display:block;aspect-ratio:1;border-radius:var(--r-sm);overflow:hidden;background:var(--surface-strong)}
 .ph-grid img{width:100%;height:100%;object-fit:cover;display:block}
@@ -412,18 +413,19 @@ const DAYS = [
   rain:[{p:"etend",t:"Bastion de l'Étendard (musée)"},{p:"aqua",t:"Aquarium sur le port"}],
   restos:['La Minute Moule Bonifacio','Del Ferro Bonifacio','Les Quatre Vents Bonifacio']},
 
- {id:'j3', walk:'~6 km · 3 h', d:'Mercredi 7 octobre', title:'Aiguilles de Bavella • Trou de la Bombe', meteo:['🌦️','18°C / 12°C','Sec le matin, averses en fin de journée'],
-  alert:'⛈️ Aujourd\'hui : sec et vent modéré (rafales 30–50 km/h) jusqu\'à ~14 h, puis averses/orage possibles (jusqu\'à ~55 % vers 16 h). Montée au Trou de la Bombe : demi-tour à 13 h 30 au plus tard, et dès le premier grondement. Demain, rafales de 100 km/h annoncées sur Bavella : c\'est le bon jour pour y aller.',
+ {id:'j3', walk:'~5,3 km · 2 h 46 (Trou de la Bombe, réalisé)', d:'Mercredi 7 octobre', title:'Aiguilles de Bavella • Trou de la Bombe', meteo:['🌦️','18°C / 12°C','Sec le matin, averses en fin de journée'],
+  alert:'✅ Trou de la Bombe fait (5,33 km en 2 h 46). Fin de journée : averses possibles et vent qui monte, prudence sur la route de montagne. Coucher du soleil vers 18 h 54.',
   stops:['bav','trou','cavu'], cover:'bav',
   steps:[
-   {t:'10:15', txt:'Départ immédiat (fenêtre sèche jusqu\'à ~14 h)'},
+   {t:'10:15', txt:'Départ de Porto-Vecchio'},
    {drive:'🚗 Porto-Vecchio → Col de Bavella via Zonza : ~1 h 15 (50 km)'},
    {t:'11:30', txt:'Arrivée Col de Bavella (parking)', p:'bav', more:["Col à 1 218 m, statue de Notre-Dame-des-Neiges, vue directe sur les aiguilles de granit rouge.", "Parking payant au col, souvent plein en milieu de journée : se garer le long de la route si besoin. Cochons et vaches en liberté : ne pas les nourrir.", "Il fait 6 à 8 °C de moins qu'à Porto-Vecchio : prendre une polaire."]},
-   {t:'11:45', end:'14:00', txt:'Montée jusqu\'au Trou de la Bombe (aller-retour)', p:'trou', dur:'2 h 15', cond:'Demi-tour à 13 h 30 au plus tard · pas d\'orage', more:["Objectif : grimper jusqu'au trou lui-même, au pied de la crête.", "Départ du col (derrière les auberges), balisage rouge puis cairns.", "~2 h aller-retour, ~200 m de dénivelé : la fin est une vraie montée rocheuse où l'on pose les mains. Prévoir eau, chaussures de rando et polaire ; descente glissante si la roche est humide.", "Arrive sous une arche naturelle de ~8 m percée dans la roche : photo classique depuis l'intérieur.", "Pique-nique possible sur les dalles avant de redescendre."]},
-   {t:'14:00', end:'15:00', txt:'Déjeuner à l\'Auberge du Col de Bavella', dur:'1 h'},
-   {drive:'🚗 Bavella → vallée du Cavu (retour par Sainte-Lucie) : ~30 min'},
-   {t:'15:15', end:'15:45', txt:'Arrêt aux piscines naturelles du Cavu', p:'cavu', dur:'30 min', cond:'Seulement si le ciel reste dégagé', more:["Vasques de granit le long de la rivière, accès en quelques minutes depuis la route.", "Baignade fraîche possible ; sinon simple balade sur les rochers."]},
-   {t:'15:45', end:'16:30', txt:'Retour via Sainte-Lucie (~35 min)'},
+   {t:'12:15', end:'15:00', txt:'Montée jusqu\'au Trou de la Bombe (aller-retour)', p:'trou', dur:'2 h 46', img:'photos/j3-rando-bombe.jpg', imgLabel:'🗺️ Carte de la rando', more:["✅ Fait : 5,33 km en 2 h 46, aller et retour par deux sentiers différents (via la Bocca Furesta et la Bocca di Velaco).", "Fin de montée rocheuse sous la crête, au pied de l'arche."]},
+   {t:'15:00', txt:'Retour au col de Bavella'},
+   {drive:'🚗 Bavella → route de la côte → vallée du Cavu'},
+   {t:'17:00', txt:'Arrêt au bord d\'une rivière en route', img:'photos/j3-riviere.jpg', imgLabel:'📸 Photo de l\'arrêt', more:["Vasques de granit et eau limpide, pins et rochers autour. Position à confirmer."]},
+   {t:'17:30', end:'18:15', txt:'Piscines naturelles du Cavu (en route par la côte)', p:'cavu', dur:'45 min', cond:'Fin de journée : seulement si le ciel reste dégagé', more:["Vasques de granit le long de la rivière, accès en quelques minutes depuis la route.", "Baignade fraîche possible ; sinon simple balade sur les rochers."]},
+   {t:'18:15', txt:'Retour au gîte avant la nuit (~35 min)'},
   ],
   rain:[{p:"sart",t:"Sartène : place Porta, caves"},{p:"prop",t:"Propriano : port et front de mer"}],
   restos:['Auberge du Col de Bavella']},
@@ -513,7 +515,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v16'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v17'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -656,6 +658,7 @@ DAYS.forEach((day, i) => {
       <span>${idx ? `<span class="badge">${idx}</span>` : ''}${esc(s.txt)}
       ${s.dur ? `<br><span class="tag">⏱ ${s.dur}</span>` : ''}${s.cond ? `<span class="tag cond">⚠ ${esc(s.cond)}</span>` : ''}
       ${s.more ? `<ul class="more">${s.more.map(m => `<li>${esc(m)}</li>`).join('')}</ul>` : ''}
+      ${s.img ? `<details class="more-d"><summary>${s.imgLabel || '📷 Photo'}</summary><a href="${s.img}" target="_blank" rel="noopener"><img class="track" src="${s.img}" alt="${esc(s.imgLabel || s.txt)}" loading="lazy"></a></details>` : ''}
       ${s.p ? phHtml(s.p) : ''}</span></li>`;
   }).join('');
 
@@ -696,7 +699,7 @@ DAYS.forEach((day, i) => {
       <span class="pill">Jour ${n} · ${wd(day)}</span>
     </div>
     <div class="dayhead">
-      <div><h2>${esc(day.title)}</h2><div class="when">${day.d} 2026${day.done ? ' · <span class="tag">✅ Fait</span>' : ''}</div>${day.walk ? `<div class="walk">🚶 Marche estimée : ${day.walk}</div>` : ''}</div>
+      <div><h2>${esc(day.title)}</h2><div class="when">${day.d} 2026${day.done ? ' · <span class="tag">✅ Fait</span>' : ''}</div>${day.walk ? `<div class="walk">🚶 Marche : ${day.walk}</div>` : ''}</div>
       <div class="meteo"><span class="ico">${day.meteo[0]}</span><div><b>${day.meteo[1]}</b><span class="m">${day.meteo[2]}</span></div></div>
     </div>
     ${day.alert ? `<div class="alert">${esc(day.alert)}</div>` : ''}${day.note ? `<div class="alert">ℹ️ ${esc(day.note)}</div>` : ''}
