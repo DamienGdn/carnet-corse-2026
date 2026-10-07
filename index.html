@@ -1,0 +1,1026 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Carnet Corse — Porto-Vecchio</title>
+<meta name="theme-color" content="#0e5a6b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Carnet Corse">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="icon" href="icon.svg">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Système de design : DESIGN.md (Airbnb, via getdesign) — Inter en substitut de Cereal */
+:root{
+  --primary:#ff385c; --primary-active:#e00b41; --ink:#222222; --body:#3f3f3f; --muted:#6a6a6a;
+  --hairline:#dddddd; --hairline-soft:#ebebeb; --canvas:#ffffff; --surface-soft:#f7f7f7; --surface-strong:#f2f2f2;
+  --warn:#c13515; --on-primary:#ffffff;
+  --shadow:rgba(0,0,0,.02) 0 0 0 1px,rgba(0,0,0,.04) 0 2px 6px 0,rgba(0,0,0,.1) 0 4px 8px 0;
+  --r-sm:8px; --r-md:14px; --r-lg:20px; --r-xl:32px;
+  --font:Inter,-apple-system,system-ui,Roboto,"Helvetica Neue",sans-serif;
+}
+[data-theme="dark"]{
+  --ink:#f2f2f2; --body:#d6d6d6; --muted:#a0a0a0; --hairline:#3a3a3a; --hairline-soft:#2c2c2c;
+  --canvas:#161616; --surface-soft:#1f1f1f; --surface-strong:#262626; --warn:#ff7a5c;
+  --shadow:rgba(255,255,255,.04) 0 0 0 1px,rgba(0,0,0,.5) 0 4px 12px 0;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{margin:0;background:var(--canvas);color:var(--ink);font:400 16px/1.5 var(--font);-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;font-weight:600;line-height:1.2}
+a{color:var(--ink)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+@media(max-width:743px){.wrap{padding:0 16px}}
+
+/* ---- Barre du haut ---- */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:calc(16px + env(safe-area-inset-top)) 0 16px}
+.brand{display:flex;align-items:center;gap:8px;color:var(--primary);font-weight:700;font-size:20px;letter-spacing:-.3px;text-decoration:none}
+.brand svg{width:30px;height:30px}
+.tools{display:flex;gap:8px}
+.chip{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:40px;min-width:40px;padding:0 14px;border-radius:9999px;border:1px solid var(--hairline);background:var(--canvas);color:var(--ink);font:500 14px var(--font);text-decoration:none;cursor:pointer}
+.chip:hover{box-shadow:var(--shadow)}
+@media(max-width:743px){.chip .lbl{display:none}.chip{padding:0 11px}}
+
+/* ---- Hero ---- */
+.hero{padding-bottom:8px}
+.hero h1{font-size:28px;font-weight:700;line-height:1.43;margin-top:8px}
+.hero .sub{color:var(--muted);font-size:16px;margin:2px 0 20px}
+.searchbar{display:flex;align-items:center;border:1px solid var(--hairline);border-radius:9999px;box-shadow:var(--shadow);background:var(--canvas);padding:8px 8px 8px 0;max-width:760px}
+.searchbar .seg{flex:1;padding:6px 24px;border-right:1px solid var(--hairline);min-width:0}
+.searchbar .seg:last-of-type{border-right:0}
+.searchbar .lab{font:700 12px var(--font);color:var(--ink)}
+.searchbar .val{font-size:14px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.orb{flex:0 0 48px;height:48px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;text-decoration:none}
+.orb:active{background:var(--primary-active)}
+.orb svg{width:18px;height:18px}
+@media(max-width:743px){.searchbar .seg{padding:4px 14px}.searchbar .seg.who{display:none}}
+.heroimg{margin-top:24px;border-radius:var(--r-md);overflow:hidden;aspect-ratio:21/9;background:var(--surface-strong) center/cover no-repeat}
+@media(max-width:743px){.heroimg{aspect-ratio:4/3}}
+
+/* ---- Barre des jours (category strip) ---- */
+.daynav{position:sticky;top:0;z-index:1000;background:var(--canvas);border-bottom:1px solid var(--hairline);padding-top:env(safe-area-inset-top)}
+.daynav .wrap{display:flex;gap:28px;overflow-x:auto;scrollbar-width:none}
+.daynav .wrap::-webkit-scrollbar{display:none}
+.daynav a{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:2px;padding:12px 2px 10px;color:var(--muted);text-decoration:none;font:600 14px/1.29 var(--font);border-bottom:2px solid transparent;transition:color .2s}
+.daynav a small{font:400 12px var(--font)}
+.daynav a:hover{color:var(--ink);border-bottom-color:var(--hairline)}
+.daynav a.active{color:var(--ink);border-bottom-color:var(--ink)}
+@media(max-width:743px){.daynav .wrap{gap:6px;justify-content:space-between}.daynav a{font-size:13px}}
+
+/* ---- Jour (page « annonce ») ---- */
+section.day{padding:48px 0 16px;border-bottom:1px solid var(--hairline)}
+section.day:last-of-type{border-bottom:0}
+.gallery{display:grid;gap:8px;border-radius:var(--r-md);overflow:hidden;grid-template-columns:1fr;position:relative}
+.gallery img{width:100%;height:100%;object-fit:cover;display:block;cursor:zoom-in;background:var(--surface-strong);transition:filter .2s}
+.gallery img:hover{filter:brightness(.92)}
+.gallery .main{aspect-ratio:4/3}
+.gallery .side{display:none}
+@media(min-width:744px){
+  .gallery{grid-template-columns:2fr 1fr;height:420px}
+  .gallery .main{aspect-ratio:auto}
+  .gallery .side{display:grid;gap:8px;grid-template-rows:1fr 1fr;min-height:0}
+  .gallery .side img{min-height:0}
+}
+.pill{position:absolute;top:16px;left:16px;background:var(--canvas);color:var(--ink);border-radius:9999px;padding:6px 12px;font:600 13px var(--font);box-shadow:var(--shadow);pointer-events:none}
+.dayhead{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin:24px 0 8px}
+.dayhead h2{font-size:26px;font-weight:600;letter-spacing:-.4px;line-height:1.18}
+.dayhead .when{color:var(--muted);font-size:16px;margin-top:6px}
+.meteo{display:flex;align-items:center;gap:12px;border:1px solid var(--hairline);border-radius:var(--r-md);padding:10px 16px}
+.meteo .ico{font-size:28px;line-height:1}
+.meteo b{display:block;font-size:16px;font-weight:600}
+.meteo span.m{font-size:14px;color:var(--muted)}
+
+.alert{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--hairline);border-radius:var(--r-md);padding:16px;margin:16px 0;font-size:14px;color:var(--body);background:var(--surface-soft)}
+.alert::before{content:"";flex:0 0 4px;align-self:stretch;border-radius:4px;background:var(--primary)}
+
+.grid{display:grid;gap:32px;margin-top:24px}
+@media(min-width:960px){.grid{grid-template-columns:1fr 1fr;align-items:start}.grid .mapbox{position:sticky;top:80px}}
+.card{background:var(--canvas)}
+h3.sub{font-size:22px;font-weight:600;letter-spacing:-.2px;margin:0 0 12px}
+.section{padding-top:32px;margin-top:32px;border-top:1px solid var(--hairline)}
+
+/* ---- Carte ---- */
+.mapbox{position:relative;border-radius:var(--r-md);overflow:hidden;background:var(--surface-strong)}
+.map{height:420px;width:100%}
+@media(max-width:743px){.map{height:320px}}
+.mapbox.full{position:fixed;inset:0;z-index:3000;border-radius:0}
+.mapbox.full .map{height:100dvh}
+.mapbtns{position:absolute;right:12px;top:12px;z-index:1000;display:flex;flex-direction:column;gap:8px}
+.mapbtns button{width:40px;height:40px;border-radius:50%;border:0;background:#fff;color:#222;font-size:17px;box-shadow:var(--shadow);cursor:pointer}
+.num-marker{background:var(--primary);color:#fff;border:2px solid #fff;border-radius:9999px;width:34px!important;height:34px!important;display:flex;align-items:center;justify-content:center;font:700 14px var(--font);box-shadow:rgba(0,0,0,.18) 0 2px 8px}
+.num-marker.alt{background:#222}
+.me-marker{background:#428bff;border:3px solid #fff;border-radius:50%;box-shadow:0 0 0 7px rgba(66,139,255,.25)}
+.leaflet-container{font-family:var(--font)}
+.leaflet-popup-content-wrapper{border-radius:var(--r-md);box-shadow:var(--shadow)}
+.leaflet-popup-content{font:14px/1.43 var(--font);margin:14px 16px;color:#222}
+.leaflet-popup-content b{font-size:16px;font-weight:600}
+.pop-btns{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+
+/* ---- Boutons ---- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:48px;padding:0 20px;border-radius:var(--r-sm);font:500 16px var(--font);text-decoration:none;border:0;cursor:pointer}
+.btn-g{background:var(--primary);color:var(--on-primary)!important}
+.btn-g:active{background:var(--primary-active)}
+.btn-a{background:var(--canvas);color:var(--ink)!important;box-shadow:inset 0 0 0 1px var(--ink)}
+.leaflet-popup-content .btn{height:38px;padding:0 12px;font-size:14px}
+.leaflet-popup-content .btn-a{background:#fff;color:#222!important;box-shadow:inset 0 0 0 1px #222}
+
+/* ---- Programme (amenity rows) ---- */
+.tl{list-style:none;margin:0;padding:0}
+.tl li{display:grid;grid-template-columns:64px 1fr;gap:16px;padding:12px 0;border-bottom:1px solid var(--hairline-soft)}
+.tl li:last-child{border-bottom:0}
+.tl .t{font-weight:600;font-size:16px;font-variant-numeric:tabular-nums}
+.tl .d{font-weight:400;font-size:13px;color:var(--muted)}
+.tl .tag{display:inline-block;font:600 12px var(--font);border-radius:9999px;padding:3px 10px;margin:6px 6px 0 0;background:var(--surface-strong);color:var(--ink)}
+.tl .tag.cond{background:#fff0f3;color:var(--primary-active)}
+[data-theme="dark"] .tl .tag.cond{background:#3a1820;color:#ff8da1}
+.tl ul.more{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px}
+.tl ul.more li{display:block;position:relative;padding:0 0 0 14px;border:0;font-size:14px;line-height:1.45;color:var(--body)}
+.tl ul.more li::before{content:"";position:absolute;left:0;top:.6em;width:5px;height:5px;border-radius:50%;background:var(--primary)}
+.tl li.drive{padding:6px 0;color:var(--muted);font-size:14px;border-bottom:1px solid var(--hairline-soft)}
+
+/* ---- Lieux (property cards) ---- */
+.stops{display:grid;gap:24px 16px;grid-template-columns:1fr;margin-top:24px}
+@media(min-width:600px){.stops{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:960px){.stops{grid-template-columns:repeat(3,1fr)}}
+.stop{display:flex;flex-direction:column;background:transparent}
+.stop figure{margin:0;border-radius:var(--r-md);overflow:hidden;aspect-ratio:1/1;background:var(--surface-strong)}
+@media(max-width:599px){.stop figure{aspect-ratio:4/3}}
+.stop img{width:100%;height:100%;object-fit:cover;display:block;cursor:zoom-in;transition:transform .4s ease}
+.stop:hover img{transform:scale(1.03)}
+.stop .body{padding:12px 0 0;display:flex;flex-direction:column;gap:2px;flex:1;font-size:14px;color:var(--muted)}
+.stop h3{font-size:16px;font-weight:600;color:var(--ink);display:flex;align-items:center}
+.stop .body>div:first-of-type{color:var(--ink)}
+.stop .gps{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.stop .row{display:flex;gap:8px;margin-top:auto;padding-top:12px}
+.stop .row .btn{flex:1;height:44px;font-size:15px}
+.badge{display:inline-flex;flex:0 0 22px;width:22px;height:22px;border-radius:50%;background:var(--primary);color:#fff;font:700 12px var(--font);align-items:center;justify-content:center;margin-right:8px}
+.badge.alt{background:var(--ink);color:var(--canvas)}
+.stop .facts{display:flex;flex-wrap:wrap;margin-top:4px}
+.stop .facts .tag{display:inline-block;font:600 12px var(--font);border-radius:9999px;padding:3px 10px;margin:6px 6px 0 0;background:var(--surface-strong);color:var(--ink)}
+.stop .warnline{margin-top:8px;font-size:13px;color:var(--warn)}
+.ph-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:6px;padding-bottom:8px}
+.ph-grid a{display:block;aspect-ratio:1;border-radius:var(--r-sm);overflow:hidden;background:var(--surface-strong)}
+.ph-grid img{width:100%;height:100%;object-fit:cover;display:block}
+.ph-grid .note{grid-column:1/-1;font-size:13px;color:var(--muted);margin:0}
+.dep{display:flex;align-items:center;gap:10px;margin:0 0 12px;font:600 14px var(--font);color:var(--ink)}
+.dep input{font:600 16px var(--font);padding:6px 10px;border:1px solid var(--hairline);border-radius:var(--r-sm);background:var(--canvas,#fff);color:var(--ink)}
+.more-d{margin-top:10px;border-top:1px solid var(--hairline-soft)}
+.more-d summary{list-style:none;cursor:pointer;display:flex;align-items:center;min-height:44px;font:600 14px var(--font);color:var(--ink)}
+.more-d summary::-webkit-details-marker{display:none}
+.more-d summary::after{content:"";margin-left:auto;width:7px;height:7px;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:rotate(45deg) translateY(-2px);transition:transform .2s}
+.more-d[open] summary::after{transform:rotate(225deg) translateY(-2px)}
+.more-d .desc{margin:0 0 8px;color:var(--body);font-size:14px;line-height:1.5}
+.more-d .kv{display:grid;gap:6px;margin:0 0 8px;border:1px solid var(--hairline);border-radius:var(--r-sm);padding:10px 12px;font-size:13px}
+.more-d .kv div{display:grid;grid-template-columns:auto 1fr;gap:8px}
+.more-d dt{color:var(--muted)} .more-d dd{margin:0;color:var(--body)}
+.more-d h4{font:600 13px var(--font);color:var(--ink);margin:10px 0 4px}
+.more-d ul{margin:0;padding-left:18px;color:var(--body);font-size:14px;line-height:1.5}
+
+/* ---- Restaurants ---- */
+.resto{display:flex;flex-wrap:wrap;gap:8px}
+.resto a{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 18px;border-radius:9999px;border:1px solid var(--hairline);color:var(--ink);text-decoration:none;font:500 14px var(--font)}
+.resto a:hover{border-color:var(--ink)}
+.resto-grid{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:600px){.resto-grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:960px){.resto-grid{grid-template-columns:repeat(3,1fr)}}
+.resto-card{border:1px solid var(--hairline);border-radius:var(--r-md);padding:16px;display:flex;flex-direction:column;gap:6px}
+.resto-card h4{margin:0;font-size:16px;font-weight:600}
+.resto-card p{margin:0;font-size:14px;line-height:1.45;color:var(--body)}
+.resto-card .adr,.resto-card .note{color:var(--muted);font-size:13px}
+.resto-card .tag{display:inline-block;font:600 12px var(--font);border-radius:9999px;padding:3px 10px;background:var(--surface-strong);color:var(--ink)}
+.resto-card .row{display:flex;gap:8px;margin-top:auto;padding-top:8px}
+.resto-card .row .btn{flex:1;height:44px;font-size:15px}
+.resto-foot{font-size:13px;color:var(--muted);margin:12px 0 0}
+.restos{margin-top:32px;padding-top:32px;border-top:1px solid var(--hairline)}
+
+/* ---- Plan B pluie (dépliable) ---- */
+.extra{margin-top:40px}
+.fold{border:1px solid var(--hairline);border-radius:var(--r-md);padding:4px 20px;margin-top:12px}
+.fold summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;min-height:60px}
+.fold summary::-webkit-details-marker{display:none}
+.fold .sub-t{font-size:18px;font-weight:600}
+.fold .cnt{font:600 11px var(--font);color:var(--ink);background:var(--surface-strong);padding:4px 10px;border-radius:9999px}
+.fold summary::after{content:"";margin-left:auto;width:9px;height:9px;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:rotate(45deg) translateY(-3px);transition:transform .2s}
+.fold[open] summary::after{transform:rotate(225deg) translateY(-3px)}
+.fold[open]{padding-bottom:20px}
+.extra .note{font-size:13px;color:var(--muted);margin:8px 0}
+.extra .map{height:340px;border-radius:var(--r-md);margin:16px 0}
+.wx-days{display:flex;gap:10px;overflow-x:auto;padding:8px 0}
+.wx-day{flex:0 0 auto;min-width:96px;border:1px solid var(--hairline);border-radius:var(--r-md);padding:10px 12px;background:none;color:var(--ink);font:inherit;text-align:center;cursor:pointer}
+.wx-day[aria-pressed=true]{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink)}
+.wx-day .d{font-size:12px;font-weight:600}.wx-day .i{font-size:26px;margin:4px 0}.wx-day .t{font-weight:600}.wx-day .r{font-size:12px;color:var(--muted)}
+.wx-hours{display:flex;gap:6px;overflow-x:auto;padding:8px 0}
+.wx-h{flex:0 0 auto;width:58px;text-align:center;font-size:12px;border-radius:var(--r-md);padding:8px 0;background:var(--surface-strong)}
+.wx-h b{display:block;font-size:14px}.wx-h .i{font-size:20px}
+.util-list{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+.util{display:flex;justify-content:space-between;align-items:center;gap:8px;border:1px solid var(--hairline);border-radius:var(--r-md);padding:12px 14px}
+.util .n{font-weight:600}.util .k{font-size:12px;color:var(--muted)}
+.util .row{display:flex;gap:6px}
+.walk{font-size:13px;color:var(--muted);margin-top:4px}
+.gite{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin:16px 0;padding:16px 20px;border:1px solid var(--hairline);border-radius:var(--r-md)}
+.gite .lab{font-size:12px;font-weight:600;color:var(--muted)}
+.gite .val{font-size:16px;font-weight:600}
+.gite .row{display:flex;gap:8px}
+.rain{margin-top:32px;border:1px solid var(--hairline);border-radius:var(--r-md);padding:4px 20px}
+.rain summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;min-height:64px}
+.rain summary::-webkit-details-marker{display:none}
+.rain .sub-t{font-size:18px;font-weight:600}
+.rain .cnt{font:600 11px var(--font);color:var(--ink);background:var(--surface-strong);padding:4px 10px;border-radius:9999px}
+.rain summary::after{content:"";margin-left:auto;width:9px;height:9px;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:rotate(45deg) translateY(-3px);transition:transform .2s}
+.rain[open] summary::after{transform:rotate(225deg) translateY(-3px)}
+.rain[open]{padding-bottom:20px}
+.rain .map{height:320px}
+.rain .note{font-size:13px;color:var(--muted);margin:16px 0 0}
+.hours{border:1px solid var(--hairline);border-radius:var(--r-sm);padding:10px 12px;font-size:13px;color:var(--body);display:grid;gap:4px;margin-top:8px}
+.hours .links{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.hours .links a{display:inline-flex;align-items:center;height:36px;padding:0 12px;border-radius:9999px;border:1px solid var(--hairline);color:var(--ink);font-weight:500;text-decoration:none}
+
+/* ---- À savoir / Checklist ---- */
+.infohead .kicker{font:600 14px var(--font);color:var(--muted)}
+.infohead h2{font-size:26px;letter-spacing:-.4px;margin:4px 0 20px}
+.infos{display:grid;gap:0 32px;grid-template-columns:1fr}
+@media(min-width:744px){.infos{grid-template-columns:1fr 1fr}}
+.infos div{padding:16px 0;border-bottom:1px solid var(--hairline-soft);color:var(--body)}
+.infos b{color:var(--ink);font-weight:600}
+.check label{display:flex;align-items:center;gap:14px;min-height:56px;border-bottom:1px solid var(--hairline-soft);cursor:pointer;font-size:16px}
+.check input{width:22px;height:22px;accent-color:var(--primary)}
+.check input:checked+span{text-decoration:line-through;color:var(--muted)}
+#resetCheck{margin-top:20px;background:var(--canvas);color:var(--ink)!important;box-shadow:inset 0 0 0 1px var(--ink)}
+
+/* ---- Lightbox ---- */
+.lb{position:fixed;inset:0;z-index:5000;background:rgba(0,0,0,.85);display:none;flex-direction:column;align-items:center;justify-content:center;padding:16px}
+.lb.open{display:flex}
+.lb img{max-width:100%;max-height:80dvh;border-radius:var(--r-md)}
+.lb p{color:#fff;margin:14px 0 0;text-align:center;font-size:14px}
+.lb button{position:absolute;top:calc(16px + env(safe-area-inset-top));left:16px;width:40px;height:40px;border-radius:50%;border:0;font-size:18px;background:#fff;color:#222;cursor:pointer}
+
+footer{border-top:1px solid var(--hairline);background:var(--surface-soft);color:var(--muted);font-size:13px;padding:32px 24px calc(32px + env(safe-area-inset-bottom));text-align:center}
+footer .sig{display:block;color:var(--ink);font-weight:600;font-size:16px;margin-bottom:4px}
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="topbar">
+    <a class="brand" href="#" aria-label="Carnet Corse">
+      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><circle cx="16" cy="11" r="5"/><path d="M3 22c3.3-3 6.7-3 10 0s6.7 3 10 0 4.7-2 6-1"/><path d="M3 28c3.3-3 6.7-3 10 0s6.7 3 10 0 4.7-2 6-1"/></svg>
+      carnet corse
+    </a>
+    <div class="tools">
+      <a class="chip" href="#infos" aria-label="À savoir">⚠️<span class="lbl">À savoir</span></a>
+      <a class="chip" href="#checklist" aria-label="Checklist">🎒<span class="lbl">Checklist</span></a>
+      <button class="chip" id="offlineBtn" aria-label="Télécharger pour le hors-ligne">⬇️<span class="lbl" id="offlineLbl">Hors-ligne</span></button>
+      <button class="chip" id="themeBtn" aria-label="Basculer le mode sombre">🌙</button>
+    </div>
+  </div>
+  <div class="hero">
+    <h1>🇫🇷 Porto-Vecchio, Corse-du-Sud</h1>
+    <p class="sub">Carnet de voyage · sept jours entre maquis et mer</p>
+    <div class="searchbar">
+      <div class="seg"><div class="lab">Destination</div><div class="val">Porto-Vecchio · Figari</div></div>
+      <div class="seg"><div class="lab">Dates</div><div class="val">5 → 11 oct. 2026</div></div>
+      <div class="seg who"><div class="lab">Programme</div><div class="val">7 jours · plans B pluie</div></div>
+      <a class="orb" id="todayOrb" href="#j1" aria-label="Aller au jour en cours"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="4"><path d="M13 24a11 11 0 1 0 0-22 11 11 0 0 0 0 22zm8-3 9 9"/></svg></a>
+    </div>
+    <div class="gite">
+      <div><div class="lab">🏡 Notre gîte</div><div class="val">Villa Occhiatana, Santa-Giulia, 20137 Porto-Vecchio</div></div>
+      <div class="row"><a class="btn btn-g" href="https://www.google.com/maps/search/?api=1&query=Villa%20Occhiatana%2C%20Santa-Giulia%2C%2020137%20Porto-Vecchio%2C%20Corse" target="_blank" rel="noopener">🧭 Naviguer</a><a class="btn btn-a" href="https://maps.apple.com/?q=Villa%20Occhiatana%2C%20Santa-Giulia%2C%2020137%20Porto-Vecchio%2C%20Corse" target="_blank" rel="noopener">🍎 Plans</a></div>
+    </div>
+    <div class="heroimg" id="heroBg" role="img" aria-label="Plage de Rondinara"></div>
+  </div>
+</header>
+
+<nav class="daynav" aria-label="Jours"><div class="wrap" id="daynav"></div></nav>
+
+<section class="wrap extra">
+  <details class="fold" id="meteo">
+    <summary><span class="sub-t">🌤️ Météo en direct</span><span class="cnt">heure par heure</span></summary>
+    <p class="note">Prévisions Open-Meteo pour le lieu principal de chaque jour · touchez un jour pour le détail heure par heure.</p>
+    <div class="wx-days" id="wxDays"><p class="note">Chargement…</p></div>
+    <div class="wx-hours" id="wxHours"></div>
+    <p class="note" id="wxStamp"></p>
+  </details>
+  <div id="utiles"></div>
+  <p class="note">Adresses OpenStreetMap ; distances à vol d'oiseau depuis Santa-Giulia. Horaires à vérifier, souvent réduits en octobre.</p>
+</section>
+
+<main class="wrap" id="days"></main>
+
+<div class="wrap">
+  <section id="infos" class="day">
+    <div class="infohead"><div class="kicker">Avant de partir chaque matin</div><h2>À savoir</h2></div>
+    <div class="infos">
+      <div>🌊 <b>Mer agitée</b> → pas de snorkeling. Vérifier le vent et la houle (drapeaux plage, Windy, Météo-France Marine).</div>
+      <div>⛈️ <b>Orage</b> → éviter les randonnées exposées (Bavella, crêtes) et les cascades après fortes pluies.</div>
+      <div>🥾 <b>Chaussures</b> de randonnée recommandées : granit glissant et sentiers caillouteux.</div>
+      <div>🚗 <b>Stationnement</b> : prévoir 15–20 min de marge (Bonifacio, Palombaggia, Bavella sont payants/limités).</div>
+      <div>⏱️ Les <b>temps de trajet</b> sont indicatifs (routes sinueuses : compter large).</div>
+      <div>📶 Réseau faible en montagne : ouvrir le carnet une fois en Wi-Fi pour le garder en cache.</div>
+    </div>
+  </section>
+
+  <section id="checklist" class="day">
+    <div class="infohead"><div class="kicker">Sac du jour</div><h2>Checklist</h2></div>
+    <div class="check" id="checkbox"></div>
+    <button class="btn btn-g" id="resetCheck">↺ Tout décocher</button>
+  </section>
+</div>
+
+<footer><span class="sig">Bon voyage ☀️</span>Cartes © OpenStreetMap · Photos Wikimedia Commons (licences libres)</footer>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true">
+  <button id="lbClose" aria-label="Fermer">✕</button>
+  <img id="lbImg" alt="">
+  <p id="lbCap"></p>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+/* ---------- Photos (Wikimedia Commons via Special:FilePath) ---------- */
+const wm = (file) => `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(file)}?width=1000`;
+
+/* ---------- Lieux ---------- */
+const P = {
+  fig:  {name:'Aéroport Figari Sud-Corse', lat:41.5006, lon:9.0978, img:wm('Figari aéroport.jpg'), cap:'Arrivée / départ — loueurs de voitures sur place', d:{"desc":"Petit aéroport de Figari Sud-Corse, à env. 30 min de Porto-Vecchio. C'est ici que l'on récupère et que l'on rend la voiture de location.","facts":{"duree":"Prévoir 1 h 15 avant le vol au retour","acces":"Parking devant l'aérogare (à vérifier)","services":"Loueurs de voitures, café"},"dontMiss":["Vérifier l'état de la voiture et le niveau de carburant à la restitution","Prévoir env. 30 min de route depuis Porto-Vecchio"],"tips":["Photographier la voiture de location à la prise et au retour","Faire le plein avant de la rendre"]}},
+  pv:   {name:'Porto-Vecchio — vieille ville & citadelle', lat:41.59167, lon:9.28028, img:wm('Porto-Vecchio vieille ville.jpg'), cap:'Ruelles et remparts génois de la vieille ville', d:{"desc":"Citadelle génoise du XVIe s., surnommée la « Cité du sel » en référence aux salines qui s'étendent en contrebas. Ruelles, remparts et place animée le soir.","facts":{"duree":"1 h – 1 h 30","acces":"Parkings en contrebas, souvent payants (à vérifier)","marche":"Courte montée","niveau":"Facile"},"dontMiss":["La porte génoise et la vue sur les salines et le golfe","La place de la République et l'église Saint-Jean-Baptiste","Le bastion et les remparts"],"tips":["Apéritif sur la place en soirée","Ne pas s'engager en voiture dans les ruelles étroites"]}},
+  sg:   {name:'Plage de Santa Giulia', lat:41.531345, lon:9.273858, img:wm('Porto-Vecchio plage de Santa Giulia.jpg'), cap:'Lagon turquoise, eau peu profonde — idéal snorkeling par mer calme', d:{"desc":"Long arc de sable blanc bordé d'une eau turquoise très peu profonde, avec un étang (lagune) juste derrière la plage.","facts":{"duree":"2 h – 3 h","moment":"Matin (mer plus calme)","acces":"Env. 15 min au sud de Porto-Vecchio ; parkings derrière la plage (payants en saison, à vérifier)","marche":"2 – 5 min","services":"Restaurants de plage souvent fermés en octobre (à vérifier)"},"dontMiss":["Le snorkeling près des extrémités rocheuses","L'étang derrière la plage"],"tips":["Prévoir des chaussures d'eau","Peu d'ombre sur la plage"]}},
+  bonc: {name:'Citadelle de Bonifacio', lat:41.38778, lon:9.15946, img:wm('Falaises depuis la citadelle de Bonifacio.jpg'), cap:'Haute-ville perchée sur les falaises calcaires', d:{"desc":"Haute-ville perchée sur un promontoire calcaire à env. 60 – 70 m au-dessus de la mer, héritée du passé génois de Bonifacio.","facts":{"duree":"2 h – 3 h","acces":"Se garer au port (payant, à vérifier), puis montée Rastello / escaliers Saint-Roch, ou petit train (à vérifier en octobre)","marche":"10 – 15 min de montée","niveau":"Facile à moyen (marches)"},"dontMiss":["La vue depuis le col Saint-Roch et les belvédères","L'Escalier du Roi d'Aragon (payant, horaires à vérifier, fermé en cas de vent ou d'orage)","L'église Sainte-Marie-Majeure","Le cimetière marin et le Bastion"],"tips":["Bonnes chaussures : les pavés sont glissants quand ils sont mouillés","Prévoir du temps pour la montée à pied"]}},
+  pert: {name:'Capo Pertusato', lat:41.3705, lon:9.1815, img:wm('Phare de Pertusato en Corse.jpg'), cap:'Phare et vue sur la Sardaigne', d:{"desc":"Point le plus au sud de la Corse continentale, avec phare et sémaphore (militaire, non visitable). Vue sur les falaises de Bonifacio et sur la Sardaigne, à env. 12 km de l'autre côté des Bouches de Bonifacio.","facts":{"duree":"1 h – 1 h 30","moment":"Fin d'après-midi","acces":"Route étroite jusqu'à un parking près du phare (gratuit, à vérifier) ou sentier côtier depuis Bonifacio (env. 1 h 30 aller)","marche":"Quelques minutes jusqu'aux points de vue","niveau":"Facile","services":"Aucun"},"dontMiss":["Le sentier de falaise avec vue en retour sur la haute-ville","La Sardaigne par temps clair"],"tips":["Prévoir un coupe-vent","Pas d'ombre"],"warn":"Falaises sans garde-corps : rester sur le sentier, surtout par vent fort ou orage."}},
+  bonp: {name:'Port de Bonifacio', lat:41.3870, lon:9.1700, img:wm('Corsica Lucciana Bonifacio citadelle port de plaisance.jpg'), cap:'Marina au fond du goulet', d:{"desc":"Marina nichée au fond d'un goulet naturel étroit entre les falaises.","facts":{"duree":"45 min – 1 h","acces":"Parking payant le long du quai (à vérifier)","marche":"À plat","services":"Boutiques, restaurants, kiosques d'excursions"},"dontMiss":["Le goulet naturel entre les falaises","Les sorties en bateau vers les grottes marines et le Grain de Sable, au départ du quai (selon météo)"],"tips":["Comparer les compagnies","Les restaurants du quai sont plutôt chers"]}},
+  osp:  {name:"Forêt de l'Ospedale", lat:41.7207, lon:9.2060, img:wm("Lac de l'Ospedale.jpg"), cap:'Pins laricio et lac de barrage', d:{"desc":"Forêt de pins laricio et de pins maritimes, vers 900 – 1 000 m d'altitude, avec un lac de barrage et une vue sur le golfe de Porto-Vecchio.","facts":{"duree":"1 h","acces":"D368 depuis Porto-Vecchio, env. 30 min","niveau":"Facile"},"dontMiss":["Les rives du lac","Le point de vue près du village de L'Ospedale"],"tips":["Plus frais que sur la côte : prévoir une couche","Vaches et cochons parfois sur la route"]}},
+  pisc: {name:'Cascade Piscia di Ghjaddu', lat:41.7004, lon:9.2052, img:wm('Piscia di Gallo cascade 1.jpg'), cap:'Cascade de ~60 m — sentier rocheux', d:{"desc":"Cascade d'env. 60 m de haut, atteinte par un sentier rocheux.","facts":{"duree":"1 h 30 – 2 h","acces":"Parking en bord de D368 (à vérifier)","marche":"Env. 30 – 40 min aller, rocheux","niveau":"Moyen","services":"Aucun"},"dontMiss":["Le chaos granitique","Le belvédère sur la cascade (débit possiblement faible en octobre)"],"tips":["De vraies chaussures de marche","Emporter de l'eau"],"warn":"Sentier glissant par temps humide ; ne pas descendre au pied de la cascade."}},
+  zon:  {name:'Zonza', lat:41.7506, lon:9.1712, img:wm('Zonza village.jpg'), cap:'Village de montagne de l\'Alta Rocca', d:{"desc":"Village de l'Alta Rocca à env. 780 m d'altitude, aux maisons de granit.","facts":{"duree":"45 min – 1 h","acces":"Parking à l'entrée du village (à vérifier)","services":"Cafés, épicerie"},"dontMiss":["L'église et les vues vers les aiguilles de Bavella","Les produits locaux (charcuterie, fromage, miel)"],"tips":["Bonne étape pour déjeuner","Le village se visite à pied depuis le parking"]}},
+  cavu: {name:'Piscines naturelles du Cavu', lat:41.71774, lon:9.30439, img:wm('Natural swimming pools at the river Cavu, Corsica, France (52723811841).jpg'), cap:'Vasques de granit sur la rivière, entre Bavella et Sainte-Lucie', d:{"desc":"Rivière de montagne aux vasques d'eau claire entre les rochers de granit, sur la route de retour Bavella → Sainte-Lucie-de-Porto-Vecchio.","facts":{"duree":"1 h","acces":"Petits parkings le long de la route (D168), puis quelques minutes à pied"},"tips":["Eau fraîche en octobre","À éviter après de fortes pluies : courant et niveau d'eau montent vite"]}},
+  bav:  {name:'Col de Bavella', lat:41.7981, lon:9.2230, img:wm('Bavella aiguilles 1.jpg'), cap:'Aiguilles de granit rouge', d:{"desc":"Col à env. 1 218 m dominé par les aiguilles de granit de Bavella, au milieu des pins laricio. La statue de Notre-Dame-des-Neiges veille sur le col.","facts":{"duree":"1 – 2 h","acces":"D268 depuis Zonza (env. 20 min de virages) ; parking au col (payant en saison, à vérifier)","services":"Auberges et snacks au col"},"dontMiss":["La statue et le panorama","Les cochons semi-sauvages"],"tips":["Prévoir une couche contre le froid et le vent","Le brouillard peut arriver vite"],"warn":"Route sinueuse et étroite : prudence, animaux en liberté."}},
+  trou: {name:'Trou de la Bombe', lat:41.7940, lon:9.2275, img:wm('Le trou de la bombe.jpg'), cap:'Arche naturelle percée dans la roche', d:{"desc":"Trou naturel formant une arche d'env. 8 m de diamètre dans la crête du Paliri.","facts":{"duree":"2 h – 2 h 30","acces":"Depuis le parking du col de Bavella","marche":"Env. 2 h aller-retour, ~200 m de dénivelé","niveau":"Facile à moyen","services":"Aucun"},"dontMiss":["La vue à travers l'arche","L'arche dans la crête du Paliri"],"tips":["Sentier balisé","Emporter de l'eau"],"warn":"Ne pas grimper sur l'arche ; prudence au bord du trou."}},
+  palo: {name:'Plage de Palombaggia', lat:41.56385, lon:9.33578, img:wm('Plage de Palombaggia (Corse du sud).jpg'), cap:'Sable blanc, pins parasols et rochers rouges', d:{"desc":"Env. 2 km de sable blanc, pins parasols et rochers rouges, face aux îles Cerbicale.","facts":{"duree":"2 h – 3 h","moment":"Fin d'après-midi","acces":"Env. 20 min de Porto-Vecchio ; plusieurs parkings (payants en saison, à vérifier)","marche":"2 – 5 min","services":"Paillotes souvent fermées hors saison (à vérifier)"},"dontMiss":["La vue sur les îles Cerbicale","L'extrémité rocheuse au sud"],"tips":["Le vent amène des vagues","Pas de maître-nageur en octobre (à vérifier)"]}},
+  tama: {name:'Plage de Tamaricciu', lat:41.551805, lon:9.314302, img:wm('Plage de Tamaricciu (14619285086).jpg'), cap:'Petite crique voisine, plus sauvage', d:{"desc":"Plage plus petite, au sud-ouest de Palombaggia, plus naturelle.","facts":{"duree":"1 h – 2 h","acces":"Sentier côtier depuis Palombaggia ou parking proche","marche":"Env. 15 – 20 min depuis Palombaggia","services":"Limités"},"dontMiss":["Les rochers rouges","La crique plus sauvage"],"tips":["À combiner avec Palombaggia","Plus abritée si Palombaggia est agitée"]}},
+  lav:  {name:'Îles Lavezzi', lat:41.335914, lon:9.258583, img:wm('Cala du Chiesa - îles Lavezzi.jpg'), cap:'Réserve naturelle — granit sculpté et eaux cristallines', d:{"desc":"Archipel de la réserve naturelle des Bouches de Bonifacio, au granit sculpté. On y trouve les cimetières et le monument du naufrage de la Sémillante (1855).","facts":{"duree":"Excursion env. 4 h","acces":"Bateau depuis le port de Bonifacio uniquement","cout":"Env. 40 – 60 € / adulte selon compagnie — à vérifier","niveau":"Facile","services":"Aucun (toilettes sèches possibles, à vérifier)"},"dontMiss":["Les criques (Cala di l'Achiarina, Cala Lazarina)","Le monument de la Sémillante","Le snorkeling"],"tips":["Emporter eau, nourriture et crème solaire","Vérifier l'heure de retour du bateau"],"warn":"Réserve naturelle : rester sur les sentiers balisés, ne rien prélever. Sortie annulée si mer agitée."}},
+  ron:  {name:'Plage de Rondinara', lat:41.468646, lon:9.267002, img:wm('Aerial view of Rondinara Beach, France (52724210190).jpg'), cap:'Anse en fer à cheval', d:{"desc":"Baie en fer à cheval presque fermée, à l'eau calme.","facts":{"duree":"1 h – 2 h","acces":"Env. 25 min de Bonifacio, fin de route étroite ; parking (payant en saison, à vérifier)","marche":"Env. 5 – 10 min","services":"Snack souvent fermé hors saison (à vérifier)"},"dontMiss":["L'eau turquoise peu profonde","La vue depuis les pointes"],"tips":["Abritée même quand il y a du vent","Fin de route étroite : conduire prudemment"]}},
+  spe:  {name:'Plage du Petit Sperone', lat:41.37082, lon:9.22098, img:wm('Flickr - lo.tangelini - Piantarella.jpg'), cap:'Crique turquoise face aux Lavezzi — accès à pied depuis Piantarella', d:{"desc":"Petite crique de sable à l'eau limpide, face aux îles Lavezzi, avec un golf en arrière-plan.","facts":{"duree":"1 h 30 – 2 h","acces":"Parking de Piantarella (payant en saison, à vérifier) puis sentier côtier","marche":"Env. 10 – 15 min","niveau":"Facile","services":"Aucun"},"dontMiss":["La vue sur les Lavezzi et Cavallo","Le snorkeling autour des rochers","Les vestiges de villa romaine en chemin"],"tips":["Emporter de l'eau","La plage est minuscule"],"warn":"Zone naturelle protégée : respecter le site, ne rien prélever."}},
+  // --- Lieux Plan B pluie ---
+  egl:  {name:'Église Saint-Jean-Baptiste', lat:41.59088, lon:9.27924, img:wm('Eglise St Jean Baptiste Porto Vecchio.jpg'), cap:'Cœur de la vieille ville de Porto-Vecchio', d:{"desc":"Église de la place de la République, dans la vieille ville de Porto-Vecchio.","facts":{"duree":"15 – 20 min","acces":"À pied depuis la vieille ville","cout":"Gratuit"},"dontMiss":["La façade et la place de la République","Les ruelles voisines autour de la place"],"tips":["Lieu de culte : visite respectueuse","À combiner avec la balade dans la vieille ville"]}},
+  torr: {name:'Domaine de Torraccia', lat:41.6802, lon:9.33387, img:wm('Domaine de Torraccia.jpg'), cap:'Domaine viticole bio à Lecci — dégustation', d:{"desc":"Domaine viticole bio situé à Lecci.","facts":{"duree":"45 min – 1 h","acces":"Env. 15 – 20 min au nord de Porto-Vecchio","cout":"Dégustation (tarifs et horaires à vérifier)"},"dontMiss":["La dégustation (tarifs et horaires à vérifier)","Le domaine viticole bio"],"tips":["Appeler avant de venir","Désigner un conducteur"]}},
+  etend:{name:"Bastion de l'Étendard", lat:41.38679, lon:9.15994, img:wm('Bonifacio falaise.jpg'), info:{h:'Tous les jours · 10:00–16:30 en octobre (ouvert jusqu\'au 11 nov.)', prix:'3,50 € · enfant 1 €', tel:'+33495731188', url:'https://www.visit-corsica.com/fr/Mon-sejour/Patrimoine-culturel/Tout-le-patrimoine-culturel/BASTION-DE-L-ETENDARD'}, cap:"Fortification génoise et petit musée d'histoire", d:{"desc":"Bastion génoise à l'entrée de la haute-ville de Bonifacio.","facts":{"duree":"45 min","acces":"À pied depuis la haute-ville"},"dontMiss":["Les expositions d'histoire à l'intérieur","La vue depuis le sommet"],"tips":["Horaires et tarifs : voir la fiche ci-dessus","À combiner avec la visite de la haute-ville"]}},
+  aqua: {name:'Aquarium de Bonifacio', lat:41.3885, lon:9.1625, img:wm('Bonifacio.jpg'), info:{h:'Ouvert tous les jours d\'avril à octobre · horaires à confirmer par téléphone', prix:'4 € · enfant 2 €', tel:'+33495730369', url:'https://www.parcsetloisirs.fr/parc/aquarium-de-bonifacio'}, cap:'Faune marine locale, sur le quai (position approximative)', d:{"desc":"Petit aquarium installé dans un espace en forme de grotte sur le quai, consacré aux espèces locales de Méditerranée.","facts":{"duree":"30 – 45 min","acces":"Sur le quai du port de Bonifacio"},"dontMiss":["Les espèces marines de Méditerranée","L'ambiance de grotte"],"tips":["Bien pour les enfants","Petit : la visite est courte"]}},
+  smm:  {name:'Église Sainte-Marie-Majeure', lat:41.38717, lon:9.15935, img:wm('Église Sainte-Marie-Majeure de Bonifacio (1).JPG'), cap:'Plus ancien édifice de la haute-ville, loggia couverte', d:{"desc":"Plus ancien édifice de la haute-ville de Bonifacio, précédé d'une loggia couverte. Une citerne se trouve sous la loggia.","facts":{"duree":"15 – 20 min","acces":"À pied dans la haute-ville","cout":"Gratuit"},"dontMiss":["La loggia couverte","La citerne sous la loggia"],"tips":["Lieu de culte : visite respectueuse","À combiner avec la balade dans la haute-ville"]}},
+  levie:{name:"Musée de l'Alta Rocca", lat:41.70397, lon:9.1256, img:wm('Levie vue générale.jpg'), info:{h:'Mar → sam · 10:00–17:00 (oct.–mai) · fermé dim. et lun.', prix:'4 € · gratuit −10 ans', tel:'+33495780073', url:'https://www.portovecchio-tourisme.corsica/sites-historiques/musee-de-lalta-rocca/'}, cap:'Préhistoire corse, « Dame de Bonifacio » — Levie', d:{"desc":"Musée consacré à la préhistoire corse, où l'on voit le squelette de la « Dame de Bonifacio » (env. 8 500 ans).","facts":{"duree":"1 h","acces":"À Levie, en Alta Rocca"},"dontMiss":["La « Dame de Bonifacio »","Les objets de la préhistoire corse"],"tips":["À combiner avec le site archéologique de Cucuruzzu / Capula à proximité (ouverture saisonnière, à vérifier)","Horaires et tarifs : voir la fiche ci-dessus"]}},
+  sart: {name:'Sartène — place Porta', lat:41.62102, lon:8.97233, img:wm('Sartene Vi1aJPG.jpg'), cap:'« La plus corse des villes corses », ruelles de granit', d:{"desc":"« La plus corse des villes corses » selon Mérimée : maisons de granit et place Porta.","facts":{"duree":"1 h – 1 h 30","acces":"Env. 1 h depuis Porto-Vecchio ; parkings autour du centre (à vérifier)"},"dontMiss":["La place Porta et l'arche de la mairie","Les ruelles du vieux quartier Santa Anna"],"tips":["Ruelles en pente : prévoir de bonnes chaussures","Se garer autour du centre et visiter à pied"]}},
+  prop: {name:'Port de Propriano', lat:41.67726, lon:8.89862, img:wm('Propriano 1.jpg'), cap:'Front de mer, cafés et boutiques', d:{"desc":"Petit port du golfe du Valinco.","facts":{"duree":"45 min – 1 h","acces":"En voiture","services":"Cafés, boutiques"},"dontMiss":["La promenade le long du port","Les cafés et boutiques du port"],"tips":["Se promener à pied le long du port","Cafés et boutiques sur place"]}},
+  cana: {name:'Clos Canarelli', lat:41.52735, lon:9.14404, img:wm('Vignobles de Bonifacio.jpg'), cap:"Domaine viticole réputé à Figari, près de l'aéroport (photo : vignoble voisin)", d:{"desc":"Domaine viticole réputé à Figari, près de l'aéroport.","facts":{"duree":"45 min","acces":"À Figari, près de l'aéroport","cout":"Conditions de dégustation à vérifier"},"dontMiss":["La dégustation (conditions à vérifier)","Le domaine viticole réputé"],"tips":["Appeler avant : visites souvent sur rendez-vous (à vérifier)","Bonne dernière étape avant le vol"]}},
+  salin:{name:'Salines de Porto-Vecchio', lat:41.58327, lon:9.2859, img:wm('Portivechju vistu da e saline.jpg'), cap:'Balade à plat au pied de la vieille ville', d:{"desc":"Anciens marais salants au pied de la citadelle : balade à plat, avec des oiseaux à observer.","facts":{"duree":"45 min","acces":"Au pied de la vieille ville de Porto-Vecchio","marche":"À plat","niveau":"Facile","cout":"Gratuit"},"dontMiss":["La vue en retour sur la vieille ville","Les oiseaux des marais"],"tips":["Moustiques au crépuscule","Balade à plat, facile pour tous"]}},
+  arag: {name:"Castellu d'Araghju", lat:41.64782, lon:9.26214, img:wm("Casteddu d'Araghju – 15.jpg"), cap:"Forteresse torréenne de l'âge du bronze, vue sur le golfe", d:{"desc":"Site fortifié de l'âge du bronze (vers 1500 av. J.-C.) perché au-dessus de Porto-Vecchio, avec murailles cyclopéennes en granit.","facts":{"duree":"1 h 30 aller-retour","acces":"Env. 20 min depuis Porto-Vecchio, puis ~30 min de montée à pied depuis le hameau d'Araggio"},"dontMiss":["Le panorama sur le golfe de Porto-Vecchio"],"tips":["Faisable sous bruine, pas sous orage : rochers glissants","Bonnes chaussures indispensables"]}},
+  preh: {name:'Musée de Préhistoire de Sartène', lat:41.62078, lon:8.97367, img:wm('Statue-menhir Portigliolo MAC Sartène D-2018-1-1.jpg'), cap:'Musée départemental : statues-menhirs et archéologie corse', d:{"desc":"Musée départemental de Préhistoire corse et d'Archéologie, installé à Sartène : statues-menhirs, mobilier néolithique et âge du bronze.","facts":{"duree":"1 h","acces":"Bd Jacques Nicolaï, à pied depuis la place Porta"},"dontMiss":["Les statues-menhirs"],"tips":["Horaires d'octobre à vérifier avant de partir"]}},
+  bat:  {name:'Balade en bateau — falaises et calanques de Bonifacio', lat:41.3870, lon:9.1700, img:wm('Corsica Bonifacio Grotte Marine de Sdragonato.jpg'), cap:'Falaises calcaires, grottes marines et calanques vues depuis la mer', d:{"desc":"Sortie d'environ 1 h au départ du port de Bonifacio : falaises calcaires, grottes marines et calanques, vues depuis la mer."}},
+  fazz: {name:'Plage de Fazzio', lat:41.3935, lon:9.1370, img:wm('20169 Bonifacio, France - panoramio.jpg'), cap:'Anse à l\'ouest de Bonifacio, atteinte à pied', d:{"desc":"Petite plage à l'ouest de Bonifacio, atteinte par une randonnée à pied depuis la ville."}},
+  cim:  {name:'Cimetière marin', lat:41.38672, lon:9.15038, img:wm('Cimetière marin (Bonifacio).jpg'), cap:'Chapelles funéraires face à la mer', d:{"desc":"Chapelles et caveaux à l'extrémité ouest du plateau, face à la mer.","facts":{"duree":"30 min","acces":"À pied depuis la haute-ville","marche":"Env. 10 min depuis la haute-ville","cout":"Gratuit (horaires à vérifier)"},"dontMiss":["La vue sur les falaises et la Sardaigne","Les chapelles funéraires face à la mer"],"tips":["Cimetière en activité : rester respectueux","Se rend à pied depuis la haute-ville (env. 10 min)"]}},
+};
+
+/* ---------- Programme ---------- */
+// steps: {t, end?, txt, p? (clé de lieu), tags?, cond?} ; drive: {drive:'texte'}
+const DAYS = [
+ {id:'j1', walk:'~2,5 km · 1 h 30', d:'Lundi 5 octobre', title:'Arrivée Figari • Porto-Vecchio • Santa Giulia', meteo:['🌦️','25°C / 19°C','Averses faibles possibles'],
+  stops:['fig','pv','sg'], cover:'sg',
+  steps:[
+   {t:'12:30', txt:'Atterrissage à Figari + récupération voiture de location', p:'fig', dur:'45 min', more:["Comptoirs des loueurs dans le hall, voitures sur le parking en face du terminal.", "Photographier la voiture (rayures, jantes) avant de partir et noter le niveau d'essence.", "Route : N198 direction Porto-Vecchio, ~30 min sans difficulté."]},
+   {drive:'🚗 Figari → Porto-Vecchio : ~30 min (25 km)'},
+   {t:'13:45', end:'14:30', txt:'Déjeuner rapide', dur:'45 min'},
+   {t:'14:30', end:'15:30', txt:'Installation au gîte (Villa Occhiatana, Santa-Giulia) + courses', dur:'1 h', more:["Adresse : Villa Occhiatana, Santa-Giulia, 20137 Porto-Vecchio.", "Grandes surfaces à l'entrée de Porto-Vecchio : faire le plein d'eau, crème solaire et de quoi pique-niquer pour les journées rando.", "Prévoir des sacs isothermes pour les pique-niques du J3 et du J4."]},
+   {t:'15:45', end:'17:00', txt:'Vieille ville et citadelle de Porto-Vecchio', p:'pv', dur:'1 h 15', more:["Se garer en bas (port de plaisance) puis monter à pied par les escaliers (~10 min), ou au parking de la haute-ville.", "À voir : porte génoise, bastion de France, belvédère sur le golfe et les salines, église Saint-Jean-Baptiste.", "Rue Borgo et place de la République : boutiques de produits corses (charcuterie, miel, couteaux)."]},
+   {drive:'🚗 Porto-Vecchio → Santa Giulia : ~15 min (8 km)'},
+   {t:'17:15', end:'18:45', txt:'Santa Giulia — baignade, coucher de soleil ~19:05', p:'sg', dur:'1 h 30', cond:'Snorkeling si mer calme', more:["Lagon très peu profond, eau souvent plus chaude qu'ailleurs : idéal pour une première baignade.", "Snorkeling : longer les rochers aux deux extrémités de la plage, plus de poissons qu'au centre (sable).", "Soleil couché vers 19:05 : rester jusqu'au bout pour la lumière sur la baie."]},
+   {t:'20:00', txt:'Dîner'},
+  ],
+  rain:[{p:"egl",t:"Vieille ville : ruelles, église, boutiques et cafés"},{p:"salin",t:"Balade sur les salines (si simple bruine)"}],
+  restos:["L'Ardoise Porto-Vecchio","Casa Corsa Porto-Vecchio"]},
+
+ {id:'j2', walk:'~8 km · 5 h (réalisé)', d:'Mardi 6 octobre', title:'Bonifacio • Citadelle • Bateau • Plage de Fazzio', done:true, meteo:['⛈️','24°C / 19°C',"Risque d'orage"],
+  stops:['bonc','bat','fazz'],
+  steps:[
+   {t:'09:00', end:'11:30', txt:"Visite de la citadelle de Bonifacio", p:'bonc', dur:'2 h 30', more:["✅ Fait : haute-ville, bastion de l'Étendard, ruelles et belvédères."]},
+   {t:'11:45', end:'12:45', txt:'Sortie en bateau — falaises et calanques', p:'bat', dur:'1 h', more:["✅ Fait : environ 1 h de mer au pied des falaises, avec vue sur les calanques et les grottes."]},
+   {t:'13:00', end:'14:15', txt:'Déjeuner à Bonifacio', dur:'1 h 15'},
+   {t:'14:30', end:'17:00', txt:'Randonnée jusqu\'à la plage de Fazzio', p:'fazz', dur:'2 h 30', more:["✅ Fait : marche à pied jusqu'à la plage de Fazzio."]},
+   {t:'17:15', txt:'Retour à Porto-Vecchio (~40 min)'},
+  ],
+  note:'Non fait : Capo Pertusato et plage du Petit Sperone (restent possibles un autre jour, voir J6).',
+  rain:[{p:"etend",t:"Bastion de l'Étendard (musée)"},{p:"aqua",t:"Aquarium sur le port"}],
+  restos:['La Minute Moule Bonifacio','Del Ferro Bonifacio','Les Quatre Vents Bonifacio']},
+
+ {id:'j3', walk:'~6 km · 3 h', d:'Mercredi 7 octobre', title:'Aiguilles de Bavella • Trou de la Bombe', meteo:['🌦️','18°C / 12°C','Sec le matin, averses en fin de journée'],
+  alert:'⛈️ Aujourd\'hui : sec et vent modéré (rafales 30–50 km/h) jusqu\'à ~14 h, puis averses/orage possibles (jusqu\'à ~55 % vers 16 h). Montée au Trou de la Bombe : demi-tour à 13 h 30 au plus tard, et dès le premier grondement. Demain, rafales de 100 km/h annoncées sur Bavella : c\'est le bon jour pour y aller.',
+  stops:['bav','trou','cavu'], cover:'bav',
+  steps:[
+   {t:'10:15', txt:'Départ immédiat (fenêtre sèche jusqu\'à ~14 h)'},
+   {drive:'🚗 Porto-Vecchio → Col de Bavella via Zonza : ~1 h 15 (50 km)'},
+   {t:'11:30', txt:'Arrivée Col de Bavella (parking)', p:'bav', more:["Col à 1 218 m, statue de Notre-Dame-des-Neiges, vue directe sur les aiguilles de granit rouge.", "Parking payant au col, souvent plein en milieu de journée : se garer le long de la route si besoin. Cochons et vaches en liberté : ne pas les nourrir.", "Il fait 6 à 8 °C de moins qu'à Porto-Vecchio : prendre une polaire."]},
+   {t:'11:45', end:'14:00', txt:'Montée jusqu\'au Trou de la Bombe (aller-retour)', p:'trou', dur:'2 h 15', cond:'Demi-tour à 13 h 30 au plus tard · pas d\'orage', more:["Objectif : grimper jusqu'au trou lui-même, au pied de la crête.", "Départ du col (derrière les auberges), balisage rouge puis cairns.", "~2 h aller-retour, ~200 m de dénivelé : la fin est une vraie montée rocheuse où l'on pose les mains. Prévoir eau, chaussures de rando et polaire ; descente glissante si la roche est humide.", "Arrive sous une arche naturelle de ~8 m percée dans la roche : photo classique depuis l'intérieur.", "Pique-nique possible sur les dalles avant de redescendre."]},
+   {t:'14:00', end:'15:00', txt:'Déjeuner à l\'Auberge du Col de Bavella', dur:'1 h'},
+   {drive:'🚗 Bavella → vallée du Cavu (retour par Sainte-Lucie) : ~30 min'},
+   {t:'15:15', end:'15:45', txt:'Arrêt aux piscines naturelles du Cavu', p:'cavu', dur:'30 min', cond:'Seulement si le ciel reste dégagé', more:["Vasques de granit le long de la rivière, accès en quelques minutes depuis la route.", "Baignade fraîche possible ; sinon simple balade sur les rochers."]},
+   {t:'15:45', end:'16:30', txt:'Retour via Sainte-Lucie (~35 min)'},
+  ],
+  rain:[{p:"sart",t:"Sartène : place Porta, caves"},{p:"prop",t:"Propriano : port et front de mer"}],
+  restos:['Auberge du Col de Bavella']},
+
+ {id:'j4', walk:'~4 km · 1 h 45 (sans la cascade : ~1,5 km · 45 min)', d:'Jeudi 8 octobre', title:'Ospedale • Piscia di Ghjaddu • Zonza', meteo:['💨','18°C / 14°C','Vent très fort'],
+  alert:'💨 Vent très fort annoncé jeudi (rafales ~70 km/h à l\'Ospedale, jusqu\'à 100 km/h plus haut) : éviter la cascade et la forêt de pins (chutes de branches). Privilégier Zonza, les musées du plan B ou une journée plage abritée ; décider le matin selon la météo.',
+  stops:['osp','pisc','zon'],
+  steps:[
+   {t:'08:30', txt:'Départ'},
+   {drive:'🚗 Porto-Vecchio → parking Piscia di Ghjaddu : ~35 min (20 km, route de montagne)'},
+   {t:'09:15', end:'11:00', txt:'Randonnée Piscia di Ghjaddu (aller-retour, facultative)', p:'pisc', dur:'1 h 45', cond:'Facultatif : à sauter si les jambes sont fatiguées (alternative : tour du lac de l\'Ospedale, ~30 min) · vent fort : à éviter si les rafales se confirment', more:["Départ du parking au bord de la D368, après le lac de l'Ospedale (panneau « Piscia di Gallo »).", "~1 h 15 à 1 h 30 aller-retour, ~200 m de dénivelé : l'aller descend, le retour remonte.", "Sentier balisé mais rocheux, passages sur dalles où l'on pose les mains. Finit à un belvédère face à la chute (~60 m) : ne pas descendre au pied.", "Partir tôt (parking vite plein), eau + chaussures à crampons. Granit très glissant s'il a plu."]},
+   {t:'11:15', end:'11:45', txt:'Forêt / belvédère de l\'Ospedale', p:'osp', dur:'30 min', more:["Grande forêt de pins laricio autour du lac de barrage, aires de pique-nique ombragées.", "Le village de L'Ospedale offre un belvédère sur tout le golfe de Porto-Vecchio."]},
+   {drive:'🚗 Ospedale → Zonza : ~30 min (20 km)'},
+   {t:'12:45', end:'14:00', txt:'Déjeuner à Zonza', dur:'1 h 15'},
+   {t:'14:00', end:'15:00', txt:'Visite de Zonza', p:'zon', dur:'45 min', more:["Village de l'Alta Rocca (~780 m) : église, ruelles de granit, terrasses de café.", "Boutiques de charcuterie, fromages de brebis et miel AOP ; bon endroit pour les achats à rapporter."]},
+   {t:'15:00', end:'16:00', txt:'Retour (via L\'Ospedale ou Sainte-Lucie, ~50 min–1 h)'},
+  ],
+  rain:[{p:"levie",t:"Musée de l'Alta Rocca (préhistoire)"},{p:"preh",t:"Musée de Préhistoire de Sartène (~45 min)"}],
+  restos:['Auberge du Sanglier Zonza',"L'Eternisula Zonza"]},
+
+ {id:'j5', walk:'~4 km · 2 h', d:'Vendredi 9 octobre', title:'Palombaggia • Tamaricciu • Snorkeling', meteo:['💨','21°C / 16°C',"Vent d'ouest potentiellement fort"],
+  alert:'🌊 Snorkeling CONDITIONNEL. Si mer agitée ou vent fort : alternative terrestre → sentier côtier Palombaggia–Tamaricciu à pied, puis vieille ville de Porto-Vecchio ou salines.',
+  stops:['palo','tama'],
+  steps:[
+   {t:'08:30', txt:'Départ'},
+   {drive:'🚗 Porto-Vecchio → Palombaggia : ~20 min (12 km)'},
+   {t:'09:00', end:'11:00', txt:'Palombaggia', p:'palo', dur:'2 h', cond:'Snorkeling si mer calme', more:["Parkings privés payants le long de la route, ou places gratuites plus loin à pied.", "Sable blanc, pins parasols et rochers rouges ; mer plus agitée qu'à Santa Giulia quand le vent d'ouest souffle.", "Snorkeling : rochers rouges à l'extrémité sud de la plage. Ne pas y aller si drapeau orange ou rouge."]},
+   {t:'11:00', end:'12:00', txt:'Marche côtière vers Tamaricciu', p:'tama', dur:'1 h', more:["Sentier côtier vers le sud, ~15–20 min à travers les rochers et les petites criques.", "Tamaricciu est plus petite et plus abritée : bonne alternative si Palombaggia est trop agitée."]},
+   {t:'12:00', end:'13:30', txt:'Déjeuner', dur:'1 h 30'},
+   {t:'13:30', end:'15:30', txt:'Deuxième session snorkeling', p:'tama', dur:'2 h', cond:'Si conditions OK', more:["Explorer les rochers entre les deux plages, en restant près du bord.", "Si le vent s'est levé : sieste à l'ombre des pins ou retour vers la vieille ville."]},
+   {t:'16:00', txt:'Retour (~20 min)'},
+   {t:'19:30', txt:'Dîner'},
+  ],
+  rain:[{p:"torr",t:"Dégustation au Domaine de Torraccia (~20 min)"},{p:"arag",t:"Castellu d'Araghju (si simple bruine)"}],
+  restos:['OMEA Beach Porto-Vecchio',"L'Ardoise Porto-Vecchio"]},
+
+ {id:'j6', walk:'~4,5 km · 2 h 30', d:'Samedi 10 octobre', title:'Lavezzi • Bonifacio • Rondinara', meteo:['🌦️','21°C / 13°C','Averses possibles'],
+  alert:'⛵ Sortie bateau Lavezzi DÉPENDANTE de la météo marine : confirmer avec la compagnie la veille au soir / le matin. Si annulée : Bonifacio le matin, Rondinara l\'après-midi.',
+  stops:['bonp','lav','ron'],
+  steps:[
+   {t:'07:30', txt:'Départ'},
+   {drive:'🚗 Porto-Vecchio → Port de Bonifacio : ~40 min + stationnement'},
+   {t:'09:00', end:'13:00', txt:'Sortie bateau îles Lavezzi', p:'lav', dur:'4 h', cond:'Baignade / snorkeling si conditions favorables', more:["Billetteries des compagnies sur le quai du port de Bonifacio ; réserver la veille et confirmer le départ le matin (annulé si mer forte).", "Traversée ~45 min le long des falaises et des grottes (Sdragonato), puis escale de 2 à 3 h sur l'île.", "Réserve naturelle sans aucun service : emporter eau, pique-nique, crème solaire, masque et tuba. Prix habituel env. 40–50 € par adulte (à vérifier).", "Sur l'île : sentier balisé jusqu'au cimetière de la Sémillante (naufrage de 1855) et criques d'eau cristalline."]},
+   {t:'13:15', end:'14:30', txt:'Déjeuner', dur:'1 h 15'},
+   {t:'14:30', end:'16:00', txt:'Citadelle / port de Bonifacio', p:'bonp', dur:'1 h 30', more:["Flâner sur le port et la marina, puis monter en haute-ville si on ne l'a pas fait le J2.", "Pause à l'Aquarium (sur le quai) si la sortie bateau a été écourtée."]},
+   {drive:'🚗 Bonifacio → Rondinara : ~25 min (18 km)'},
+   {t:'16:15', end:'17:30', txt:'Plage de Rondinara', p:'ron', dur:'1 h 15', cond:'Si météo favorable', more:["Baie presque fermée, en forme de fer à cheval : eau calme même quand il y a du vent.", "Parking payant puis ~10 min à pied. Coucher de soleil à prévoir avant 19:00."]},
+   {t:'18:00', txt:'Retour (~25 min)'},
+  ],
+  rain:[{p:"smm",t:"Église Sainte-Marie-Majeure et ruelles couvertes"},{p:"cana",t:"Dégustation au Clos Canarelli (Figari, sur le retour)"}],
+  restos:['La Minute Moule Bonifacio','La Bohème Bonifacio','Del Ferro Bonifacio']},
+
+ {id:'j7', walk:'~3 km · 1 h 30', d:'Dimanche 11 octobre', title:'Dernière baignade • Palombaggia • Envol Figari', meteo:['🌦️','19°C / 11°C','Averses possibles'],
+  alert:'✈️ Départ de Figari à 20:00 : être à l\'aéroport vers 18:45 (restitution voiture + enregistrement). Vérifier l\'heure de libération du logement.',
+  stops:['sg','palo','pv','fig'], cover:'palo',
+  steps:[
+   {t:'08:30', txt:'Petit-déjeuner + bagages', dur:'1 h'},
+   {drive:'🚗 → Santa Giulia : ~15 min'},
+   {t:'09:30', end:'11:30', txt:'Santa Giulia (ou Saint-Cyprien)', p:'sg', dur:'2 h', cond:'Baignade si mer calme', more:["Dernière baignade dans le lagon. Variante : plage de Saint-Cyprien (au nord), plus calme hors saison.", "Garder une serviette sèche et des vêtements de rechange dans la voiture."]},
+   {t:'11:45', end:'12:30', txt:'Libération du gîte / bagages dans la voiture', dur:'45 min'},
+   {t:'12:30', end:'14:00', txt:'Déjeuner à Porto-Vecchio', p:'pv', dur:'1 h 30'},
+   {drive:'🚗 Porto-Vecchio → Palombaggia : ~20 min'},
+   {t:'14:30', end:'17:00', txt:'Palombaggia — dernière baignade & sieste sous les pins', p:'palo', dur:'2 h 30', cond:'Si météo favorable, sinon vieille ville', more:["Dernier après-midi sous les pins. Si temps couvert : vieille ville de Porto-Vecchio pour les derniers achats.", "Faire le plein d'essence avant l'aéroport (le loueur facture le carburant manquant)."]},
+   {t:'17:00', end:'17:45', txt:'Douche plage / se changer, dernier verre', dur:'45 min'},
+   {drive:'🚗 Palombaggia → Aéroport de Figari : ~40 min (30 km) + plein d\'essence'},
+   {t:'18:45', txt:'Aéroport : restitution voiture + enregistrement', p:'fig', dur:'1 h 15', more:["Retour de la voiture au parking du loueur, puis enregistrement. Petit aéroport : 1 h 15 avant le vol suffit."]},
+   {t:'20:00', txt:'Décollage ✈️'},
+  ],
+  rain:[{p:"pv",t:"Derniers achats en vieille ville (charcuterie, fromages, vins)"}],
+  restos:['Casa Corsa Porto-Vecchio',"L'Ardoise Porto-Vecchio"]},
+];
+
+/* ---------- Utilitaires ---------- */
+const gUrl = (p) => `https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lon}`;
+const aUrl = (p) => `https://maps.apple.com/?ll=${p.lat},${p.lon}&q=${encodeURIComponent(p.name)}`;
+const esc = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const phHtml = (k) => `<details class="more-d ph" data-p="${k}"><summary>📷 Photos du lieu</summary><div class="ph-grid"></div></details>`;
+const navBtns = (p) =>
+  `<a class="btn btn-g" href="${gUrl(p)}" target="_blank" rel="noopener">🧭 Naviguer</a>` +
+  `<a class="btn btn-a" href="${aUrl(p)}" target="_blank" rel="noopener">🍎 Plans</a>`;
+
+// Image de secours si la photo distante ne charge pas (hotlink, hors-ligne…)
+function fallbackImg(name){
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7cc6d1"/><stop offset=".55" stop-color="#2a8a9a"/><stop offset="1" stop-color="#0e5a6b"/></linearGradient></defs><rect width="800" height="500" fill="url(#g)"/><circle cx="620" cy="130" r="60" fill="#f2c26b"/><path d="M0 330 L160 220 L290 300 L420 190 L560 290 L800 200 V500 H0Z" fill="#c4613a" opacity=".55"/><path d="M0 400 Q200 370 400 400 T800 400 V500 H0Z" fill="#0b4654"/><text x="400" y="470" font-family="Georgia,serif" font-size="34" fill="#fff" text-anchor="middle">${esc(name)}</text></svg>`;
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
+
+const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+const CACHE = 'carnet-corse-v16'; // même nom que dans sw.js
+
+const RESTO = {
+ "L'Ardoise Porto-Vecchio": {
+  "name": "L'Ardoise",
+  "cuisine": "Petit bistrot maison, carte renouvelée chaque semaine (recettes du Nord, de Corse et d'ailleurs)",
+  "budget": "env. 20–35 € le midi, un peu plus le soir",
+  "adr": "Rue du Maréchal Juin, Porto-Vecchio (bord du centre)",
+  "tel": "+33636471193",
+  "note": "Petite salle : réserver par téléphone."
+ },
+ "Casa Corsa Porto-Vecchio": {
+  "name": "Casa Corsa",
+  "cuisine": "Cuisine corse généreuse : veau aux olives, sanglier, agneau braisé, charcuterie, desserts au brocciu",
+  "budget": "env. 20–40 €",
+  "adr": "Quai Pascal Paoli, port de plaisance de Porto-Vecchio",
+  "note": "Terrasse sur la marina."
+ },
+ "Del Ferro Bonifacio": {
+  "name": "Del Ferro",
+  "cuisine": "Corse et italienne : poisson grillé, pâtes maison, tapas, burgers",
+  "budget": "env. 30–40 €",
+  "adr": "3 quai Banda del Ferro, port de Bonifacio",
+  "note": "Très bien noté (≈ 4,8/5 sur Google) : réserver. Grande terrasse face aux bateaux."
+ },
+ "Les Quatre Vents Bonifacio": {
+  "name": "Les Quatre Vents",
+  "cuisine": "Méditerranéenne terre et mer ; bouillabaisse réputée, poisson du jour",
+  "budget": "env. 35–55 €",
+  "adr": "29 quai Banda del Ferro, port de Bonifacio",
+  "tel": "+33495730750",
+  "note": "Plus calme et plus chic : bon choix pour un dîner. Réservation conseillée."
+ },
+ "La Minute Moule Bonifacio": {
+  "name": "La Minute Moule",
+  "cuisine": "Moules cuisinées à la minute, nombreuses sauces (dont marinière)",
+  "budget": "env. 14,50 € (petite) à 21 € (grande portion)",
+  "adr": "Rue des Moulins, haute-ville, face à la mairie",
+  "tel": "+33495505567",
+  "note": "Recommandé par des amis. Arriver tôt pour éviter l'attente."
+ },
+ "La Bohème Bonifacio": {
+  "name": "La Bohème",
+  "cuisine": "Méditerranéenne et corse : poisson frais, produits de producteurs locaux",
+  "budget": "env. 25–40 €",
+  "adr": "Bonifacio, entre la vieille ville et le port",
+  "note": "Entre bistrot de bord de mer et table gastronomique de quartier."
+ },
+ "Auberge du Sanglier Zonza": {
+  "name": "Auberge du Sanglier",
+  "cuisine": "Corse traditionnelle : civet de sanglier, charcuterie, gâteau à la châtaigne, bières et vins corses",
+  "adr": "Zonza, centre du village",
+  "note": "Terrasse avec vue sur les montagnes ; ≈ 4,3/5 sur Google. Prix à vérifier sur place."
+ },
+ "L'Eternisula Zonza": {
+  "name": "L'Eternisula",
+  "cuisine": "Tapas corses, planches charcuterie-fromage, beignets, aubergines à la zonzaise, cannellonis",
+  "budget": "env. 20–30 €",
+  "adr": "12 Strada di Quenza, Zonza (dans l'ancienne école)",
+  "note": "Fermé le lundi (à vérifier). Terrasse ombragée, bar à vins."
+ },
+ "Auberge du Col de Bavella": {
+  "name": "Auberge du Col de Bavella",
+  "cuisine": "Cuisine corse, options végétariennes ; bar et épicerie",
+  "budget": "env. 20–30 €",
+  "adr": "Village de Bavella, ~200 m sous le col",
+  "tel": "+33495720987",
+  "note": "Auberge historique (1936), juste à côté du départ du Trou de la Bombe."
+ },
+ "OMEA Beach Porto-Vecchio": {
+  "name": "OMEA Beach",
+  "cuisine": "Méditerranéenne contemporaine : brunchs, déjeuners, snacks, cocktails",
+  "adr": "Résidence Paese Serenu, voie d'Arena, golfe de Porto-Vecchio — pas sur la plage de Palombaggia (env. 15–20 min en voiture)",
+  "note": "Ouverture en octobre à vérifier. Terrasse panoramique sur le golfe."
+ }
+};
+
+/* ---------- Rendu ---------- */
+const galleryImg = (p, cls) =>
+  `<img class="${cls}" src="${p.img}" alt="${esc(p.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="imgFail(this)" data-cap="${esc(p.cap)}">`;
+const FACT_ICO = {duree:'⏱',moment:'🌅',acces:'🚗',marche:'🥾',cout:'💶',niveau:'📈',services:'🚻'};
+const FACT_LBL = {duree:'Sur place',moment:'Meilleur moment',acces:'Accès',marche:'Marche',cout:'Coût',niveau:'Niveau',services:'Équipements'};
+function detailHtml(p){
+  const d = p.d; if (!d) return '';
+  const f = d.facts || {};
+  const key = ['duree','marche','niveau'].filter(k => f[k]);
+  const rest = Object.keys(FACT_ICO).filter(k => f[k] && !key.includes(k));
+  const list = (t, a) => a && a.length ? `<h4>${t}</h4><ul>${a.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>` : '';
+  return `<div class="facts">${key.map(k=>`<span class="tag">${FACT_ICO[k]} ${esc(f[k])}</span>`).join('')}</div>
+  ${d.warn ? `<div class="warnline">⚠ ${esc(d.warn)}</div>` : ''}
+  <details class="more-d"><summary>Plus de détails</summary>
+    <p class="desc">${esc(d.desc)}</p>
+    ${rest.length ? `<dl class="kv">${rest.map(k=>`<div><dt>${FACT_ICO[k]} ${FACT_LBL[k]}</dt><dd>${esc(f[k])}</dd></div>`).join('')}</dl>` : ''}
+    ${list('À ne pas manquer', d.dontMiss)}${list('Conseils', d.tips)}
+  </details>`;
+}
+const nav = document.getElementById('daynav');
+const wd = (day) => day.d.split(' ')[0];
+const wdShort = (day) => wd(day).slice(0, 3).toLowerCase() + '.';
+const main = document.getElementById('days');
+
+// ——— Adresses utiles (OpenStreetMap) ———
+const UTILES = [
+  {cat:'🛒 Supermarché', name:'Supermarché Arataggiu', lat:41.56192, lon:9.27350},
+  {cat:'🛒 Supermarché', name:'Spar Pinarellu', lat:41.56660, lon:9.27401},
+  {cat:'🛒 Supermarché', name:'Auchan Supermarché (Vignola)', lat:41.58603, lon:9.28161},
+  {cat:'🛒 Supermarché', name:'Hyper U Porto-Vecchio', lat:41.59787, lon:9.27686},
+  {cat:'🛒 Supermarché', name:'Auchan Poretta', lat:41.60495, lon:9.27880},
+  {cat:'⛽ Station', name:'Total (Strada di Ceccia)', lat:41.57061, lon:9.27328},
+  {cat:'⛽ Station', name:'Vito (Pifano)', lat:41.57847, lon:9.27488},
+  {cat:'⛽ Station', name:'Vito Poretta', lat:41.59828, lon:9.27566},
+  {cat:'⛽ Station', name:'Total Poretta', lat:41.60151, lon:9.27655},
+  {cat:'💊 Pharmacie', name:'Pharmacie Paolini', lat:41.58314, lon:9.26672},
+  {cat:'💊 Pharmacie', name:'Pharmacie de la Marine', lat:41.58866, lon:9.28382},
+  {cat:'💊 Pharmacie', name:'Pharmacie des 4 Chemins', lat:41.59665, lon:9.27619},
+  {cat:'🏥 Urgences', name:"Clinique de l'Ospedale", lat:41.59867, lon:9.27681},
+];
+const GITE = {name:'Gîte — secteur Santa-Giulia (position approx.)', lat:P.sg.lat, lon:P.sg.lon};
+const kmFrom = (p) => Math.hypot((p.lat - GITE.lat) * 111, (p.lon - GITE.lon) * 83).toFixed(1);
+const UGROUPS = [['sup', '🛒 Supermarchés', '🛒 Supermarché'], ['fuel', '⛽ Stations-service', '⛽ Station'], ['sante', '💊 Pharmacies & urgences', '💊 Pharmacie|🏥 Urgences']]
+  .map(([key, title, cats]) => ({key, title, items: UTILES.filter(u => cats.split('|').includes(u.cat))}));
+document.getElementById('utiles').innerHTML = UGROUPS.map(g => `
+  <details class="fold" data-key="${g.key}">
+    <summary><span class="sub-t">${g.title}</span><span class="cnt">${g.items.length}</span></summary>
+    <div class="map" id="map-u-${g.key}"></div>
+    <div class="util-list">${g.items.map((u, j) => `
+      <div class="util"><div><div class="k">${u.cat} · ${kmFrom(u)} km</div><div class="n">${'ABCDEFGHIJ'[j]} · ${esc(u.name)}</div></div><div class="row">${navBtns(u)}</div></div>`).join('')}</div>
+  </details>`).join('');
+
+
+const seenImg = new Set();
+DAYS.forEach((day, i) => {
+  const n = i + 1;
+  nav.insertAdjacentHTML('beforeend', `<a href="#${day.id}" data-id="${day.id}">J${n}<small>${wdShort(day)} ${day.d.split(" ")[1]}</small></a>`);
+
+  const order = day.stops; // numérotation des marqueurs
+  const stepsHtml = day.steps.map(s => {
+    if (s.drive) return `<li class="drive"><span></span><span>${esc(s.drive)}</span></li>`;
+    const idx = s.p ? order.indexOf(s.p) + 1 : 0;
+    return `<li><span class="t"><span data-t="${s.t}">${s.t}</span>${s.end ? `<br><span class="d">→ <span data-t="${s.end}">${s.end}</span></span>` : ''}</span>
+      <span>${idx ? `<span class="badge">${idx}</span>` : ''}${esc(s.txt)}
+      ${s.dur ? `<br><span class="tag">⏱ ${s.dur}</span>` : ''}${s.cond ? `<span class="tag cond">⚠ ${esc(s.cond)}</span>` : ''}
+      ${s.more ? `<ul class="more">${s.more.map(m => `<li>${esc(m)}</li>`).join('')}</ul>` : ''}
+      ${s.p ? phHtml(s.p) : ''}</span></li>`;
+  }).join('');
+
+  const stopsHtml = order.map((k, j) => { const p = P[k]; return `
+    <article class="stop">
+      <figure><img src="${p.img}" alt="${esc(p.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="imgFail(this)" data-cap="${esc(p.cap)}"></figure>
+      <div class="body">
+        <h3><span class="badge">${j+1}</span>${esc(p.name)}</h3>
+        <div class="cap">${esc(p.cap)}</div>
+        ${detailHtml(p)}${phHtml(k)}
+        <div class="gps">${p.lat.toFixed(4)}° N · ${p.lon.toFixed(4)}° E</div>
+        <div class="row">${navBtns(p)}</div>
+      </div>
+    </article>`; }).join('');
+
+  const restoHtml = day.restos.map(k => {
+    const r = RESTO[k] || {name: k};
+    const maps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(k)}`;
+    return `<article class="resto-card">
+      <h4>🍽️ ${esc(r.name)}</h4>
+      ${r.cuisine ? `<p class="cui">${esc(r.cuisine)}</p>` : ''}
+      <div class="meta">${r.budget ? `<span class="tag">💶 ${esc(r.budget)}</span>` : ''}</div>
+      ${r.adr ? `<p class="adr">📍 ${esc(r.adr)}</p>` : ''}
+      ${r.note ? `<p class="note">${esc(r.note)}</p>` : ''}
+      <div class="row"><a class="btn btn-g" href="${maps}" target="_blank" rel="noopener">🧭 Itinéraire</a>${r.tel ? `<a class="btn btn-a" href="tel:${r.tel}">📞 Appeler</a>` : ''}</div>
+    </article>`;
+  }).join('');
+
+  const cover = P[day.cover || order[order.length - 1]];
+  const pool = [...new Set([...order, ...(day.rain || []).map(r => r.p)])].map(k => P[k]).filter(p => p !== cover && p.img);
+  const side = [...pool.filter(p => !seenImg.has(p.img)), ...pool.filter(p => seenImg.has(p.img))].slice(0, 2);
+  [cover, ...side].forEach(p => seenImg.add(p.img));
+  main.insertAdjacentHTML('beforeend', `
+  <section class="day" id="${day.id}">
+    <div class="gallery">
+      ${galleryImg(cover, 'main')}
+      ${side.length ? `<div class="side">${side.map(p => galleryImg(p, '')).join('')}</div>` : ''}
+      <span class="pill">Jour ${n} · ${wd(day)}</span>
+    </div>
+    <div class="dayhead">
+      <div><h2>${esc(day.title)}</h2><div class="when">${day.d} 2026${day.done ? ' · <span class="tag">✅ Fait</span>' : ''}</div>${day.walk ? `<div class="walk">🚶 Marche estimée : ${day.walk}</div>` : ''}</div>
+      <div class="meteo"><span class="ico">${day.meteo[0]}</span><div><b>${day.meteo[1]}</b><span class="m">${day.meteo[2]}</span></div></div>
+    </div>
+    ${day.alert ? `<div class="alert">${esc(day.alert)}</div>` : ''}${day.note ? `<div class="alert">ℹ️ ${esc(day.note)}</div>` : ''}
+    <div class="grid">
+      <div class="mapbox" id="box-${day.id}">
+        <div class="map" id="map-${day.id}"></div>
+        <div class="mapbtns">
+          <button data-act="full" title="Plein écran" aria-label="Plein écran">⛶</button>
+          <button data-act="me" title="Ma position" aria-label="Ma position">📍</button>
+          <button data-act="fit" title="Recentrer" aria-label="Recentrer">🎯</button>
+        </div>
+      </div>
+      <div><h3 class="sub">Programme</h3>${/^Départ/.test(day.steps[0].txt) ? `<label class="dep">🕗 Heure de départ <input type="time" step="900" value="${day.steps[0].t}" data-day="${day.id}" data-base="${day.steps[0].t}"></label>` : ''}<ul class="tl">${stepsHtml}</ul></div>
+    </div>
+    <div class="stops">${stopsHtml}</div>
+    ${day.rain ? `<details class="rain" data-day="${day.id}">
+      <summary><span class="sub-t">☔ Plan B pluie</span><span class="cnt">${day.rain.length} idées</span></summary>
+      <div class="mapbox" id="box-r${day.id}">
+        <div class="map" id="map-r${day.id}"></div>
+        <div class="mapbtns">
+          <button data-act="full" title="Plein écran" aria-label="Plein écran">⛶</button>
+          <button data-act="me" title="Ma position" aria-label="Ma position">📍</button>
+          <button data-act="fit" title="Recentrer" aria-label="Recentrer">🎯</button>
+        </div>
+      </div>
+      <div class="stops">${day.rain.map((r, j) => { const p = P[r.p]; return `
+        <article class="stop">
+          <figure><img src="${p.img || fallbackImg(p.name)}" alt="${esc(p.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="imgFail(this)" data-cap="${esc(p.cap)}"></figure>
+          <div class="body">
+            <h3><span class="badge alt">${'ABCDE'[j]}</span>${esc(p.name)}</h3>
+            <div>${esc(r.t)}</div>
+            <div class="cap">${esc(p.cap)}</div>
+            ${p.info ? `<div class="hours"><div>🕘 ${esc(p.info.h)}</div><div>🎟️ ${esc(p.info.prix)}</div>
+              <div class="links"><a href="${p.info.url}" target="_blank" rel="noopener">🌐 Infos du musée</a><a href="tel:${p.info.tel}">📞 Appeler</a></div></div>` : ''}
+            ${detailHtml(p)}${phHtml(r.p)}
+            <div class="gps">${p.lat.toFixed(4)}° N · ${p.lon.toFixed(4)}° E</div>
+            <div class="row">${navBtns(p)}</div>
+          </div>
+        </article>`; }).join('')}</div>
+      <p class="note">Horaires relevés en octobre 2026 sur les sites touristiques officiels : un coup de fil la veille reste prudent.</p>
+    </details>` : ''}
+    <div class="restos"><h3 class="sub">Où manger</h3><div class="resto-grid">${restoHtml}</div><p class="resto-foot">Prix et horaires relevés en ligne, à vérifier : beaucoup de restaurants réduisent leurs jours d'ouverture en octobre.</p></div>
+  </section>`);
+});
+
+/* Photo du hero */
+document.getElementById('heroBg').style.backgroundImage = `url("${P.ron.img}")`;
+
+/* ---------- Cartes (création paresseuse quand visibles) ---------- */
+const maps = {};
+// items : [{p: lieu, label: 1 ou 'A', info: texte popup}] ; line : relier les points dans l'ordre
+function buildMap(key, items, line){
+  // Sur écran tactile, la carte intégrée ne capte pas le glisser à un doigt (sinon la page se bloque) :
+  // déplacement activé seulement en plein écran.
+  const map = L.map('map-' + key, {scrollWheelZoom:false, dragging:!L.Browser.mobile, tap:false});
+  L.tileLayer(TILE_URL, {maxZoom:19, attribution:'© OpenStreetMap'}).addTo(map);
+  items.forEach(({p, label, info}) => {
+    const icon = L.divIcon({className:'', html:`<div class="num-marker${line ? '' : ' alt'}"><span>${label}</span></div>`, iconSize:[34,34], iconAnchor:[17,17], popupAnchor:[0,-16]});
+    L.marker([p.lat, p.lon], {icon}).addTo(map).bindPopup(
+      `<b>📍 ${label} — ${esc(p.name)}</b><br>${esc(info)}<div class="pop-btns">${navBtns(p)}</div>`);
+  });
+  const ll = items.map(({p}) => [p.lat, p.lon]);
+  if (line && ll.length > 1) L.polyline(ll, {color:'#ff385c', weight:4, opacity:.8, dashArray:'8 8'}).addTo(map);
+  const bounds = L.latLngBounds(ll);
+  map.fitBounds(bounds, {padding:[50,50], maxZoom:14});
+  maps[key] = {map, bounds};
+}
+const dayItems = (day) => day.stops.map((k, j) => {
+  const step = day.steps.find(s => s.p === k);
+  return {p:P[k], label:j + 1, info: step ? `${step.t}${step.end ? '–' + step.end : ''} — ${step.txt}` : ''};
+});
+document.querySelectorAll('#utiles details').forEach(det => det.addEventListener('toggle', () => {
+  if (!det.open) return;
+  const key = 'u-' + det.dataset.key, g = UGROUPS.find(x => x.key === det.dataset.key);
+  if (!maps[key]) buildMap(key, [{p:GITE, label:'🏡', info:'Villa Occhiatana, Santa-Giulia'}, ...g.items.map((u, j) => ({p:u, label:'ABCDEFGHIJ'[j], info:u.cat}))], false);
+  else maps[key].map.invalidateSize();
+}));
+
+// ——— Météo dynamique (Open-Meteo, sans clé) ———
+const WMO = c => c === 0 ? ['☀️','Ensoleillé'] : c <= 2 ? ['🌤️','Éclaircies'] : c === 3 ? ['☁️','Couvert'] : c <= 48 ? ['🌫️','Brouillard'] : c <= 57 ? ['🌦️','Bruine'] : c <= 67 ? ['🌧️','Pluie'] : c <= 77 ? ['🌨️','Neige'] : c <= 82 ? ['🌦️','Averses'] : ['⛈️','Orage'];
+const TRIP_START = '2026-10-05';
+const dateOf = i => { const d = new Date(TRIP_START + 'T12:00'); d.setDate(d.getDate() + i); return d.toISOString().slice(0, 10); };
+function renderWx(data, stamp){
+  const days = DAYS.map((day, i) => {
+    const loc = data[i], date = dateOf(i), k = loc.daily.time.indexOf(date);
+    return k < 0 ? null : {day, i, loc, date, k};
+  });
+  const box = document.getElementById('wxDays');
+  box.innerHTML = days.map(x => { if (!x) return ''; const dl = x.loc.daily, [ico] = WMO(dl.weather_code[x.k]);
+    return `<button class="wx-day" data-i="${x.i}" aria-pressed="false"><div class="d">J${x.i + 1} · ${wdShort(x.day)} ${x.date.slice(8)}/10</div><div class="i">${ico}</div><div class="t">${Math.round(dl.temperature_2m_max[x.k])}° / ${Math.round(dl.temperature_2m_min[x.k])}°</div><div class="r">💧 ${dl.precipitation_probability_max[x.k] ?? '–'}% · 💨 ${Math.round(dl.wind_speed_10m_max[x.k])} km/h</div></button>`; }).join('') || '<p class="note">Prévisions pas encore disponibles pour ces dates.</p>';
+  days.forEach(x => { if (!x) return; const dl = x.loc.daily, [ico, txt] = WMO(dl.weather_code[x.k]);
+    const el = document.querySelector(`#${x.day.id} .meteo`);
+    if (el) el.innerHTML = `<span class="ico">${ico}</span><div><b>${Math.round(dl.temperature_2m_max[x.k])}°C / ${Math.round(dl.temperature_2m_min[x.k])}°C</b><span class="m">${txt} · pluie ${dl.precipitation_probability_max[x.k] ?? '–'}% · vent ${Math.round(dl.wind_speed_10m_max[x.k])} km/h</span></div>`; });
+  const show = i => { const x = days[i]; if (!x) return;
+    box.querySelectorAll('.wx-day').forEach(b => b.setAttribute('aria-pressed', b.dataset.i == i));
+    const h = x.loc.hourly;
+    document.getElementById('wxHours').innerHTML = h.time.map((t, j) => [t, j]).filter(([t]) => t.startsWith(x.date) && +t.slice(11, 13) >= 7 && +t.slice(11, 13) <= 22)
+      .map(([t, j]) => `<div class="wx-h">${t.slice(11, 13)}h<div class="i">${WMO(h.weather_code[j])[0]}</div><b>${Math.round(h.temperature_2m[j])}°</b>💧${h.precipitation_probability[j] ?? '–'}%<br>💨${Math.round(h.wind_speed_10m[j])}</div>`).join('');
+  };
+  box.querySelectorAll('.wx-day').forEach(b => b.addEventListener('click', () => show(+b.dataset.i)));
+  const today = days.find(x => x && x.date === new Date().toISOString().slice(0, 10)) || days.find(Boolean);
+  if (today) show(today.i);
+  document.getElementById('wxStamp').textContent = stamp;
+}
+(async () => {
+  const locs = DAYS.map(d => P[d.stops[0] === 'fig' ? d.stops[1] : d.stops[0]]);
+  const url = 'https://api.open-meteo.com/v1/forecast?timezone=Europe%2FParis&forecast_days=16'
+    + '&latitude=' + locs.map(p => p.lat).join(',') + '&longitude=' + locs.map(p => p.lon).join(',')
+    + '&hourly=temperature_2m,precipitation_probability,weather_code,wind_speed_10m'
+    + '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max';
+  try {
+    const data = await (await fetch(url)).json();
+    if (!Array.isArray(data)) throw new Error(data.reason || 'réponse inattendue');
+    renderWx(data, 'Mis à jour à ' + new Date().toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'}) + ' · Open-Meteo');
+    try { localStorage.setItem('wx', JSON.stringify({t: Date.now(), data})); } catch (e) {}
+  } catch (e) {
+    let saved = null; try { saved = JSON.parse(localStorage.getItem('wx')); } catch (_) {}
+    if (saved) renderWx(saved.data, 'Hors ligne — prévisions du ' + new Date(saved.t).toLocaleString('fr-FR'));
+    else document.getElementById('wxDays').innerHTML = '<p class="note">Météo indisponible (hors ligne). Les prévisions indicatives restent affichées dans chaque jour.</p>';
+  }
+})();
+
+// ——— Photos autour de chaque étape (Wikimedia Commons, géolocalisées, sans clé) ———
+const PH = {};
+// File d'attente : 2 requêtes Commons à la fois, pour ne pas être limité
+let phActive = 0; const phQueue = [];
+const phFetch = (url) => new Promise((ok, ko) => { phQueue.push({url, ok, ko}); phNext(); });
+function phNext(){
+  if (phActive >= 2 || !phQueue.length) return;
+  const {url, ok, ko} = phQueue.shift(); phActive++;
+  fetch(url).then(ok, ko).finally(() => { phActive--; phNext(); });
+}
+const commonsNear = (p, r) => phFetch('https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=geosearch&ggsnamespace=6&ggslimit=20'
+  + `&ggsradius=${r}&ggscoord=${p.lat}|${p.lon}&prop=imageinfo&iiprop=url|mime&iiurlwidth=360`)
+  .then(res => res.json()).then(d => Object.values(d.query?.pages || {}).map(pg => pg.imageinfo?.[0]).filter(i => i && /jpeg|png|webp/.test(i.mime)));
+const photosOf = (k) => PH[k] || (PH[k] = (async () => {
+  let imgs = [];
+  for (const r of [600, 2500, 8000]) { imgs = await commonsNear(P[k], r); if (imgs.length >= 4) break; }
+  return imgs.slice(0, 9);
+})().catch(e => { delete PH[k]; throw e; }));
+async function fillPh(det){
+  const grid = det.querySelector('.ph-grid');
+  if (grid.dataset.done) return;
+  grid.dataset.done = 1;
+  grid.innerHTML = '<p class="note">Chargement…</p>';
+  try {
+    const imgs = await photosOf(det.dataset.p);
+    grid.innerHTML = imgs.length ? imgs.map(i => `<a href="${i.descriptionurl}" target="_blank" rel="noopener"><img src="${i.thumburl}" alt="" loading="lazy" referrerpolicy="no-referrer"></a>`).join('')
+      + '<p class="note">Photos Wikimedia Commons prises à proximité · touchez pour l’auteur et la licence.</p>'
+      : '<p class="note">Aucune photo géolocalisée trouvée à proximité.</p>';
+  } catch (e) { grid.innerHTML = '<p class="note">Photos indisponibles (hors ligne ?) · refermez et rouvrez pour réessayer.</p>'; delete grid.dataset.done; }
+}
+// Précharge la liste des photos quand l'étape approche de l'écran, pour une ouverture immédiate
+const phObs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { phObs.unobserve(e.target); photosOf(e.target.dataset.p).catch(() => {}); } }), {rootMargin:'600px'});
+document.querySelectorAll('details.ph').forEach(det => {
+  phObs.observe(det);
+  det.addEventListener('toggle', () => { if (det.open) fillPh(det); });
+});
+
+// ——— Heure de départ variable : décale tous les horaires du jour ———
+const toMin = t => +t.slice(0, 2) * 60 + +t.slice(3, 5);
+const fmt = m => { m = ((m % 1440) + 1440) % 1440; return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
+document.querySelectorAll('.dep input').forEach(inp => {
+  const apply = () => {
+    if (!inp.value) return;
+    const delta = toMin(inp.value) - toMin(inp.dataset.base);
+    document.querySelectorAll(`#${inp.dataset.day} .tl [data-t]`).forEach(el => el.textContent = fmt(toMin(el.dataset.t) + delta));
+  };
+  try { const v = localStorage.getItem('dep-' + inp.dataset.day); if (v) inp.value = v; } catch (e) {}
+  apply();
+  inp.addEventListener('change', () => { apply(); try { localStorage.setItem('dep-' + inp.dataset.day, inp.value); } catch (e) {} });
+});
+
+const mapObs = new IntersectionObserver(entries => entries.forEach(e => {
+  if (!e.isIntersecting) return;
+  const day = DAYS.find(d => 'map-' + d.id === e.target.id);
+  if (!maps[day.id]) buildMap(day.id, dayItems(day), true);
+  mapObs.unobserve(e.target);
+}), {rootMargin:'300px'});
+DAYS.forEach(d => mapObs.observe(document.getElementById('map-' + d.id)));
+
+// Carte Plan B créée à la première ouverture du bloc dépliable
+document.querySelectorAll('details.rain').forEach(det => det.addEventListener('toggle', () => {
+  if (!det.open) return;
+  const day = DAYS.find(d => d.id === det.dataset.day), key = 'r' + day.id;
+  if (!maps[key]) buildMap(key, day.rain.map((r, j) => ({p:P[r.p], label:'ABCDE'[j], info:r.t})), false);
+  else maps[key].map.invalidateSize();
+}));
+
+/* ---------- Boutons de carte ---------- */
+document.addEventListener('click', e => {
+  const b = e.target.closest('.mapbtns button'); if (!b) return;
+  const box = b.closest('.mapbox'); const id = box.id.slice(4);
+  const m = maps[id]; if (!m) return;
+  if (b.dataset.act === 'full') {
+    const on = box.classList.toggle('full');
+    b.textContent = on ? '✕' : '⛶';
+    document.body.style.overflow = on ? 'hidden' : '';
+    if (L.Browser.mobile) m.map.dragging[on ? 'enable' : 'disable']();
+    setTimeout(() => { m.map.invalidateSize(); m.map.fitBounds(m.bounds, {padding:[50,50], maxZoom:14}); }, 50);
+  } else if (b.dataset.act === 'fit') {
+    m.map.fitBounds(m.bounds, {padding:[50,50], maxZoom:14});
+  } else if (b.dataset.act === 'me') {
+    if (!navigator.geolocation) return alert('Géolocalisation indisponible sur cet appareil.');
+    b.textContent = '⏳';
+    navigator.geolocation.getCurrentPosition(pos => {
+      b.textContent = '📍';
+      const ll = [pos.coords.latitude, pos.coords.longitude];
+      if (m.me) m.me.setLatLng(ll); else m.me = L.marker(ll, {icon:L.divIcon({className:'me-marker', iconSize:[18,18]})}).addTo(m.map).bindPopup('Vous êtes ici');
+      m.map.fitBounds(m.bounds.pad(0).extend(ll), {padding:[50,50], maxZoom:14});
+    }, err => { b.textContent = '📍'; alert('Position introuvable : ' + err.message); }, {enableHighAccuracy:true, timeout:10000});
+  }
+});
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  document.querySelector('.mapbox.full .mapbtns [data-act="full"]')?.click();
+  closeLb();
+});
+
+/* ---------- Lightbox ---------- */
+const lb = document.getElementById('lb'), lbImg = document.getElementById('lbImg'), lbCap = document.getElementById('lbCap');
+document.addEventListener('click', e => {
+  const img = e.target.closest('.stop img, .gallery img'); if (!img) return;
+  lbImg.src = img.src; lbImg.alt = img.alt;
+  lbCap.textContent = img.alt + ' — ' + img.dataset.cap;
+  lb.classList.add('open');
+});
+function closeLb(){ lb.classList.remove('open'); }
+lb.addEventListener('click', e => { if (e.target !== lbImg) closeLb(); });
+
+/* ---------- Nav active + ouverture sur le jour courant ---------- */
+const navObs = new IntersectionObserver(entries => entries.forEach(e => {
+  if (!e.isIntersecting) return;
+  nav.querySelectorAll('a').forEach(a => {
+    const on = a.dataset.id === e.target.id;
+    a.classList.toggle('active', on);
+    // Défilement horizontal de la barre seule : scrollIntoView interromprait le scroll de la page
+    if (on) nav.scrollTo({left: a.offsetLeft - (nav.clientWidth - a.offsetWidth) / 2, behavior:'smooth'});
+  });
+}), {rootMargin:'-45% 0px -50% 0px'});
+document.querySelectorAll('section.day[id^="j"]').forEach(s => navObs.observe(s));
+
+const today = new Date();
+if (today.getFullYear() === 2026 && today.getMonth() === 9 && today.getDate() >= 5 && today.getDate() <= 11)
+  document.getElementById('todayOrb').href = '#j' + (today.getDate() - 4);
+if (!location.hash && today.getFullYear() === 2026 && today.getMonth() === 9 && today.getDate() >= 5 && today.getDate() <= 11) {
+  document.getElementById('j' + (today.getDate() - 4)).scrollIntoView();
+}
+
+/* ---------- Checklist (mémorisée localement) ---------- */
+const ITEMS = ['🤿 Masque','🫧 Tuba','🦶 Palmes','🥾 Chaussures de randonnée','💧 Eau','🧴 Crème solaire','🏖️ Serviette'];
+const store = { get(k){ try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
+                set(k,v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch {} } };
+const checked = store.get('cc-check') || {};
+const cb = document.getElementById('checkbox');
+cb.innerHTML = ITEMS.map((it, i) => `<label><input type="checkbox" data-i="${i}" ${checked[i] ? 'checked' : ''}><span>${it}</span></label>`).join('');
+cb.addEventListener('change', e => { checked[e.target.dataset.i] = e.target.checked; store.set('cc-check', checked); });
+document.getElementById('resetCheck').onclick = () => { cb.querySelectorAll('input').forEach(i => i.checked = false); store.set('cc-check', {}); };
+
+/* ---------- Mode sombre ---------- */
+const themeBtn = document.getElementById('themeBtn');
+function setTheme(t){ document.documentElement.dataset.theme = t; themeBtn.textContent = t === 'dark' ? '☀️' : '🌙'; store.set('cc-theme', t); }
+setTheme(store.get('cc-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+themeBtn.onclick = () => setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
+
+/* ---------- Téléchargement hors-ligne ---------- */
+// Tuiles OSM autour de chaque lieu : vue d'ensemble (z9–12) + voisinage proche (z13–15).
+function tileUrls(){
+  const tile = (lat, lon, z) => {
+    const n = 2 ** z, r = lat * Math.PI / 180;
+    return [Math.floor((lon + 180) / 360 * n), Math.floor((1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2 * n)];
+  };
+  const set = new Set();
+  const add = (z, x, y) => set.add(TILE_URL.replace('{z}', z).replace('{x}', x).replace('{y}', y));
+  const pts = Object.values(P);
+  for (let z = 9; z <= 15; z++) {
+    const rad = z <= 12 ? 1 : z === 13 ? 2 : 1;
+    pts.forEach(p => {
+      const [x, y] = tile(p.lat, p.lon, z);
+      for (let dx = -rad; dx <= rad; dx++) for (let dy = -rad; dy <= rad; dy++) add(z, x + dx, y + dy);
+    });
+  }
+  return [...set];
+}
+const offlineBtn = document.getElementById('offlineBtn'), offlineLbl = document.getElementById('offlineLbl');
+offlineBtn.onclick = async () => {
+  if (!('caches' in window) || !location.protocol.startsWith('http')) {
+    alert('Le mode hors-ligne nécessite la version en ligne (https).'); return;
+  }
+  const urls = [...new Set([
+    './', './index.html', './manifest.json', './icon.svg',
+    ...Object.values(P).map(p => p.img).filter(Boolean),
+    ...tileUrls(),
+  ])];
+  if (!confirm(`Télécharger ${urls.length} fichiers (photos + cartes, environ ${Math.round(urls.length * 0.025)} Mo) ? À faire en Wi-Fi.`)) return;
+  offlineBtn.disabled = true;
+  const cache = await caches.open(CACHE);
+  let done = 0, fail = 0;
+  const queue = [...urls];
+  const worker = async () => {
+    while (queue.length) {
+      const u = queue.shift();
+      try {
+        if (!(await cache.match(u))) {
+          const sameOrigin = new URL(u, location.href).origin === location.origin;
+          const res = await fetch(u, sameOrigin ? {} : {mode:'no-cors'});
+          if (res.ok || res.type === 'opaque') await cache.put(u, res); else fail++;
+        }
+      } catch { fail++; }
+      done++;
+      offlineLbl.textContent = `${Math.round(done / urls.length * 100)} %`;
+    }
+  };
+  await Promise.all(Array.from({length: 4}, worker));
+  offlineBtn.disabled = false;
+  offlineLbl.textContent = fail ? `Prêt (${fail} échecs)` : 'Prêt ✓';
+  store.set('cc-offline', new Date().toISOString());
+};
+if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
+
+/* ---------- PWA (uniquement servi en http/https) ---------- */
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+</script>
+</body>
+</html>
