@@ -415,7 +415,7 @@ const DAYS = [
   restos:['La Minute Moule Bonifacio','Del Ferro Bonifacio','Les Quatre Vents Bonifacio']},
 
  {id:'j3', walk:'~5,3 km · 2 h 46 (Trou de la Bombe, réalisé)', d:'Mercredi 7 octobre', title:'Aiguilles de Bavella • Trou de la Bombe', done:true, meteo:['🌦️','18°C / 12°C','Sec le matin, averses en fin de journée'],
-  alert:'✅ Trou de la Bombe fait (5,33 km en 2 h 46). Orage violent en fin de journée : plage annulée, retour au gîte.',
+  alert:'✅ Trou de la Bombe fait (5,33 km en 2 h 46). Orage violent en fin de journée : plage annulée, pause bière sur la route, retour au gîte à 19:50.',
   stops:['bav','trou','sol'], cover:'bav',
   steps:[
    {t:'10:15', txt:'Départ de Porto-Vecchio'},
@@ -425,8 +425,8 @@ const DAYS = [
    {t:'15:00', txt:'Retour au col de Bavella'},
    {drive:'🚗 Bavella → route de la côte (Solenzara)'},
    {t:'17:00', txt:'Arrêt au bord de la Solenzara', p:'sol', img:'photos/j3-riviere.jpg', imgLabel:'📸 Photo de l\'arrêt', more:["Vasques de granit et eau limpide, pins et rochers autour, sur la route de Bavella vers la côte."]},
-   {t:'17:30', txt:'⛈️ Orage violent : plage de la Siesta annulée, retour au gîte', more:["Plan abandonné à cause de l'orage : retour direct à Porto-Vecchio."]},
-   {t:'18:15', txt:'Retour au gîte'},
+   {t:'17:30', txt:'⛈️ Orage violent : plage annulée, arrêt au bord de la route', more:["Pause bière à la Cantina di u Palace, sur la route, le temps de laisser passer l'orage."]},
+   {t:'19:50', txt:'Retour au gîte'},
   ],
   rain:[{p:"sart",t:"Sartène : place Porta, caves"},{p:"prop",t:"Propriano : port et front de mer"}],
   restos:['Auberge du Col de Bavella']},
@@ -516,7 +516,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v21'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v22'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
