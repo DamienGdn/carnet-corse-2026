@@ -318,6 +318,35 @@ footer .sig{display:block;color:var(--primary);font:700 28px var(--hand);margin-
 @keyframes cc-stroll{from{transform:translateX(0)}to{transform:translateX(240px)}}
 @media (prefers-reduced-motion:reduce){.anim *{animation:none!important}.sky .plane{transform:translateX(120px)}.road .car{transform:translateX(16px)}.wkrow .wk{transform:translateX(100px)}}
 
+/* ---- Icônes météo animées + vol hero ---- */
+.wxi{display:inline-block;width:1em;height:1em;vertical-align:middle;line-height:1}
+.wxi svg{width:100%;height:100%;display:block;overflow:visible}
+.meteo .ico .wxi{font-size:34px}.wx-day .i .wxi{font-size:34px}.wx-h .i .wxi{font-size:26px}
+.wxi .rays{transform-origin:16px 16px;animation:wx-spin 14s linear infinite}
+.wxi .cl{animation:wx-drift 5s ease-in-out infinite alternate}
+.wxi .cl2{animation:wx-drift 7s ease-in-out infinite alternate-reverse}
+.wxi .fg line{animation:wx-slide 3.4s ease-in-out infinite alternate}
+.wxi .fg line:nth-child(2){animation-duration:4.4s;animation-direction:alternate-reverse}
+.wxi .fg line:nth-child(3){animation-duration:3.9s}
+.wxi .dr{animation:wx-fall 1.1s linear infinite}
+.wxi .dr:nth-child(2){animation-delay:-.4s}.wxi .dr:nth-child(3){animation-delay:-.8s}
+.wxi .fl{animation:wx-snow 2.4s linear infinite}
+.wxi .fl:nth-child(2){animation-delay:-.8s}.wxi .fl:nth-child(3){animation-delay:-1.6s}
+.wxi .bolt{animation:wx-flash 2.6s steps(1,end) infinite}
+@keyframes wx-spin{to{transform:rotate(360deg)}}
+@keyframes wx-drift{from{transform:translateX(-2px)}to{transform:translateX(3px)}}
+@keyframes wx-slide{from{transform:translateX(-3px)}to{transform:translateX(3px)}}
+@keyframes wx-fall{0%{transform:translateY(-4px);opacity:0}25%{opacity:1}100%{transform:translateY(7px);opacity:0}}
+@keyframes wx-snow{0%{transform:translate(-1px,-4px);opacity:0}25%{opacity:1}50%{transform:translate(2px,2px)}100%{transform:translate(-1px,8px);opacity:0}}
+@keyframes wx-flash{0%,55%,63%,100%{opacity:.25}58%,60%,70%,74%{opacity:1}}
+.heroimg{position:relative}
+.flight{position:absolute;inset:0;width:100%;height:100%;display:block;overflow:visible;pointer-events:none}
+.flight .fl-lab{font:700 17px Caveat,var(--hand),cursive;fill:#12324a}
+.flight .fl-bg{fill:#f7efdc;stroke:#a8401f;stroke-width:1.2;opacity:.94}
+.flight .fl-path{fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-dasharray:1 7;filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.6))}
+.flight .fl-dot{fill:#a8401f;stroke:#f7efdc;stroke-width:1.5}
+@media (prefers-reduced-motion:reduce){.wxi *{animation:none!important}.wxi .bolt{opacity:1}}
+
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
 </style>
 </head>
@@ -381,7 +410,7 @@ footer .sig{display:block;color:var(--primary);font:700 28px var(--hand);margin-
       <div class="row"><a class="btn btn-g" href="https://www.google.com/maps/search/?api=1&query=Villa%20Occhiatana%2C%20Santa-Giulia%2C%2020137%20Porto-Vecchio%2C%20Corse" target="_blank" rel="noopener">🧭 Naviguer</a><a class="btn btn-a" href="https://maps.apple.com/?q=Villa%20Occhiatana%2C%20Santa-Giulia%2C%2020137%20Porto-Vecchio%2C%20Corse" target="_blank" rel="noopener">🍎 Plans</a></div>
     </div>
     <svg class="route" viewBox="0 0 360 36" preserveAspectRatio="none" aria-hidden="true"><path d="M4 28C50 2 90 36 140 18S230 4 270 22s60 6 86-14" fill="none" stroke="#a8401f" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 9"/><path d="M350 4l8 5-9 3z" fill="#a8401f"/></svg>
-    <div class="polaroid"><div class="heroimg" id="heroBg" role="img" aria-label="Plage de Rondinara"></div><div class="cap">la plage de Rondinara</div></div>
+    <div class="polaroid"><div class="heroimg" id="heroBg" role="img" aria-label="Plage de Rondinara, avec le vol Nantes vers Figari"><svg class="flight" id="flight" viewBox="0 0 320 180" aria-hidden="true"><path class="fl-path" id="flPath" d="M44 34Q190 6 270 128"/><circle class="fl-dot" cx="44" cy="34" r="4"/><circle class="fl-dot" cx="270" cy="128" r="4"/><g><rect class="fl-bg" x="8" y="8" width="64" height="22" rx="5"/><text class="fl-lab" x="40" y="25" text-anchor="middle">Nantes</text></g><g><rect class="fl-bg" x="236" y="146" width="66" height="22" rx="5"/><text class="fl-lab" x="269" y="163" text-anchor="middle">Figari</text></g><g id="flPlane" transform="translate(270 128) rotate(40)"><g transform="translate(-11 -8)"><path d="M1 8L22 8 17 4 12 4 9 0 6 0 8 4 4 4 1 1 0 1 2 8 0 15 1 15 4 12 8 12 6 16 9 16 12 12 17 12 22 8Z" fill="#f7efdc" stroke="#14566f" stroke-width="1.3" stroke-linejoin="round" transform="scale(1)"/></g></g></svg></div><div class="cap">la plage de Rondinara</div></div>
   </div>
 </header>
 
@@ -605,7 +634,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v28'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v29'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -850,6 +879,25 @@ DAYS.forEach((day, i) => {
   if (!('IntersectionObserver' in window)) return;
   const io = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('on', e.isIntersecting)), {rootMargin: '40px'});
   els.forEach(el => io.observe(el));
+  window.animWatch = root => root.querySelectorAll('.anim').forEach(el => io.observe(el));
+})();
+
+
+/* Vol Nantes → Figari (hero) */
+(() => {
+  const svg = document.getElementById('flight'), pl = document.getElementById('flPlane');
+  if (!svg || !pl) return;
+  const still = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if (still || !svg.pauseAnimations) return;
+  const am = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');
+  am.setAttribute('dur', '7.5s'); am.setAttribute('repeatCount', 'indefinite'); am.setAttribute('rotate', 'auto');
+  am.setAttribute('calcMode', 'spline'); am.setAttribute('keyPoints', '0;1;1'); am.setAttribute('keyTimes', '0;0.8;1');
+  am.setAttribute('keySplines', '.4 0 .6 1;0 0 1 1');
+  am.setAttribute('path', 'M44 34Q190 6 270 128');
+  pl.removeAttribute('transform'); pl.appendChild(am);
+  svg.pauseAnimations();
+  if ('IntersectionObserver' in window) new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? svg.unpauseAnimations() : svg.pauseAnimations())).observe(svg);
+  else svg.unpauseAnimations();
 })();
 
 /* Photo du hero */
@@ -886,7 +934,26 @@ document.querySelectorAll('#utiles details').forEach(det => det.addEventListener
 }));
 
 // ——— Météo dynamique (Open-Meteo, sans clé) ———
-const WMO = c => c === 0 ? ['☀️','Ensoleillé'] : c <= 2 ? ['🌤️','Éclaircies'] : c === 3 ? ['☁️','Couvert'] : c <= 48 ? ['🌫️','Brouillard'] : c <= 57 ? ['🌦️','Bruine'] : c <= 67 ? ['🌧️','Pluie'] : c <= 77 ? ['🌨️','Neige'] : c <= 82 ? ['🌦️','Averses'] : ['⛈️','Orage'];
+const WMO = c => c === 0 ? ['☀️','Ensoleillé'] : c <= 2 ? ['🌤️','Éclaircies'] : c === 3 ? ['☁️','Couvert'] : c <= 48 ? ['🌫️','Brouillard'] : c <= 57 ? ['🌦️','Bruine'] : c <= 67 ? ['🌧️','Pluie'] : c <= 77 ? ['🌨️','Neige'] : c <= 82 ? ['🌦️','Averses'] : c <= 86 ? ['🌨️','Neige'] : ['⛈️','Orage'];
+
+const WXI = {
+  sun: '<g class="rays" stroke="#c88a1f" stroke-width="2.2" stroke-linecap="round"><path d="M16 2.5v3M16 26.5v3M2.5 16h3M26.5 16h3M6.4 6.4l2.1 2.1M23.5 23.5l2.1 2.1M25.6 6.4l-2.1 2.1M8.5 23.5l-2.1 2.1"/></g><circle cx="16" cy="16" r="6.5" fill="#f2b632" stroke="#c88a1f" stroke-width="1.5"/>',
+  cloud: (x, y, c) => `<path transform="translate(${x} ${y})" d="M9 24a5 5 0 0 1-.6-9.96A7 7 0 0 1 22 12.5 5.5 5.5 0 0 1 22.5 24z" fill="${c || '#fdf8ec'}" stroke="#14566f" stroke-width="1.5" stroke-linejoin="round"/>`
+};
+function wxSvg(c){
+  const cl = (x, y, f) => WXI.cloud(x, y, f), g = (k, inner) => `<g class="${k}">${inner}</g>`;
+  let b;
+  if (c === 0) b = WXI.sun;
+  else if (c <= 2) b = '<g transform="translate(-4 -5) scale(.8)">' + WXI.sun + '</g>' + g('cl', cl(2, 2));
+  else if (c === 3) b = g('cl2', cl(-5, -4, '#dde7ea')) + g('cl', cl(2, 2));
+  else if (c <= 48) b = g('cl', cl(0, -4)) + '<g class="fg" stroke="#6f8a96" stroke-width="2.2" stroke-linecap="round"><line x1="6" y1="23" x2="20" y2="23"/><line x1="10" y1="27" x2="26" y2="27"/><line x1="5" y1="31" x2="18" y2="31"/></g>';
+  else if (c <= 67 || (c >= 80 && c <= 82)) { const n = c <= 57 ? 2 : 3;
+    b = cl(0, -5, '#dde7ea') + [0,1,2].slice(0, n).map(i => `<line class="dr" x1="${(n === 2 ? 12 : 9) + i * 5.5}" y1="22" x2="${(n === 2 ? 10.8 : 7.8) + i * 5.5}" y2="26" stroke="#14566f" stroke-width="2.2" stroke-linecap="round"/>`).join(''); }
+  else if (c <= 77 || c === 85 || c === 86) b = cl(0, -5, '#dde7ea') + [0,1,2].map(i => `<circle class="fl" cx="${9.5 + i * 6.5}" cy="24" r="1.7" fill="#fff" stroke="#14566f" stroke-width="1"/>`).join('');
+  else b = cl(0, -6, '#b9c7cc') + '<path class="bolt" d="M17.5 17l-5 7h4l-2 6 7-9h-4.5l2-4z" fill="#f2b632" stroke="#a8401f" stroke-width="1.2" stroke-linejoin="round"/>';
+  return `<svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">${b}</svg>`;
+}
+const wxIcon = (c, txt) => `<span class="wxi anim" role="img" aria-label="${txt}">${wxSvg(c)}</span>`;
 const TRIP_START = '2026-10-05';
 const dateOf = i => { const d = new Date(TRIP_START + 'T12:00'); d.setDate(d.getDate() + i); return d.toISOString().slice(0, 10); };
 function renderWx(data, stamp){
@@ -895,21 +962,23 @@ function renderWx(data, stamp){
     return k < 0 ? null : {day, i, loc, date, k};
   });
   const box = document.getElementById('wxDays');
-  box.innerHTML = days.map(x => { if (!x) return ''; const dl = x.loc.daily, [ico] = WMO(dl.weather_code[x.k]);
+  box.innerHTML = days.map(x => { if (!x) return ''; const dl = x.loc.daily, [, t0] = WMO(dl.weather_code[x.k]), ico = wxIcon(dl.weather_code[x.k], t0);
     return `<button class="wx-day" data-i="${x.i}" aria-pressed="false"><div class="d">J${x.i + 1} · ${wdShort(x.day)} ${x.date.slice(8)}/10</div><div class="i">${ico}</div><div class="t">${Math.round(dl.temperature_2m_max[x.k])}° / ${Math.round(dl.temperature_2m_min[x.k])}°</div><div class="r">💧 ${dl.precipitation_probability_max[x.k] ?? '–'}% · 💨 ${Math.round(dl.wind_speed_10m_max[x.k])} km/h</div></button>`; }).join('') || '<p class="note">Prévisions pas encore disponibles pour ces dates.</p>';
-  days.forEach(x => { if (!x) return; const dl = x.loc.daily, [ico, txt] = WMO(dl.weather_code[x.k]);
+  days.forEach(x => { if (!x) return; const dl = x.loc.daily, [, txt] = WMO(dl.weather_code[x.k]), ico = wxIcon(dl.weather_code[x.k], txt);
     const el = document.querySelector(`#${x.day.id} .meteo`);
     if (el) el.innerHTML = `<span class="ico">${ico}</span><div><b>${Math.round(dl.temperature_2m_max[x.k])}°C / ${Math.round(dl.temperature_2m_min[x.k])}°C</b><span class="m">${txt} · pluie ${dl.precipitation_probability_max[x.k] ?? '–'}% · vent ${Math.round(dl.wind_speed_10m_max[x.k])} km/h</span></div>`; });
   const show = i => { const x = days[i]; if (!x) return;
     box.querySelectorAll('.wx-day').forEach(b => b.setAttribute('aria-pressed', b.dataset.i == i));
     const h = x.loc.hourly;
     document.getElementById('wxHours').innerHTML = h.time.map((t, j) => [t, j]).filter(([t]) => t.startsWith(x.date) && +t.slice(11, 13) >= 7 && +t.slice(11, 13) <= 22)
-      .map(([t, j]) => `<div class="wx-h">${t.slice(11, 13)}h<div class="i">${WMO(h.weather_code[j])[0]}</div><b>${Math.round(h.temperature_2m[j])}°</b>💧${h.precipitation_probability[j] ?? '–'}%<br>💨${Math.round(h.wind_speed_10m[j])}</div>`).join('');
+      .map(([t, j]) => `<div class="wx-h">${t.slice(11, 13)}h<div class="i">${wxIcon(h.weather_code[j], WMO(h.weather_code[j])[1])}</div><b>${Math.round(h.temperature_2m[j])}°</b>💧${h.precipitation_probability[j] ?? '–'}%<br>💨${Math.round(h.wind_speed_10m[j])}</div>`).join('');
+    if (window.animWatch) window.animWatch(document.getElementById('wxHours'));
   };
   box.querySelectorAll('.wx-day').forEach(b => b.addEventListener('click', () => show(+b.dataset.i)));
   const today = days.find(x => x && x.date === new Date().toISOString().slice(0, 10)) || days.find(Boolean);
   if (today) show(today.i);
   document.getElementById('wxStamp').textContent = stamp;
+  if (window.animWatch) window.animWatch(document);
 }
 (async () => {
   const locs = DAYS.map(d => P[d.stops[0] === 'fig' ? d.stops[1] : d.stops[0]]);
