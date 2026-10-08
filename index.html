@@ -550,19 +550,18 @@ const DAYS = [
   ],
   restos:['Auberge du Col de Bavella']},
 
- {id:'j4', walk:'~2 km · 1 h', d:'Jeudi 8 octobre', title:'Torraccia • Saint-Cyprien (journée à l\'abri)', meteo:['💨','20°C / 15°C','Vent d\'ouest, côte est au sec'],
-  alert:'💨 Programme changé : Ospedale annulé (pluie et vent fort en montagne). Côte est la plus abritée du vent d\'ouest. Plage seulement s\'il ne pleut pas, sinon plan B.',
+ {id:'j4', walk:'~3 km · 1 h 30', d:'Jeudi 8 octobre', title:'Torraccia • Saint-Cyprien • Cala Rossa (côte abritée)', meteo:['☁️','25°C / 21°C','Sec, couvert, vent d\'ouest'],
+  alert:'🌤️ Météo du jour (relevée à 9 h) : l\'averse du matin est passée, sec toute la journée sur la côte est, 22–25 °C, ciel couvert. Vent d\'ouest : rafales ~35–42 km/h à Lecci, ~55 km/h à Santa-Giulia, averses et ~55 km/h à Bonifacio. La zone de Lecci / Saint-Cyprien est la plus abritée. Coucher du soleil 18 h 53.',
   stops:['torr','cyp'],
   steps:[
-   {t:'10:30', txt:'Départ tranquille du gîte'},
+   {t:'10:00', txt:'Départ du gîte'},
    {drive:'🚗 Santa-Giulia → Lecci : ~30 min'},
-   {t:'11:00', end:'12:00', txt:'Dégustation au Domaine de Torraccia', p:'torr', dur:'1 h', more:["Domaine bio de Lecci, dégustation au caveau, à l'abri.", "Horaires d'octobre à confirmer par téléphone avant d'y aller."]},
-   {t:'12:15', end:'13:30', txt:'Pique-nique à l\'abri ou déjeuner au gîte', dur:'1 h 15'},
-   {drive:'🚗 → Saint-Cyprien : ~10 min depuis Lecci'},
-   {t:'14:30', end:'16:30', txt:'Plage de Saint-Cyprien, abritée du vent d\'ouest', p:'cyp', dur:'2 h', cond:'Seulement s\'il ne pleut pas · baignade si la mer est plate', more:["Plage tournée vers l'est : le vent vient de la terre, la mer reste calme près du bord.", "Se poser au sud de la plage, derrière les rochers, pour éviter le sable soulevé."]},
+   {t:'10:30', end:'11:30', txt:'Dégustation au Domaine de Torraccia', p:'torr', dur:'1 h', more:["Domaine bio de Lecci, dégustation au caveau.", "Horaires d'octobre à confirmer par téléphone avant d'y aller."]},
+   {drive:'🚗 Torraccia → Saint-Cyprien : ~10 min'},
+   {t:'12:00', end:'16:30', txt:'Plage de Saint-Cyprien : pique-nique, baignade, balade vers Cala Rossa', p:'cyp', dur:'4 h 30', cond:'Baignade si la mer est plate près du bord', more:["Le moment le plus chaud : 25 °C de 13 h à 15 h, rafales les plus faibles du secteur (~40 km/h).", "Pique-nique au sud de la plage, derrière les rochers, à l'abri du sable soulevé.", "Balade à pied le long de la côte vers les plages de Cala Rossa (~30 min aller)."]},
    {t:'16:45', txt:'Retour au gîte (~25 min)'},
   ],
-  rain:[{p:"cana",t:"Dégustation au Clos Canarelli (Figari, ~30 min)"},{p:"aqua",t:"Aquarium de Bonifacio (~40 min)"}],
+  rain:[{p:"cana",t:"Si averse : dégustation au Clos Canarelli (Figari, au sec aujourd'hui, ~30 min)"}],
   restos:[]},
 
  {id:'j5', walk:'~4 km · 2 h', d:'Vendredi 9 octobre', title:'Palombaggia • Tamaricciu • Snorkeling', meteo:['💨','21°C / 16°C',"Vent d'ouest potentiellement fort"],
@@ -634,7 +633,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v32'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v33'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
