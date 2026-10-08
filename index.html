@@ -86,6 +86,10 @@ a{color:var(--sea)}
 .daynav{position:sticky;top:0;z-index:1000;background:var(--canvas) var(--grain);border-bottom:2px dashed var(--hairline);padding-top:env(safe-area-inset-top)}
 .daynav .wrap{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-top:8px;padding-bottom:8px}
 .daynav .wrap::-webkit-scrollbar{display:none}
+.dn-in{display:flex;align-items:center;max-width:1120px;margin:0 auto;padding-left:max(10px,env(safe-area-inset-left))}
+.dn-in .wrap{flex:1;min-width:0;padding-left:8px}
+.daynav a.dn-logo{flex:0 0 auto;min-width:0;display:flex;align-items:center;min-height:48px;border:0;background:none;box-shadow:none;padding:0}
+.dn-logo img{display:block;width:64px;height:auto}
 .daynav a{flex:1 0 auto;min-width:48px;min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2px 10px;color:var(--ink);text-decoration:none;font:600 17px/1.1 var(--display);border:2px solid var(--hairline);border-radius:12px 12px 12px 4px;background:var(--paper)}
 .daynav a small{font:600 12px var(--font);color:var(--muted)}
 .daynav a:hover{border-color:var(--ink)}
@@ -317,7 +321,7 @@ footer .sig{display:block;color:var(--primary);font:700 28px var(--hand);margin-
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
 </style>
 </head>
-<body>
+<body id="top">
 
 <header class="wrap">
   <div class="topbar">
@@ -381,7 +385,7 @@ footer .sig{display:block;color:var(--primary);font:700 28px var(--hand);margin-
   </div>
 </header>
 
-<nav class="daynav" aria-label="Jours"><div class="wrap" id="daynav"></div></nav>
+<nav class="daynav" aria-label="Jours"><div class="dn-in"><a class="dn-logo" href="#top" aria-label="Haut de page"><img src="logo.svg" alt="" width="52" height="32"></a><div class="wrap" id="daynav"></div></div></nav>
 
 <section class="wrap extra">
   <details class="fold" id="meteo">
@@ -601,7 +605,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v26'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v27'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
