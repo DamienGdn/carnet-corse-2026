@@ -499,6 +499,7 @@ const P = {
   fazz: {name:'Plage de Fazzio', lat:41.3935, lon:9.1370, img:wm('20169 Bonifacio, France - panoramio.jpg'), cap:'Anse à l\'ouest de Bonifacio, atteinte à pied', d:{"desc":"Petite plage à l'ouest de Bonifacio, atteinte par une randonnée à pied depuis la ville."}},
   sol:  {name:'La Solenzara — arrêt au bord de la rivière', lat:41.83427, lon:9.31907, img:'photos/j3-riviere.jpg', cap:'Vasques de granit et eau limpide, sur la route de Bavella vers la côte (votre photo)', d:{"desc":"Arrêt sur la Strada di Bavella (D268), au bord de la Solenzara, entre le col de Bavella et la côte.","tips":["Eau claire dans les vasques de granit : baignade possible l'été, fraîche en octobre"]}},
   cant: {name:'Cantina di u Palace', lat:41.6963, lon:9.3408, img:'', cap:'Bar sur la route, à Sainte-Lucie-de-Porto-Vecchio — pause bière pendant l\'orage', d:{"desc":"440 Strada di Portivechju, Sainte-Lucie de Porto-Vecchio, 20124 Zonza. Point sur la carte approximatif (le long de la route, numéro non localisé)."}},
+  cyp:  {name:'Plage de Saint-Cyprien (San Ciprianu)', lat:41.63241, lon:9.34601, img:wm('Plage de San Ciprianu – Lecci.jpg'), cap:'Grand arc de sable face à l\'est, abrité du vent d\'ouest', d:{"desc":"Longue plage de sable blanc à Lecci, ~15 min au nord de Porto-Vecchio. Tournée vers l'est : par vent d'ouest (libeccio), le vent souffle de la terre et la mer reste calme près du bord.","tips":["Sable soulevé par les rafales : se poser derrière les rochers au sud de la plage","Baignade possible si la mer est plate près du bord"]}},
   cim:  {name:'Cimetière marin', lat:41.38672, lon:9.15038, img:wm('Cimetière marin (Bonifacio).jpg'), cap:'Chapelles funéraires face à la mer', d:{"desc":"Chapelles et caveaux à l'extrémité ouest du plateau, face à la mer.","facts":{"duree":"30 min","acces":"À pied depuis la haute-ville","marche":"Env. 10 min depuis la haute-ville","cout":"Gratuit (horaires à vérifier)"},"dontMiss":["La vue sur les falaises et la Sardaigne","Les chapelles funéraires face à la mer"],"tips":["Cimetière en activité : rester respectueux","Se rend à pied depuis la haute-ville (env. 10 min)"]}},
 };
 
@@ -549,21 +550,22 @@ const DAYS = [
   ],
   restos:['Auberge du Col de Bavella']},
 
- {id:'j4', walk:'~4 km · 1 h 45 (sans la cascade : ~1,5 km · 45 min)', d:'Jeudi 8 octobre', title:'Ospedale • Piscia di Ghjaddu • Zonza', meteo:['💨','18°C / 14°C','Vent très fort'],
-  alert:'💨 Vent très fort annoncé jeudi (rafales ~70 km/h à l\'Ospedale, jusqu\'à 100 km/h plus haut) : éviter la cascade et la forêt de pins (chutes de branches). Privilégier Zonza, les musées du plan B ou une journée plage abritée ; décider le matin selon la météo.',
-  stops:['osp','pisc','zon'],
+ {id:'j4', walk:'~3 km · 1 h 30', d:'Jeudi 8 octobre', title:'Porto-Vecchio • Torraccia • Saint-Cyprien (journée à l\'abri)', meteo:['💨','20°C / 15°C','Vent d\'ouest, côte est au sec'],
+  alert:'💨 Programme changé : Ospedale annulé (pluie et vent fort en montagne). Le vent d\'ouest (rafales 35–45 km/h à Porto-Vecchio, ~70 km/h en Alta Rocca) laisse la côte est au sec et la mer calme près du bord. Pluie à l\'ouest (Sartène) : éviter ce côté-là.',
+  stops:['pv','torr','cyp'],
   steps:[
-   {t:'08:30', txt:'Départ'},
-   {drive:'🚗 Porto-Vecchio → parking Piscia di Ghjaddu : ~35 min (20 km, route de montagne)'},
-   {t:'09:15', end:'11:00', txt:'Randonnée Piscia di Ghjaddu (aller-retour, facultative)', p:'pisc', dur:'1 h 45', cond:'Facultatif : à sauter si les jambes sont fatiguées (alternative : tour du lac de l\'Ospedale, ~30 min) · vent fort : à éviter si les rafales se confirment', more:["Départ du parking au bord de la D368, après le lac de l'Ospedale (panneau « Piscia di Gallo »).", "~1 h 15 à 1 h 30 aller-retour, ~200 m de dénivelé : l'aller descend, le retour remonte.", "Sentier balisé mais rocheux, passages sur dalles où l'on pose les mains. Finit à un belvédère face à la chute (~60 m) : ne pas descendre au pied.", "Partir tôt (parking vite plein), eau + chaussures à crampons. Granit très glissant s'il a plu."]},
-   {t:'11:15', end:'11:45', txt:'Forêt / belvédère de l\'Ospedale', p:'osp', dur:'30 min', more:["Grande forêt de pins laricio autour du lac de barrage, aires de pique-nique ombragées.", "Le village de L'Ospedale offre un belvédère sur tout le golfe de Porto-Vecchio."]},
-   {drive:'🚗 Ospedale → Zonza : ~30 min (20 km)'},
-   {t:'12:45', end:'14:00', txt:'Déjeuner à Zonza', dur:'1 h 15'},
-   {t:'14:00', end:'15:00', txt:'Visite de Zonza', p:'zon', dur:'45 min', more:["Village de l'Alta Rocca (~780 m) : église, ruelles de granit, terrasses de café.", "Boutiques de charcuterie, fromages de brebis et miel AOP ; bon endroit pour les achats à rapporter."]},
-   {t:'15:00', end:'16:00', txt:'Retour (via L\'Ospedale ou Sainte-Lucie, ~50 min–1 h)'},
+   {t:'10:00', txt:'Départ tranquille du gîte'},
+   {drive:'🚗 Santa-Giulia → Porto-Vecchio : ~15 min'},
+   {t:'10:30', end:'12:30', txt:'Vieille ville de Porto-Vecchio : ruelles, citadelle, boutiques', p:'pv', dur:'2 h', more:["Ruelles abritées du vent, cafés en terrasse côté est.", "Courses de produits corses à rapporter (charcuterie, fromages, vins)."]},
+   {t:'12:30', end:'14:00', txt:'Déjeuner à Porto-Vecchio', dur:'1 h 30'},
+   {drive:'🚗 Porto-Vecchio → Lecci : ~20 min'},
+   {t:'14:30', end:'15:30', txt:'Dégustation au Domaine de Torraccia', p:'torr', dur:'1 h', more:["Domaine bio de Lecci, dégustation au caveau à l'abri.", "Horaires d'octobre à confirmer par téléphone avant d'y aller."]},
+   {drive:'🚗 Torraccia → Saint-Cyprien : ~10 min'},
+   {t:'15:45', end:'17:45', txt:'Plage de Saint-Cyprien, abritée du vent d\'ouest', p:'cyp', dur:'2 h', cond:'Baignade si la mer est plate près du bord', more:["Plage tournée vers l'est : le vent vient de la terre, la mer reste calme.", "Se poser au sud de la plage, derrière les rochers, pour éviter le sable soulevé."]},
+   {t:'18:00', txt:'Retour au gîte (~25 min)'},
   ],
-  rain:[{p:"levie",t:"Musée de l'Alta Rocca (préhistoire)"},{p:"preh",t:"Musée de Préhistoire de Sartène (~45 min)"}],
-  restos:['Auberge du Sanglier Zonza',"L'Eternisula Zonza"]},
+  rain:[{p:"egl",t:"Si averse : cafés et boutiques couvertes de la vieille ville"},{p:"cana",t:"Dégustation au Clos Canarelli (Figari, ~30 min)"}],
+  restos:["L'Ardoise Porto-Vecchio","Casa Corsa Porto-Vecchio"]},
 
  {id:'j5', walk:'~4 km · 2 h', d:'Vendredi 9 octobre', title:'Palombaggia • Tamaricciu • Snorkeling', meteo:['💨','21°C / 16°C',"Vent d'ouest potentiellement fort"],
   alert:'🌊 Snorkeling CONDITIONNEL. Si mer agitée ou vent fort : alternative terrestre → sentier côtier Palombaggia–Tamaricciu à pied, puis vieille ville de Porto-Vecchio ou salines.',
@@ -634,7 +636,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v30'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v31'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
