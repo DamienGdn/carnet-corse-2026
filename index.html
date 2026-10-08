@@ -986,7 +986,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v47'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v48'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -1787,13 +1787,16 @@ if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
 
   /* --- Compteurs --- */
   const num = '(\\d+(?:[.,]\\d+)?)', toN = x => parseFloat(x.replace(',', '.'));
+  // Mesures réelles (compteur de la voiture, Apple Watch) : priment sur les estimations du programme
+  const MESURES = {voitureKm: 210, marcheKm: {/* j1: 4.2, j2: 9.1 … */}};
   const walkKm = doneDays.reduce((a, d) => {
+    if (MESURES.marcheKm[d.id] != null) return a + MESURES.marcheKm[d.id];
     if (!d.walk) return a;
     const w = d.walk.split('·')[0];
     const r = new RegExp(num + '\\s*[–-]\\s*' + num).exec(w), one = new RegExp(num).exec(w);
     return a + (r ? (toN(r[1]) + toN(r[2])) / 2 : one ? toN(one[1]) : 0);
   }, 0);
-  const driveKm = doneDays.reduce((a, d) => a + d.steps.reduce((b, s) => { const m = s.drive && /\((\d+)\s*km\)/.exec(s.drive); return b + (m ? +m[1] : 0); }, 0), 0);
+  const driveKm = MESURES.voitureKm != null ? MESURES.voitureKm : doneDays.reduce((a, d) => a + d.steps.reduce((b, s) => { const m = s.drive && /\((\d+)\s*km\)/.exec(s.drive); return b + (m ? +m[1] : 0); }, 0), 0);
   const swims = visited.filter(v => v.s.txt && /plage|baignade|snorkeling/i.test(v.s.txt) && !/annul/i.test(v.s.txt)).length;
   const picnics = visited.filter(v => v.s.txt && /pique-?nique/i.test(v.s.txt)).length;
   const places = new Set(visited.filter(v => v.s.p && P[v.s.p]).map(v => v.s.p)).size;
