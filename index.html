@@ -323,6 +323,17 @@ h3.sub::after{content:"";flex:1;border-top:3px dotted var(--hairline)}
 .pcdlg .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .pcdlg .row .btn{flex:1 1 auto;justify-content:center}
 .pcdlg [hidden]{display:none!important}
+.pc-hint{font-size:14px;color:var(--muted);margin:0 0 8px}
+.pc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0;padding:0;border:0;min-width:0}
+.pc-grp{grid-column:1/-1;font:700 15px var(--hand);color:var(--primary);margin:6px 0 0}
+.pc-tile{appearance:none;font:inherit;position:relative;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;min-width:0;aspect-ratio:1;padding:0;margin:0;border:2px solid var(--ink);border-radius:8px;background:var(--sea-soft);color:var(--ink);cursor:pointer;overflow:hidden;font-size:12px;font-weight:700;text-align:center;line-height:1.15}
+.pc-tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pc-tile .pc-l{position:absolute;left:0;right:0;bottom:0;padding:2px 3px;background:rgba(255,250,240,.9);color:#16313f;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pc-tile .pc-ic{font-size:24px}
+.pc-tile[aria-pressed="true"]{outline:4px solid var(--primary);outline-offset:1px;box-shadow:0 0 0 2px var(--paper)}
+.pc-tile[aria-pressed="true"]::after{content:"✓";position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:var(--primary);color:#fff;font-size:13px;line-height:20px}
+.pc-tile:focus-visible{outline:3px solid var(--sea);outline-offset:2px}
+.pc-file{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
 .lb .lbn{top:50%;left:auto;right:12px;transform:translateY(-50%);display:none}
 .lb .lbn.p{left:12px;right:auto}
 .lb.album .lbn{display:block}
@@ -812,9 +823,16 @@ html.intro-on #intro.skip{animation:cc-in-skip .2s ease-out forwards}
 </div>
 <dialog id="pcDlg" class="pcdlg" aria-labelledby="pcT">
   <h2 id="pcT">💌 Carte postale</h2>
+  <div id="pcPick" hidden>
+    <p class="pc-hint" id="pcHint">Quelle photo en fond de la carte ? Elle reste sur votre appareil.</p>
+    <div class="pc-grid" id="pcGrid" role="group" aria-labelledby="pcHint"></div>
+    <input type="file" accept="image/*" id="pcFileIn" class="pc-file" tabindex="-1" aria-hidden="true">
+  </div>
   <div id="pcBox"></div>
   <p class="pc-st" id="pcSt" role="status" aria-live="polite"></p>
   <div class="row">
+    <button class="btn btn-a" id="pcGo" hidden>🖼️ Créer la carte</button>
+    <button class="btn" id="pcBack" hidden>← Changer de photo</button>
     <button class="btn btn-a" id="pcShare" hidden>📤 Partager</button>
     <button class="btn btn-g" id="pcDl" disabled>⬇️ Télécharger</button>
     <button class="btn" id="pcClose">Fermer</button>
@@ -1003,7 +1021,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v55'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v56'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -2000,16 +2018,14 @@ if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
     x.fillText('CORSE', w / 2, h - 30); x.fillStyle = TERRA; x.font = '700 26px Caveat, cursive'; x.fillText('2026 · 0,99', w / 2, h - 10);
     return c;
   }
-  async function drawCard(i){
+  async function drawCard(i, sel){
     const day = DAYS[i], W = 1080, H = 1350, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
     const ctx = cv.getContext('2d');
     try { await Promise.all([document.fonts.load('600 64px Fredoka'), document.fonts.load('700 60px Caveat')]); } catch (e) {}
-    // photo : perso du jour sinon couverture
-    const mine = album.find(a => a.i === i && !/carte/i.test(a.alt)) || album.find(a => a.i === i);
-    const ck = day.cover || day.stops[0], cp = P[ck];
-    const src = mine ? mine.src : cp && cp.img, cap = mine ? mine.cap : cp ? shortName(cp.name) : 'Corse';
+    // photo choisie par l'utilisateur (sel) ; null = fond illustré
+    const cap = sel && sel.cap || 'Corse';
     let photo = null;
-    if (src) { try { photo = await loadImg(src, true); } catch (e) { photo = null; } }
+    if (sel && sel.src) { try { photo = await loadImg(sel.src, sel.cors); } catch (e) { photo = null; } }
     let logo = null;
     try {
       const t = await (await fetch('logo.svg')).text();
@@ -2061,14 +2077,58 @@ if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
     if (logo) ctx.drawImage(logo, 62, 1112, 236, 144);
     ctx.textAlign = 'left'; ctx.fillStyle = TERRA; ctx.font = '700 100px Caveat, cursive'; ctx.fillText('Bises de Corse !', 320, 1196);
     ctx.fillStyle = INK; ctx.font = '700 52px Caveat, cursive'; ctx.fillText('— Anne-Gaëlle & Damien', 320, 1262);
-    return {cv, ok:!!photo};
+    return {cv, ok:!!photo || !(sel && sel.src)};
   }
-  async function openCard(i, opener){
-    const my = ++pcSeq; pcFile = null; shareB.hidden = true; dlB.disabled = true;
+  const pickEl = $('pcPick'), grid = $('pcGrid'), goB = $('pcGo'), backB = $('pcBack'), fileIn = $('pcFileIn');
+  let pcDay = 0, pcSel = null, pcObj = null;
+  const tileHtml = (o, k) => `<button type="button" class="pc-tile" data-k="${k}" aria-pressed="false" aria-label="${esc(o.alt)}"><img src="${o.thumb || o.src}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"><span class="pc-l">${esc(o.cap)}</span></button>`;
+  let pcOpts = [];
+  function pcBuild(i){
+    const day = DAYS[i], seen = new Set(); pcOpts = [];
+    const push = o => { if (!o.src || seen.has(o.src)) return; seen.add(o.src); pcOpts.push(o); };
+    const mineDay = album.filter(a => a.i === i), other = album.filter(a => a.i !== i);
+    mineDay.forEach(a => push({g:'Photos du jour', src:a.src, cap:a.cap, alt:'Photo perso : ' + a.alt, cors:true}));
+    other.forEach(a => push({g:'Autres photos du voyage', src:a.src, cap:a.cap, alt:'Photo du voyage : ' + a.alt + ', ' + dayShort(a.i), cors:true}));
+    [...day.stops, ...day.steps.map(s => s.p)].forEach(k => { const p = k && P[k]; if (p && p.img) push({g:'Lieux du jour', src:p.img, cap:shortName(p.name), alt:'Photo du lieu : ' + p.name, cors:true}); });
+    let h = '', g = '';
+    pcOpts.forEach((o, k) => { if (o.g !== g) { g = o.g; h += `<p class="pc-grp">${g}</p>`; } h += tileHtml(o, k); });
+    h += `<p class="pc-grp">Autres choix</p><button type="button" class="pc-tile" data-k="file" aria-pressed="false" aria-label="Depuis mon téléphone : choisir une image"><span class="pc-ic" aria-hidden="true">📱</span><span>Depuis mon téléphone</span></button>`;
+    h += `<button type="button" class="pc-tile" data-k="illus" aria-pressed="false" aria-label="Fond illustré, sans photo"><span class="pc-ic" aria-hidden="true">🎨</span><span>Fond illustré</span></button>`;
+    grid.innerHTML = h;
+    pcSelect(pcOpts.length ? '0' : 'illus');
+  }
+  function pcSelect(k){
+    grid.querySelectorAll('.pc-tile').forEach(t => t.setAttribute('aria-pressed', t.dataset.k === k ? 'true' : 'false'));
+    pcSel = k === 'illus' ? {src:null, cap:'Corse'} : k === 'file' ? pcSel : pcOpts[+k];
+    goB.disabled = !pcSel;
+  }
+  grid.addEventListener('click', e => {
+    const t = e.target.closest('.pc-tile'); if (!t) return;
+    if (t.dataset.k === 'file') { if (pcObj && t.getAttribute('aria-pressed') !== 'true') { pcSel = {src:pcObj, cap:'Souvenir', cors:false}; pcSelect('file'); return; } fileIn.value = ''; fileIn.click(); return; }
+    pcSelect(t.dataset.k);
+  });
+  fileIn.addEventListener('change', () => {
+    const f = fileIn.files && fileIn.files[0]; if (!f) return;
+    if (pcObj) URL.revokeObjectURL(pcObj);
+    pcObj = URL.createObjectURL(f);
+    const tile = grid.querySelector('[data-k="file"]');
+    tile.innerHTML = `<img src="${pcObj}" alt=""><span class="pc-l">📱 Ma photo</span>`;
+    tile.setAttribute('aria-label', 'Depuis mon téléphone : ' + f.name);
+    pcSel = {src:pcObj, cap:'Souvenir', cors:false}; pcSelect('file');
+  });
+  function pcStep1(i, keep){
+    const prev = keep && pcSel; ++pcSeq; pcFile = null; pcDay = i; box.innerHTML = '';
+    shareB.hidden = true; dlB.hidden = true; backB.hidden = true; goB.hidden = false; goB.disabled = false; pickEl.hidden = false;
+    st.textContent = 'Touchez une photo, puis « Créer la carte ».';
+    pcBuild(i);
+    if (prev) { if (!prev.src) pcSelect('illus'); else { const k = pcOpts.findIndex(o => o.src === prev.src); if (k >= 0) pcSelect(String(k)); else if (prev.src === pcObj) { pcSel = prev; const t = grid.querySelector('[data-k="file"]'); t.innerHTML = `<img src="${pcObj}" alt=""><span class="pc-l">📱 Ma photo</span>`; pcSelect('file'); } } }
+  }
+  async function openCard(i, sel){
+    const my = ++pcSeq; pcFile = null; shareB.hidden = true; dlB.disabled = true; dlB.hidden = false;
+    pickEl.hidden = true; goB.hidden = true; backB.hidden = false;
     box.innerHTML = ''; st.textContent = 'Création de la carte postale…';
-    dlg.showModal(); (dlB.disabled ? $('pcClose') : dlB).focus();
     try {
-      const {cv, ok} = await drawCard(i);
+      const {cv, ok} = await drawCard(i, sel);
       if (my !== pcSeq) return;
       cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', `Carte postale du jour ${i + 1} : ${DAYS[i].title}. Bises de Corse, Anne-Gaëlle et Damien.`);
       box.appendChild(cv);
@@ -2077,13 +2137,16 @@ if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
         pcFile = new File([b], `carte-postale-corse-j${i + 1}.png`, {type:'image/png'});
         dlB.disabled = false; dlB.focus();
         shareB.hidden = !(navigator.canShare && navigator.canShare({files:[pcFile]}));
-        st.textContent = ok ? 'Prête ! Partagez-la ou enregistrez-la.' : 'Prête (photo distante indisponible : fond illustré).';
+        st.textContent = ok ? 'Prête ! Partagez-la ou enregistrez-la.' : 'Prête (photo indisponible : fond illustré). Vous pouvez changer de photo.';
       }, 'image/png');
     } catch (e) { st.textContent = 'Impossible de générer la carte postale.'; }
   }
+  goB.onclick = () => { if (pcSel) openCard(pcDay, pcSel); };
+  backB.onclick = () => { pcStep1(pcDay, true); const t = grid.querySelector('.pc-tile[aria-pressed="true"]'); if (t) t.focus(); };
   document.addEventListener('click', e => {
     const b = e.target.closest('.pc-btn'); if (!b) return;
-    openCard(DAYS.findIndex(d => d.id === b.dataset.day), b);
+    pcSel = null; dlg.showModal(); pcStep1(DAYS.findIndex(d => d.id === b.dataset.day));
+    const t = grid.querySelector('.pc-tile[aria-pressed="true"]'); if (t) t.focus(); else goB.focus();
   });
   shareB.onclick = async () => {
     if (!pcFile) return;
@@ -2097,7 +2160,7 @@ if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
   };
   $('pcClose').onclick = () => dlg.close();
   dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
-  dlg.addEventListener('close', () => { pcSeq++; box.innerHTML = ''; });
+  dlg.addEventListener('close', () => { pcSeq++; box.innerHTML = ''; grid.innerHTML = ''; if (pcObj) { URL.revokeObjectURL(pcObj); pcObj = null; } });
 })();
 
 // Météo réellement vécue, figée dans le fichier (les prévisions disparaissent une fois le jour passé).
