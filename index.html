@@ -309,6 +309,13 @@ h3.sub::after{content:"";flex:1;border-top:3px dotted var(--hairline)}
 .pol .j{display:block;font:700 11px var(--font);color:#566468;margin-top:2px}
 .pol:hover,.pol:focus-visible{transform:rotate(0) scale(1.04);z-index:1}
 .pol:focus-visible{outline:3px solid var(--primary);outline-offset:3px}
+.al-im{display:block;position:relative}
+.al-play{position:absolute;left:50%;top:50%;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:rgba(255,250,240,.9);color:#16313f;font:normal 18px/44px var(--font);text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.4);pointer-events:none}
+.al-n{font:700 15px var(--font);color:#566468;margin-left:6px}
+.al-dbtn{margin-left:8px}.al-dbtn[hidden]{display:none}
+.al-load{text-align:center;color:#566468;margin:14px 0}
+.lb video{max-width:100%;max-height:80dvh;border-radius:4px;border:8px solid #fffaf0;background:#000}
+.lb video[hidden]{display:none}
 .tr-map{height:340px;border-radius:var(--r-md);border:2px solid var(--ink);margin:12px 0;background:var(--sea-soft)}
 .tp{width:38px;height:38px;border-radius:50%;background:rgba(255,250,240,.95);border:3px solid #12324a;color:#12324a;font:600 17px/32px var(--display);text-align:center;box-shadow:0 0 0 2px rgba(255,250,240,.85),0 2px 5px rgba(0,0,0,.35);transform:rotate(var(--r,-6deg));animation:tp-pop .5s cubic-bezier(.3,1.6,.5,1) both;animation-delay:var(--d,0s);position:relative}
 .tp::after{content:"";position:absolute;inset:3px;border-radius:50%;border:1.5px dashed #a8401f}
@@ -819,6 +826,7 @@ html.intro-on #intro.skip{animation:cc-in-skip .2s ease-out forwards}
 <div class="lb" id="lb" role="dialog" aria-modal="true">
   <button id="lbClose" aria-label="Fermer">✕</button>
   <img id="lbImg" alt="">
+  <video id="lbVid" controls playsinline preload="metadata" hidden></video>
   <p id="lbCap"></p>
 </div>
 <dialog id="pcDlg" class="pcdlg" aria-labelledby="pcT">
@@ -1025,7 +1033,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v59'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v60'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -1240,7 +1248,7 @@ DAYS.forEach((day, i) => {
       <div><h2>${esc(day.title)}</h2><div class="when">${day.d} 2026${day.done ? '<span class="sr-only"> · Fait</span>' : ''}</div>${day.walk ? `<div class="walk anim"><span class="wk">${WALKER_SVG}</span>Marche : ${day.walk}</div>` : ''}</div>
       <div class="meteo"><span class="ico">${day.meteo[0]}</span><div><b>${day.meteo[1]}</b><span class="m">${day.meteo[2]}</span></div></div>
     </div>
-    <div class="pc-row"><button type="button" class="btn btn-a pc-btn" data-day="${day.id}">💌 Carte postale</button></div>
+    <div class="pc-row"><button type="button" class="btn btn-a pc-btn" data-day="${day.id}">💌 Carte postale</button><button type="button" class="btn btn-a al-dbtn" data-al="${n - 1}" hidden></button></div>
     ${day.alert ? `<div class="alert">${esc(day.alert)}</div>` : ''}${day.note ? `<div class="alert">ℹ️ ${esc(day.note)}</div>` : ''}
     <div class="grid">
       <div class="mapbox" id="box-${day.id}">
@@ -1531,8 +1539,8 @@ document.addEventListener('click', e => {
   lb.classList.add('open');
 });
 let lbReturn = null;
-function closeLb(){ lb.classList.remove('open', 'album'); if (lbReturn) { lbReturn.focus({preventScroll:true}); lbReturn = null; } }
-lb.addEventListener('click', e => { if (e.target !== lbImg) closeLb(); });
+function closeLb(){ const v = document.getElementById('lbVid'); if (v) { v.pause(); v.removeAttribute('src'); v.hidden = true; lbImg.hidden = false; } lb.classList.remove('open', 'album'); if (lbReturn) { lbReturn.focus({preventScroll:true}); lbReturn = null; } }
+lb.addEventListener('click', e => { if (e.target !== lbImg && e.target.id !== 'lbVid') closeLb(); });
 
 /* ---------- Nav active + ouverture sur le jour courant ---------- */
 const navObs = new IntersectionObserver(entries => entries.forEach(e => {
@@ -1890,27 +1898,72 @@ if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
     day.steps.forEach(s => { add(s.img, s.p, s); if (s.p && P[s.p]) add(P[s.p].img, s.p); });
     day.stops.forEach(k => P[k] && add(P[k].img, k));
   });
-  $('albCnt').textContent = album.length ? album.length + ' photo' + (album.length > 1 ? 's' : '') : 'bientôt';
-  $('album').innerHTML = album.length ? DAYS.map((d, i) => {
-    const ph = album.map((a, k) => ({a, k})).filter(x => x.a.i === i);
-    return ph.length ? `<div class="album-day"><h3>Jour ${i + 1} · ${esc(d.d)}</h3><div class="pols">${ph.map(({a, k}) =>
-      `<button type="button" class="pol" data-k="${k}" aria-label="Agrandir : ${esc(a.cap)}, ${esc(dayShort(i))}"><img src="${a.src}" alt="${esc(a.alt)}" loading="lazy" decoding="async"><span class="c">${esc(a.cap)}</span><span class="j">${esc(dayShort(i))}</span></button>`).join('')}</div></div>` : '';
-  }).join('') : '<p class="note">Les photos du séjour apparaîtront ici.</p>';
+  // Album complet : photos/album.json (chargé à l'ouverture), rendu par jour
+  const sv = $('souvenirs'), alb = $('album'), lbVid = $('lbVid');
+  const dayLbl = i => i < 0 ? 'Avant le départ · 4 oct' : dayShort(i);
+  const dayTtl = i => i < 0 ? 'Avant le départ · 4 oct' : `Jour ${i + 1} · ${DAYS[i].d}`;
+  let all = album.slice(), loadP = null, rendered = -1, cur = 0;
+  const setCnt = () => { $('albCnt').textContent = all.length ? all.length + ' photo' + (all.length > 1 ? 's' : '') : 'bientôt'; };
+  const upBtns = () => document.querySelectorAll('.al-dbtn').forEach(b => {
+    const n = all.filter(a => a.i === +b.dataset.al).length;
+    b.hidden = !n; b.textContent = `📸 Les photos du jour (${n})`;
+  });
+  const sync = () => {
+    const ex = (all.extra || []);
+    all = album.concat(ex).map((a, k) => ({a, k})).sort((x, y) => x.a.i - y.a.i || x.k - y.k).map(x => x.a);
+    all.extra = ex; setCnt(); upBtns();
+  };
+  const load = () => loadP || (loadP = fetch('photos/album.json').then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(js => {
+    const ex = js.map(e => {
+      const i = e.jour === 'avant' ? -1 : (/^j(\d)$/.test(e.jour) ? +e.jour.slice(1) - 1 : null);
+      if (i === null || i > 6) return null;
+      const lieu = e.lieu && P[e.lieu] ? shortName(P[e.lieu].name) : '';
+      const cap = [e.heure, lieu].filter(Boolean).join(' · ') || 'Souvenir';
+      return {i, src:'photos/album/' + e.f, th:'photos/album/thumbs/' + e.th, cap, alt:(e.video ? 'Vidéo' : 'Photo') + ' · ' + cap, video:!!e.video};
+    }).filter(Boolean);
+    all = album; all.extra = ex; sync();
+  }).catch(() => { loadP = null; sync(); }));
+  const render = () => {
+    if (rendered === all.length) return;
+    rendered = all.length;
+    if (!all.length) { alb.innerHTML = '<p class="note">Les photos du séjour apparaîtront ici.</p>'; return; }
+    let h = '';
+    for (let i = -1; i < DAYS.length; i++) {
+      const ph = all.map((a, k) => ({a, k})).filter(x => x.a.i === i);
+      if (!ph.length) continue;
+      h += `<div class="album-day" id="al-d${i}"><h3>${esc(dayTtl(i))}<span class="al-n">(${ph.length})</span></h3><div class="pols">${ph.map(({a, k}) =>
+        `<button type="button" class="pol" data-k="${k}" aria-label="${a.video ? 'Lire la vidéo' : 'Agrandir'} : ${esc(a.cap)}, ${esc(dayLbl(i))}"><span class="al-im"><img src="${a.th || a.src}" alt="${esc(a.alt)}" loading="lazy" decoding="async">${a.video ? '<i class="al-play" aria-hidden="true">▶</i>' : ''}</span><span class="c">${esc(a.cap)}</span><span class="j">${esc(dayLbl(i))}</span></button>`).join('')}</div></div>`;
+    }
+    alb.innerHTML = h;
+  };
+  const openAl = async day => {
+    sv.open = true;
+    alb.innerHTML = '<p class="al-load">Chargement des photos…</p>'; rendered = -1;
+    await load(); render();
+    if (day !== undefined) { const t = $('al-d' + day); if (t) t.scrollIntoView({behavior: still() ? 'instant' : 'smooth', block:'start'}); }
+  };
+  sv.addEventListener('toggle', () => { if (sv.open) { alb.innerHTML = '<p class="al-load">Chargement des photos…</p>'; rendered = -1; load().then(render); } });
+  document.addEventListener('click', e => { const b = e.target.closest('.al-dbtn'); if (b) openAl(+b.dataset.al); });
+  setCnt();
+  const idle = window.requestIdleCallback || (f => setTimeout(f, 1500));
+  addEventListener('load', () => idle(() => load().then(() => { if (sv.open) render(); })));
+  if (sv.open) { load().then(render); }
 
   // Visionneuse : réutilise la lightbox existante (+ précédent/suivant, flèches, swipe)
-  let cur = 0;
   const showAlb = k => {
-    cur = (k + album.length) % album.length;
-    const a = album[cur];
-    lbImg.src = a.src; lbImg.alt = a.alt;
-    lbCap.textContent = `${a.cap} — ${dayShort(a.i)} (${cur + 1}/${album.length})`;
+    cur = (k + all.length) % all.length;
+    const a = all[cur];
+    lbVid.pause();
+    if (a.video) { lbImg.hidden = true; lbImg.removeAttribute('src'); lbVid.hidden = false; lbVid.src = a.src; }
+    else { lbVid.hidden = true; lbVid.removeAttribute('src'); lbImg.hidden = false; lbImg.src = a.src; lbImg.alt = a.alt; }
+    lbCap.textContent = `${a.cap} — ${dayLbl(a.i)} (${cur + 1}/${all.length})`;
   };
   lb.setAttribute('aria-label', 'Visionneuse de photos');
   lb.insertAdjacentHTML('beforeend', '<button type="button" class="lbn p" id="lbPrev" aria-label="Photo précédente">‹</button><button type="button" class="lbn" id="lbNext" aria-label="Photo suivante">›</button>');
   $('lbPrev').onclick = e => { e.stopPropagation(); showAlb(cur - 1); };
   $('lbNext').onclick = e => { e.stopPropagation(); showAlb(cur + 1); };
   $('lbClose').onclick = e => { e.stopPropagation(); closeLb(); };
-  $('album').addEventListener('click', e => {
+  alb.addEventListener('click', e => {
     const b = e.target.closest('.pol'); if (!b) return;
     lbReturn = b; showAlb(+b.dataset.k);
     lb.classList.add('album', 'open'); $('lbClose').focus();
