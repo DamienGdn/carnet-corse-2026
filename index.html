@@ -231,6 +231,12 @@ h3.sub::after{content:"";flex:1;border-top:3px dotted var(--hairline)}
 
 /* ---- Dépliants (météo, adresses utiles, plan B) ---- */
 .extra{margin-top:28px}
+.cu-list{list-style:none;margin:8px 0 4px;padding:0;display:grid;gap:12px}
+.cu-it{display:grid;grid-template-columns:72px 1fr;gap:12px;align-items:center;background:var(--paper);border:1.5px dashed var(--hairline);border-radius:var(--r-md);padding:10px}
+.cu-it img,.cu-ic{width:72px;height:72px;border-radius:10px;object-fit:cover;display:flex;align-items:center;justify-content:center;font-size:34px;background:var(--surface-strong)}
+.cu-it h4{margin:0;font:600 16px var(--display);color:var(--ink)}
+.cu-it .cu-k{font:700 15px var(--hand);color:var(--primary)}
+.cu-it p{margin:2px 0 0;font-size:13px;color:var(--muted)}
 .fold,.rain{border:2px solid var(--ink);border-radius:var(--r-md);padding:2px 16px;margin-top:12px;background:var(--paper);box-shadow:3px 3px 0 var(--ink)}
 .rain{margin-top:32px;border-color:var(--sea);box-shadow:3px 3px 0 var(--sea)}
 .fold summary,.rain summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;min-height:60px;flex-wrap:wrap}
@@ -759,6 +765,11 @@ html.intro-on #intro.skip{animation:cc-in-skip .2s ease-out forwards}
     <summary><span class="sub-t">📸 Nos souvenirs</span><span class="cnt" id="albCnt"></span></summary>
     <div id="album"></div>
   </details>
+  <details class="fold" id="cuisine">
+    <summary><span class="sub-t">🍺 Nos découvertes culinaires</span><span class="cnt" id="cuCnt"></span></summary>
+    <p class="note">Ce qu'on a goûté en Corse, au fil du voyage.</p>
+    <ul class="cu-list" id="cuList"></ul>
+  </details>
   <details class="fold" id="trajet">
     <summary><span class="sub-t">🗺️ Notre trajet</span><span class="cnt" id="trCnt"></span></summary>
     <p class="note">Les lieux déjà visités, dans l'ordre, avec une couleur par jour.</p>
@@ -915,6 +926,7 @@ const DAYS = [
    {t:'13:45', end:'16:17', txt:'Suite de la randonnée et retour', p:'sg', noSwim:true, dur:'2 h 30'},
    {drive:'🚗 Santa-Giulia → Palombaggia : ~20 min'},
    {t:'17:30', txt:'Plage de Palombaggia : juste pour la voir, sans baignade', p:'palo', noSwim:true, img:'photos/j4-palombaggia.jpg', imgLabel:'📸 Panorama de Palombaggia', more:["Ciel d'orage sur la baie, eau turquoise et rochers de granit."]},
+   {t:'18:00', txt:'Pause à la paillote : Pietra ambrée et gaufre au chocolat face à la mer', p:'palo', noSwim:true, img:'photos/j4-gaufre.jpg', imgLabel:'📸 Pause gaufre et Pietra', more:["Bière corse Pietra ambrée (à la farine de châtaigne) sur les planches de la paillote."]},
   ],
   rain:[{p:"torr",t:"Si averse : dégustation au Domaine de Torraccia (~30 min)"}],
   restos:[]},
@@ -991,7 +1003,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v54'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v55'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -1428,6 +1440,20 @@ document.querySelectorAll('.dep input').forEach(inp => {
   inp.addEventListener('change', () => { apply(); try { localStorage.setItem('dep-' + inp.dataset.day, inp.value); } catch (e) {} });
 });
 
+
+/* ——— Découvertes culinaires ——— */
+const CUISINE = [
+  {nom:'Pietra blonde', type:'Bière corse', ic:'🍺', note:'Goûtée pendant le séjour.'},
+  {nom:'Pietra ambrée', type:'Bière corse à la farine de châtaigne', img:'photos/j4-pietra.jpg', note:'Face à la mer, à la paillote de Palombaggia.'},
+  {nom:'Colomba', type:'Bière blanche corse', ic:'🍺', note:'Goûtée pendant le séjour.'},
+  {nom:'Paolina', type:'À compléter', ic:'🥂', note:'Goûtée pendant le séjour.'},
+  {nom:'Gaufre au chocolat', type:'Douceur de plage', img:'photos/j4-gaufre.jpg', note:'Avec la Pietra, à Palombaggia.'},
+];
+(() => {
+  const ul = document.getElementById('cuList'); if (!ul) return;
+  ul.innerHTML = CUISINE.map(c => `<li class="cu-it">${c.img ? `<img src="${c.img}" alt="${esc(c.nom)}" loading="lazy">` : `<span class="cu-ic" aria-hidden="true">${c.ic || '🍽️'}</span>`}<div><h4>${esc(c.nom)}</h4><div class="cu-k">${esc(c.type)}</div><p>${esc(c.note || '')}</p></div></li>`).join('');
+  const n = document.getElementById('cuCnt'); if (n) n.textContent = CUISINE.length;
+})();
 const mapObs = new IntersectionObserver(entries => entries.forEach(e => {
   if (!e.isIntersecting) return;
   const day = DAYS.find(d => 'map-' + d.id === e.target.id);
