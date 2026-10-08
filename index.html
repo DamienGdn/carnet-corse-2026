@@ -316,7 +316,24 @@ footer .sig{display:block;color:var(--primary);font:700 28px var(--hand);margin-
 .wkrow::before{content:"";position:absolute;left:0;right:0;bottom:2px;border-bottom:2.5px dotted var(--maquis);opacity:.5}
 .wkrow .wk{position:absolute;left:0;bottom:3px;margin:0;animation:cc-stroll 6s linear infinite alternate}
 @keyframes cc-stroll{from{transform:translateX(0)}to{transform:translateX(240px)}}
-@media (prefers-reduced-motion:reduce){.anim *{animation:none!important}.sky .plane{transform:translateX(120px)}.road .car{transform:translateX(16px)}.wkrow .wk{transform:translateX(100px)}}
+.swrow{display:block;margin-top:6px;height:24px;position:relative;overflow:hidden}
+.swrow::before{content:"";position:absolute;left:0;right:0;bottom:2px;border-bottom:2.5px dotted #14566f;opacity:.35}
+.swrow .sw{position:absolute;left:0;bottom:1px;width:30px;height:22px;animation:cc-swim 7s ease-in-out infinite alternate}
+.swrow .sw svg{width:30px;height:22px}
+.sw .cw{transform-origin:20px 13px;animation:cc-crawl 1s linear infinite}
+.sw .cw.b{animation-delay:-.5s}
+.sw .kk{transform-origin:8px 13px;animation:cc-kick .25s ease-in-out infinite alternate}
+.sw .wv{animation:cc-wave 1.2s linear infinite}
+.sw .bub{animation:cc-bub 1.6s ease-in infinite;opacity:0}
+.sw .bub.b{animation-delay:-.8s}
+.sw svg{animation:cc-bob 1.2s ease-in-out infinite alternate}
+@keyframes cc-swim{from{transform:translateX(0)}to{transform:translateX(200px)}}
+@keyframes cc-crawl{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes cc-kick{from{transform:rotate(-10deg)}to{transform:rotate(10deg)}}
+@keyframes cc-wave{from{transform:translateX(0)}to{transform:translateX(-10px)}}
+@keyframes cc-bub{0%{transform:translateY(0);opacity:0}15%{opacity:.9}100%{transform:translateY(-7px);opacity:0}}
+@keyframes cc-bob{from{transform:translateY(0)}to{transform:translateY(-.8px)}}
+@media (prefers-reduced-motion:reduce){.anim *{animation:none!important}.swrow .sw{transform:translateX(90px)}.sw .bub{opacity:.8}.sky .plane{transform:translateX(120px)}.road .car{transform:translateX(16px)}.wkrow .wk{transform:translateX(100px)}}
 
 /* ---- Icônes météo animées + vol hero ---- */
 .wxi{display:inline-block;width:1em;height:1em;vertical-align:middle;line-height:1}
@@ -348,6 +365,109 @@ footer .sig{display:block;color:var(--primary);font:700 28px var(--hand);margin-
 @media (prefers-reduced-motion:reduce){.wxi *{animation:none!important}.wxi .bolt{opacity:1}}
 
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+
+/* ===== v35 : vie du carnet ===== */
+@media(max-width:400px){.brand svg{width:90px}.tools{gap:4px}.chip{min-width:42px;padding:0 8px}.topbar{gap:6px}}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+/* 1. trajet dessiné au défilement */
+@property --p{syntax:'<number>';inherits:true;initial-value:0}
+.tl{--p:0}
+.tl::before,.tl::after{content:"";position:absolute;left:66px;top:16px;bottom:16px;width:3px;pointer-events:none;background:repeating-linear-gradient(to bottom,var(--hairline) 0 6px,transparent 6px 13px)}
+.tl::after{background:repeating-linear-gradient(to bottom,var(--primary) 0 6px,transparent 6px 13px);clip-path:inset(0 0 calc((1 - var(--p)) * 100%) 0)}
+.tl>li.trcar{position:absolute;left:67.5px;top:calc(16px + var(--p) * (100% - 32px));width:30px;height:19px;margin:-9px 0 0 -15px;padding:0;border:0;display:block;transform:rotate(90deg);z-index:2;pointer-events:none;filter:drop-shadow(0 1px 1.5px rgba(22,49,63,.35))}
+.tl>li.trcar svg{display:block;width:100%;height:100%}
+@media (prefers-reduced-motion:reduce){.tl{--p:1}.tl>li.trcar{display:none}}
+@supports (animation-timeline:view()){
+  @media (prefers-reduced-motion:no-preference){
+    .tl{animation:cc-trace linear both;animation-timeline:view();animation-range:cover 0% cover 65%}
+    @keyframes cc-trace{from{--p:0}to{--p:1}}
+  }
+}
+/* 2. carnet qui s'ouvre + photos qui se posent */
+@media (prefers-reduced-motion:no-preference){
+  section.pg:not(.in){opacity:0}
+  section.pg.in{animation:cc-page .85s cubic-bezier(.2,.8,.25,1) backwards;transform-origin:0 30%}
+  @keyframes cc-page{0%{opacity:0;transform:perspective(900px) rotateY(-16deg) translateX(-10px)}60%{opacity:1}100%{opacity:1;transform:perspective(900px) rotateY(0)}}
+  .drop:not(.in){opacity:0}
+  .drop.in{animation:cc-drop .75s cubic-bezier(.3,1.2,.5,1) backwards;animation-delay:var(--dl,0s)}
+  @keyframes cc-drop{0%{opacity:0;transform:translateY(-26px) rotate(-5deg) scale(1.05)}55%{opacity:1;transform:translateY(5px) rotate(.8deg) scale(.995)}75%{transform:translateY(-3px) rotate(-.4deg)}100%{transform:none}}
+}
+/* 3. ambiance météo */
+.gallery .pill{z-index:3}
+.amb{position:absolute;inset:0;overflow:hidden;border-radius:6px;pointer-events:none;z-index:2}
+.amb *{position:absolute;display:block;pointer-events:none;animation-play-state:paused}
+.amb.on *{animation-play-state:running}
+.amb .dr{top:-12%;left:var(--x);width:1.5px;height:16px;border-radius:2px;background:linear-gradient(to bottom,transparent,rgba(235,245,250,.75));opacity:.5;transform:rotate(12deg);animation:cc-drop-rain var(--d) linear var(--dl) infinite}
+.amb.light .dr{height:11px;opacity:.38}
+@keyframes cc-drop-rain{to{transform:translate(-14px,125vh) rotate(12deg)}}
+@media (max-width:743px){@keyframes cc-drop-rain{to{transform:translate(-10px,340px) rotate(12deg)}}}
+.amb .cl{top:var(--y);left:-45%;width:70%;height:40%;border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.7),rgba(255,255,255,0));opacity:.55;filter:blur(5px);animation:cc-cloud var(--d) linear var(--dl) infinite}
+.amb.grey .cl{background:radial-gradient(closest-side,rgba(190,203,210,.85),rgba(190,203,210,0));opacity:.6}
+@keyframes cc-cloud{to{transform:translateX(280%)}}
+.amb .sg{top:-30%;right:-20%;width:80%;height:90%;border-radius:50%;background:radial-gradient(closest-side,rgba(255,221,130,.5),rgba(255,221,130,0));animation:cc-glow 6s ease-in-out infinite alternate}
+@keyframes cc-glow{from{opacity:.55;transform:scale(.94)}to{opacity:1;transform:scale(1.06)}}
+.amb .sw{top:0;bottom:0;left:-40%;width:35%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.2) 50%,transparent);transform:skewX(-14deg);animation:cc-sweep 10s ease-in-out 1s infinite}
+@keyframes cc-sweep{0%{transform:translateX(0) skewX(-14deg)}60%,100%{transform:translateX(480%) skewX(-14deg)}}
+.amb .gl{left:var(--x);top:var(--y);width:9px;height:9px;background:radial-gradient(circle,#fff 0 1.5px,rgba(255,244,200,.8) 2px,transparent 5px);opacity:0;animation:cc-twinkle 4s ease-in-out var(--dl) infinite}
+@keyframes cc-twinkle{0%,100%{opacity:0;transform:scale(.4)}50%{opacity:.85;transform:scale(1.2)}}
+.amb .fx{inset:0;background:rgba(255,255,255,.9);opacity:0;animation:cc-flash 13s linear infinite}
+@keyframes cc-flash{0%,93%,100%{opacity:0}94%{opacity:.5}95%{opacity:.05}96%{opacity:.35}98%{opacity:0}}
+[data-theme="dark"] .amb .sg{opacity:.7}
+@media (prefers-reduced-motion:reduce){.amb *{animation:none!important}.amb .fx,.amb .sw,.amb .gl{display:none}.amb .cl{left:20%}.amb .cl+.cl{left:50%}.amb .dr{top:calc(var(--x) * 1.2)}}
+/* 4. tampon Fait */
+.gallery .stampdone{position:absolute;right:14px;bottom:-26px;width:96px;height:96px;z-index:3;pointer-events:none;color:var(--primary);transform:rotate(-14deg)}
+.stampdone .ink{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;border-radius:50%;border:4px double currentColor;box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3.5px currentColor;background:color-mix(in srgb,var(--paper) 45%,transparent);font-family:var(--display);line-height:1;text-transform:uppercase;
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.5' numOctaves='3' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -4 3.4'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23f)'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.5' numOctaves='3' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -4 3.4'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23f)'/%3E%3C/svg%3E");-webkit-mask-size:120px;mask-size:120px}
+.stampdone .ink b{font-size:17px;font-weight:700}
+.stampdone .ink i{font-style:normal;font-size:27px;font-weight:700;letter-spacing:1.5px;margin:1px 0 2px}
+.stampdone .ink u{text-decoration:none;font:700 15px var(--hand);text-transform:none;letter-spacing:0}
+@media (prefers-reduced-motion:no-preference){
+  .gallery .stampdone{opacity:0}
+  section.pg.in .stampdone{animation:cc-thud .62s .55s cubic-bezier(.3,1.3,.5,1) both}
+  @keyframes cc-thud{0%{opacity:0;transform:scale(2.7) rotate(-38deg)}50%{opacity:.95;transform:scale(.86) rotate(-9deg)}72%{opacity:.95;transform:scale(1.07) rotate(-16deg)}100%{opacity:.95;transform:scale(1) rotate(-14deg)}}
+}
+@media (max-width:743px){.dayhead{padding-right:0}}
+/* 5. personnages vivants */
+.hd{transform-box:fill-box;transform-origin:50% 100%}
+.hd.nod{animation:cc-nod .95s ease-in-out}
+@keyframes cc-nod{0%,100%{transform:none}28%{transform:rotate(-5deg) translateY(2px)}55%{transform:rotate(3deg) translateY(-1px)}78%{transform:rotate(-1.5deg)}}
+.bs{opacity:0;transition:opacity .2s}
+.lv.smile .bs{opacity:1}
+.lv.smile .eye{animation:none;transform:scaleY(.55) translateY(-1px)}
+.dn-logo svg{display:block;width:64px;height:auto;overflow:visible}
+.brand,.dn-logo{-webkit-tap-highlight-color:transparent}
+.cc-fx{position:fixed;z-index:2000;pointer-events:none;font:700 18px/1 var(--display);will-change:transform,opacity}
+.tl li .t .here{display:block;margin-top:6px;width:54px;text-align:center;color:var(--primary);font:700 15px/1 var(--hand)}
+.tl li .t .here svg{display:block;width:54px;height:auto;overflow:visible;margin-bottom:2px;filter:drop-shadow(0 1px 1px rgba(22,49,63,.25))}
+.tl li.is-cur{background:linear-gradient(to right,color-mix(in srgb,var(--ocre) 16%,transparent),transparent 80%);border-radius:10px}
+@media (prefers-reduced-motion:reduce){.hd.nod{animation:none}}
+/* 6. mode Aujourd'hui */
+#todayDlg{width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:var(--canvas) var(--grain);color:var(--ink);overflow:auto;overscroll-behavior:contain}
+#todayDlg::backdrop{background:rgba(22,49,63,.6)}
+body:has(#todayDlg[open]){overflow:hidden}
+.td-in{max-width:560px;margin:0 auto;padding:calc(14px + env(safe-area-inset-top)) 16px calc(28px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:14px;min-height:100%}
+.td-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.td-top svg{width:84px;height:auto;overflow:visible}
+.td-x{height:48px;min-width:48px;padding:0 16px;border-radius:14px 14px 14px 4px;border:2px solid var(--ink);background:var(--paper);color:var(--ink);font:700 16px var(--font);box-shadow:2px 2px 0 var(--ink);cursor:pointer}
+.td-kick{font:700 22px/1 var(--hand);color:var(--primary);transform:rotate(-2deg)}
+#todayDlg h2{font-size:clamp(26px,8vw,34px);line-height:1.1}
+.td-when{font:700 20px var(--hand);color:var(--sea)}
+.td-msg{border:2px dashed var(--ocre);background:var(--ocre-soft);color:#3a2a08;border-radius:var(--r-md);padding:10px 14px;font-weight:700}
+[data-theme="dark"] .td-msg{color:#f4ead2}
+.td-wx{display:flex;align-items:center;gap:12px;border:2px solid var(--ocre);background:var(--ocre-soft);color:#3a2a08;border-radius:var(--r-md);padding:8px 14px;transform:rotate(-.6deg)}
+[data-theme="dark"] .td-wx{color:#f4ead2}
+.td-wx .wxi{font-size:42px}
+.td-wx b{display:block;font:600 20px var(--display)}.td-wx small{font-size:14px}
+.td-card{background:var(--paper);border-radius:6px;box-shadow:var(--shadow);padding:14px 16px;position:relative}
+.td-card.cur{border-left:6px solid var(--primary)}
+.td-card .lab{font:700 20px var(--hand);color:var(--primary)}
+.td-card .tm{font:600 30px/1.1 var(--display);color:var(--sea);font-variant-numeric:tabular-nums}
+.td-card .tx{font:700 18px/1.3 var(--font);margin-top:4px}
+.td-card .rt{margin-top:8px;font:700 19px var(--hand);color:var(--muted)}
+.td-actions{display:flex;flex-wrap:wrap;gap:10px}
+.td-actions .btn{min-height:52px;font-size:17px}
+.td-link{font-weight:700}
+@media (prefers-reduced-motion:no-preference){#todayDlg[open] .td-in>*{animation:cc-drop .6s cubic-bezier(.3,1.2,.5,1) backwards}#todayDlg[open] .td-in>*:nth-child(2){animation-delay:.05s}#todayDlg[open] .td-in>*:nth-child(3){animation-delay:.1s}#todayDlg[open] .td-in>*:nth-child(4){animation-delay:.15s}#todayDlg[open] .td-in>*:nth-child(5){animation-delay:.2s}#todayDlg[open] .td-in>*:nth-child(6){animation-delay:.25s}}
 </style>
 </head>
 <body id="top">
@@ -389,6 +509,7 @@ footer .sig{display:block;color:var(--primary);font:700 28px var(--hand);margin-
       <span>carnet corse</span>
     </a>
     <div class="tools">
+      <button class="chip" id="todayBtn" aria-label="Mode Aujourd’hui" aria-haspopup="dialog">📅<span class="lbl">Aujourd’hui</span></button>
       <a class="chip" href="#infos" aria-label="À savoir">⚠️<span class="lbl">À savoir</span></a>
       <a class="chip" href="#checklist" aria-label="Checklist">🎒<span class="lbl">Checklist</span></a>
       <button class="chip" id="offlineBtn" aria-label="Télécharger pour le hors-ligne">⬇️<span class="lbl" id="offlineLbl">Hors-ligne</span></button>
@@ -459,6 +580,7 @@ footer .sig{display:block;color:var(--primary);font:700 28px var(--hand);margin-
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<dialog id="todayDlg" aria-labelledby="tdTitle"></dialog>
 <script>
 /* ---------- Photos (Wikimedia Commons via Special:FilePath) ---------- */
 const wm = (file) => `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(file)}?width=1000`;
@@ -506,16 +628,16 @@ const P = {
 /* ---------- Programme ---------- */
 // steps: {t, end?, txt, p? (clé de lieu), tags?, cond?} ; drive: {drive:'texte'}
 const DAYS = [
- {id:'j1', done:true, walk:'~2,5 km · 1 h 30', d:'Lundi 5 octobre', title:'Arrivée Figari • Porto-Vecchio • Santa Giulia', meteo:['🌦️','25°C / 19°C','Averses faibles possibles'],
-  stops:['fig','pv','sg'], cover:'sg',
+ {id:'j1', done:true, walk:'~2,5 km · 1 h 30', d:'Lundi 5 octobre', title:'Arrivée Figari • Santa Giulia • Porto-Vecchio', meteo:['🌦️','25°C / 19°C','Averses faibles possibles'],
+  stops:['fig','sg','pv'], cover:'sg',
   steps:[
    {t:'12:30', txt:'Atterrissage à Figari + récupération voiture de location', p:'fig', dur:'45 min', more:["Comptoirs des loueurs dans le hall, voitures sur le parking en face du terminal.", "Photographier la voiture (rayures, jantes) avant de partir et noter le niveau d'essence.", "Route : N198 direction Porto-Vecchio, ~30 min sans difficulté."]},
    {drive:'🚗 Figari → Porto-Vecchio : ~30 min (25 km)'},
    {t:'13:45', end:'14:30', txt:'Déjeuner rapide', dur:'45 min'},
    {t:'14:30', end:'15:30', txt:'Installation au gîte (Villa Occhiatana, Santa-Giulia) + courses', dur:'1 h', more:["Adresse : Villa Occhiatana, Santa-Giulia, 20137 Porto-Vecchio.", "Grandes surfaces à l'entrée de Porto-Vecchio : faire le plein d'eau, crème solaire et de quoi pique-niquer pour les journées rando.", "Prévoir des sacs isothermes pour les pique-niques du J3 et du J4."]},
-   {t:'15:45', end:'17:00', txt:'Vieille ville et citadelle de Porto-Vecchio', p:'pv', dur:'1 h 15', more:["Se garer en bas (port de plaisance) puis monter à pied par les escaliers (~10 min), ou au parking de la haute-ville.", "À voir : porte génoise, bastion de France, belvédère sur le golfe et les salines, église Saint-Jean-Baptiste.", "Rue Borgo et place de la République : boutiques de produits corses (charcuterie, miel, couteaux)."]},
-   {drive:'🚗 Porto-Vecchio → Santa Giulia : ~15 min (8 km)'},
-   {t:'17:15', end:'18:45', txt:'Santa Giulia — baignade, coucher de soleil ~19:05', p:'sg', dur:'1 h 30', cond:'Snorkeling si mer calme', more:["Lagon très peu profond, eau souvent plus chaude qu'ailleurs : idéal pour une première baignade.", "Snorkeling : longer les rochers aux deux extrémités de la plage, plus de poissons qu'au centre (sable).", "Soleil couché vers 19:05 : rester jusqu'au bout pour la lumière sur la baie."]},
+   {t:'15:45', end:'17:15', txt:'Santa Giulia — première baignade', p:'sg', dur:'1 h 30', cond:'Snorkeling si mer calme', more:["Lagon très peu profond, eau souvent plus chaude qu'ailleurs : idéal pour une première baignade.", "Snorkeling : longer les rochers aux deux extrémités de la plage, plus de poissons qu'au centre (sable).", "Soleil couché vers 19:05 : rester jusqu'au bout pour la lumière sur la baie."]},
+   {drive:'🚗 Santa Giulia → Porto-Vecchio : ~15 min (8 km)'},
+   {t:'17:30', end:'18:45', txt:'Vieille ville et citadelle de Porto-Vecchio', p:'pv', dur:'1 h 15', more:["Se garer en bas (port de plaisance) puis monter à pied par les escaliers (~10 min), ou au parking de la haute-ville.", "À voir : porte génoise, bastion de France, belvédère sur le golfe et les salines, église Saint-Jean-Baptiste.", "Rue Borgo et place de la République : boutiques de produits corses (charcuterie, miel, couteaux)."]},
    {t:'20:00', txt:'Dîner'},
   ],
   rain:[{p:"egl",t:"Vieille ville : ruelles, église, boutiques et cafés"},{p:"salin",t:"Balade sur les salines (si simple bruine)"}],
@@ -564,17 +686,19 @@ const DAYS = [
   rain:[{p:"cana",t:"Si averse : dégustation au Clos Canarelli (Figari, au sec aujourd'hui, ~30 min)"}],
   restos:[]},
 
- {id:'j5', walk:'~4 km · 2 h', d:'Vendredi 9 octobre', title:'Palombaggia • Tamaricciu • Snorkeling', meteo:['💨','21°C / 16°C',"Vent d'ouest potentiellement fort"],
+ {id:'j5', walk:'~4 km · 2 h', d:'Vendredi 9 octobre', title:'Palombaggia • Tamaricciu • piscines du Cavu', meteo:['💨','21°C / 16°C',"Vent d'ouest potentiellement fort"],
   alert:'🌊 Snorkeling CONDITIONNEL. Si mer agitée ou vent fort : alternative terrestre → sentier côtier Palombaggia–Tamaricciu à pied, puis vieille ville de Porto-Vecchio ou salines.',
-  stops:['palo','tama'],
+  stops:['palo','tama','cavu'],
   steps:[
    {t:'08:30', txt:'Départ'},
    {drive:'🚗 Porto-Vecchio → Palombaggia : ~20 min (12 km)'},
    {t:'09:00', end:'11:00', txt:'Palombaggia', p:'palo', dur:'2 h', cond:'Snorkeling si mer calme', more:["Parkings privés payants le long de la route, ou places gratuites plus loin à pied.", "Sable blanc, pins parasols et rochers rouges ; mer plus agitée qu'à Santa Giulia quand le vent d'ouest souffle.", "Snorkeling : rochers rouges à l'extrémité sud de la plage. Ne pas y aller si drapeau orange ou rouge."]},
    {t:'11:00', end:'12:00', txt:'Marche côtière vers Tamaricciu', p:'tama', dur:'1 h', more:["Sentier côtier vers le sud, ~15–20 min à travers les rochers et les petites criques.", "Tamaricciu est plus petite et plus abritée : bonne alternative si Palombaggia est trop agitée."]},
    {t:'12:00', end:'13:30', txt:'Déjeuner', dur:'1 h 30'},
-   {t:'13:30', end:'15:30', txt:'Deuxième session snorkeling', p:'tama', dur:'2 h', cond:'Si conditions OK', more:["Explorer les rochers entre les deux plages, en restant près du bord.", "Si le vent s'est levé : sieste à l'ombre des pins ou retour vers la vieille ville."]},
-   {t:'16:00', txt:'Retour (~20 min)'},
+   {t:'13:30', end:'15:15', txt:'Deuxième session snorkeling', p:'tama', dur:'2 h', cond:'Si conditions OK', more:["Explorer les rochers entre les deux plages, en restant près du bord.", "Si le vent s'est levé : sieste à l'ombre des pins ou retour vers la vieille ville."]},
+   {drive:'🚗 Palombaggia → Sainte-Lucie (Cavu) : ~40 min'},
+   {t:'16:15', end:'17:30', txt:'Piscines naturelles du Cavu en rentrant', p:'cavu', dur:'1 h 15', cond:'Baignade fraîche, seulement si le ciel est dégagé', more:["Vasques de granit le long de la rivière, accès en quelques minutes depuis la route.", "Sec et ~22 °C annoncés au Cavu vendredi après-midi."]},
+   {t:'17:30', txt:'Retour au gîte (~35 min)'},
    {t:'19:30', txt:'Dîner'},
   ],
   rain:[{p:"torr",t:"Dégustation au Domaine de Torraccia (~20 min)"},{p:"arag",t:"Castellu d'Araghju (si simple bruine)"}],
@@ -596,9 +720,9 @@ const DAYS = [
   rain:[{p:"smm",t:"Église Sainte-Marie-Majeure et ruelles couvertes"},{p:"cana",t:"Dégustation au Clos Canarelli (Figari, sur le retour)"}],
   restos:['La Minute Moule Bonifacio','La Bohème Bonifacio','Del Ferro Bonifacio']},
 
- {id:'j7', walk:'~3 km · 1 h 30', d:'Dimanche 11 octobre', title:'Dernière baignade • Palombaggia • Envol Figari', meteo:['🌦️','19°C / 11°C','Averses possibles'],
+ {id:'j7', walk:'~3 km · 1 h 30', d:'Dimanche 11 octobre', title:'Dernière baignade • Palombaggia • Sartène • Envol Figari', meteo:['🌦️','19°C / 11°C','Averses possibles'],
   alert:'✈️ Départ de Figari à 20:00 : être à l\'aéroport vers 18:45 (restitution voiture + enregistrement). Vérifier l\'heure de libération du logement.',
-  stops:['sg','palo','pv','fig'], cover:'palo',
+  stops:['sg','pv','palo','sart','fig'], cover:'palo',
   steps:[
    {t:'08:30', txt:'Petit-déjeuner + bagages', dur:'1 h'},
    {drive:'🚗 → Santa Giulia : ~15 min'},
@@ -606,9 +730,10 @@ const DAYS = [
    {t:'11:45', end:'12:30', txt:'Libération du gîte / bagages dans la voiture', dur:'45 min'},
    {t:'12:30', end:'14:00', txt:'Déjeuner à Porto-Vecchio', p:'pv', dur:'1 h 30'},
    {drive:'🚗 Porto-Vecchio → Palombaggia : ~20 min'},
-   {t:'14:30', end:'17:00', txt:'Palombaggia — dernière baignade & sieste sous les pins', p:'palo', dur:'2 h 30', cond:'Si météo favorable, sinon vieille ville', more:["Dernier après-midi sous les pins. Si temps couvert : vieille ville de Porto-Vecchio pour les derniers achats.", "Faire le plein d'essence avant l'aéroport (le loueur facture le carburant manquant)."]},
-   {t:'17:00', end:'17:45', txt:'Douche plage / se changer, dernier verre', dur:'45 min'},
-   {drive:'🚗 Palombaggia → Aéroport de Figari : ~40 min (30 km) + plein d\'essence'},
+   {t:'14:15', end:'15:45', txt:'Palombaggia — dernière baignade & sieste sous les pins', p:'palo', dur:'1 h 30', cond:'Si météo favorable, sinon vieille ville', more:["Dernier après-midi sous les pins. Si temps couvert : vieille ville de Porto-Vecchio pour les derniers achats.", "Faire le plein d'essence avant l'aéroport (le loueur facture le carburant manquant)."]},
+   {drive:'🚗 Palombaggia → Sartène par Figari : ~1 h 10'},
+   {t:'17:00', end:'17:55', txt:'Sartène : petit tour express (place Porta)', p:'sart', dur:'55 min', cond:'Partir à 17:55 au plus tard pour l\'aéroport', more:["Tour rapide de la place Porta et des ruelles autour, se garer au plus près du centre."]},
+   {drive:'🚗 Sartène → Aéroport de Figari : ~40 min (35 km) + plein d\'essence'},
    {t:'18:45', txt:'Aéroport : restitution voiture + enregistrement', p:'fig', dur:'1 h 15', more:["Retour de la voiture au parking du loueur, puis enregistrement. Petit aéroport : 1 h 15 avant le vol suffit."]},
    {t:'20:00', txt:'Décollage ✈️'},
   ],
@@ -633,7 +758,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v33'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v36'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -768,6 +893,11 @@ const PLANE_SVG = '<svg viewBox="0 0 30 18" aria-hidden="true"><g stroke="#12324
 const WALKER_SVG = '<svg viewBox="0 0 18 22" aria-hidden="true"><g stroke="#12324a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path class="lg" d="M9 13V20"/><path class="lg b" d="M9 13V20"/><path d="M9 8V13"/><path class="ar" d="M9 9V14"/><path class="ar b" d="M9 9V14"/><circle cx="9" cy="4.6" r="3" fill="#f7cfa6"/><path d="M6.3 3.6Q9 .8 11.8 3.6" stroke="#6b3a1f" stroke-width="1.5"/></g></svg>';
 const animEl = (cls, inner) => `<span class="anim ${cls}" aria-hidden="true">${inner}</span>`;
 const isPlane = t => /✈|Décollage|Atterrissage/.test(t);
+const WAVE = y => '<path class="wv" d="M-10 ' + y + 'Q-7.5 ' + (y - 2.2) + ' -5 ' + y + 'T0 ' + y + 'T5 ' + y + 'T10 ' + y + 'T15 ' + y + 'T20 ' + y + 'T25 ' + y + 'T30 ' + y + 'T35 ' + y + 'T40 ' + y + 'V22H-10Z" fill="#bcdde4" fill-opacity=".85" stroke="#14566f" stroke-width="1"/>';
+const SWIM_SVG = '<svg viewBox="0 0 30 22" aria-hidden="true"><g stroke="#12324a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path class="kk" d="M8 13L3 14"/><path d="M8 12.5H20"/><circle cx="23.5" cy="10.5" r="3" fill="#f7cfa6"/><path d="M21 9.5Q23.5 6.8 26.2 9.2" stroke="#6b3a1f" stroke-width="1.5"/><path class="cw" d="M20 13L20 6"/><path class="cw b" d="M20 13L20 6"/></g><g>' + WAVE(14) + '</g></svg>';
+const DIVE_SVG = '<svg viewBox="0 0 30 22" aria-hidden="true"><g>' + WAVE(9) + '</g><g stroke="#12324a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path class="kk" d="M8 16L2 17.5"/><path d="M8 16H20"/><path d="M19 16L22 18.5"/><circle cx="23.5" cy="15" r="3" fill="#f7cfa6"/><path d="M24 13.6H27.2V16.4H24Z" fill="#bcdde4" stroke-width="1.1"/><path d="M22.2 12Q20 10 21 4" stroke-width="1.3"/><path d="M21 4H19.5" stroke="#d62828" stroke-width="1.6"/></g><g fill="none" stroke="#14566f" stroke-width=".8"><circle class="bub" cx="28" cy="13" r="1"/><circle class="bub b" cx="26.5" cy="12" r="1.2"/></g></svg>';
+const isSwim = (s) => /^Plage/i.test((P[s.p] || {}).name || '') || /plage|baignade|snorkeling/i.test(s.txt);
+const swimEl = s => animEl('swrow', '<span class="sw">' + (/snorkeling/i.test(s.txt) ? DIVE_SVG : SWIM_SVG) + '</span>');
 const isHike = t => /^(Randonnée|Marche)/.test(t);
 
 const seenImg = new Set();
@@ -782,7 +912,7 @@ DAYS.forEach((day, i) => {
     return `<li><span class="t"><span data-t="${s.t}">${s.t}</span>${s.end ? `<br><span class="d">→ <span data-t="${s.end}">${s.end}</span></span>` : ''}</span>
       <span>${idx ? `<span class="badge">${idx}</span>` : ''}${esc(s.txt)}
       ${s.dur ? `<br><span class="tag">⏱ ${s.dur}</span>` : ''}${s.cond ? `<span class="tag cond">⚠ ${esc(s.cond)}</span>` : ''}
-      ${isPlane(s.txt) ? animEl('sky ' + (/Décollage/.test(s.txt) ? 'up' : 'down'), '<span class="plane">' + PLANE_SVG + '</span>') : ''}${isHike(s.txt) ? animEl('wkrow', '<span class="wk">' + WALKER_SVG + '</span>') : ''}
+      ${isPlane(s.txt) ? animEl('sky ' + (/Décollage/.test(s.txt) ? 'up' : 'down'), '<span class="plane">' + PLANE_SVG + '</span>') : ''}${isHike(s.txt) ? animEl('wkrow', '<span class="wk">' + WALKER_SVG + '</span>') : (isSwim(s) ? swimEl(s) : '')}
       ${s.more ? `<ul class="more">${s.more.map(m => `<li>${esc(m)}</li>`).join('')}</ul>` : ''}
       ${s.img ? `<details class="more-d"><summary>${s.imgLabel || '📷 Photo'}</summary><a href="${s.img}" target="_blank" rel="noopener"><img class="track" src="${s.img}" alt="${esc(s.imgLabel || s.txt)}" loading="lazy"></a></details>` : ''}
       ${s.p ? phHtml(s.p) : ''}</span></li>`;
@@ -822,10 +952,10 @@ DAYS.forEach((day, i) => {
     <div class="gallery">
       ${galleryImg(cover, 'main')}
       ${side.length ? `<div class="side">${side.map(p => galleryImg(p, '')).join('')}</div>` : ''}
-      <span class="pill">Jour ${n} · ${wd(day)}</span>
+      <span class="pill">Jour ${n} · ${wd(day)}</span>${day.done ? `<div class="stampdone" aria-hidden="true"><span class="ink"><b>✓</b><i>Fait</i><u>jour ${n}</u></span></div>` : ''}
     </div>
     <div class="dayhead">
-      <div><h2>${esc(day.title)}</h2><div class="when">${day.d} 2026${day.done ? ' · <span class="tag">✅ Fait</span>' : ''}</div>${day.walk ? `<div class="walk anim"><span class="wk">${WALKER_SVG}</span>Marche : ${day.walk}</div>` : ''}</div>
+      <div><h2>${esc(day.title)}</h2><div class="when">${day.d} 2026${day.done ? '<span class="sr-only"> · Fait</span>' : ''}</div>${day.walk ? `<div class="walk anim"><span class="wk">${WALKER_SVG}</span>Marche : ${day.walk}</div>` : ''}</div>
       <div class="meteo"><span class="ico">${day.meteo[0]}</span><div><b>${day.meteo[1]}</b><span class="m">${day.meteo[2]}</span></div></div>
     </div>
     ${day.alert ? `<div class="alert">${esc(day.alert)}</div>` : ''}${day.note ? `<div class="alert">ℹ️ ${esc(day.note)}</div>` : ''}
@@ -838,7 +968,7 @@ DAYS.forEach((day, i) => {
           <button data-act="fit" title="Recentrer" aria-label="Recentrer">🎯</button>
         </div>
       </div>
-      <div><h3 class="sub">Programme</h3>${/^Départ/.test(day.steps[0].txt) ? `<label class="dep">🕗 Heure de départ <input type="time" step="900" value="${day.steps[0].t}" data-day="${day.id}" data-base="${day.steps[0].t}"></label>` : ''}<ul class="tl">${stepsHtml}</ul></div>
+      <div><h3 class="sub">Programme</h3>${/^Départ/.test(day.steps[0].txt) ? `<label class="dep">🕗 Heure de départ <input type="time" step="900" value="${day.steps[0].t}" data-day="${day.id}" data-base="${day.steps[0].t}"></label>` : ''}<ul class="tl"><li class="trcar" role="presentation" aria-hidden="true">${CAR_SVG}</li>${stepsHtml}</ul></div>
     </div>
     <div class="stops">${stopsHtml}</div>
     ${day.rain ? `<details class="rain" data-day="${day.id}">
@@ -974,8 +1104,11 @@ function renderWx(data, stamp){
   box.querySelectorAll('.wx-day').forEach(b => b.addEventListener('click', () => show(+b.dataset.i)));
   const today = days.find(x => x && x.date === new Date().toISOString().slice(0, 10)) || days.find(Boolean);
   if (today) show(today.i);
+  window.ccWx = {days, data};
+  if (window.ccAmb) window.ccAmb(days);
   document.getElementById('wxStamp').textContent = stamp;
   if (window.animWatch) window.animWatch(document);
+  if (window.ccWxReady) window.ccWxReady();
 }
 (async () => {
   const locs = DAYS.map(d => P[d.stops[0] === 'fig' ? d.stops[1] : d.stops[0]]);
@@ -1192,6 +1325,193 @@ offlineBtn.onclick = async () => {
   store.set('cc-offline', new Date().toISOString());
 };
 if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
+
+/* ===== v35 : vie du carnet (trajet, pages, ambiance, tampons, personnages, mode Aujourd'hui) ===== */
+(() => {
+  const still = () => matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const NS = 'http://www.w3.org/2000/svg';
+  const q = new URLSearchParams(location.search).get('now'); // ?now=2026-10-08T14:30 : simulation pour tests
+  const nowDate = () => q ? new Date(q) : new Date();
+  const tripIdx = d => (d.getFullYear() === 2026 && d.getMonth() === 9 && d.getDate() >= 5 && d.getDate() <= 11) ? d.getDate() - 5 : -1;
+
+  /* --- 1. trajet : repli JS si animation-timeline n'existe pas --- */
+  if (!(window.CSS && CSS.supports('animation-timeline', 'view()'))) {
+    const tls = [...document.querySelectorAll('ul.tl')], vis = new Set(); let tick = false;
+    const upd = () => { tick = false; if (still()) return;
+      vis.forEach(ul => { const r = ul.getBoundingClientRect(), vh = innerHeight;
+        ul.style.setProperty('--p', Math.max(0, Math.min(1, (vh - r.top) / (vh + r.height) / 0.65)).toFixed(3)); }); };
+    const req = () => { if (!tick) { tick = true; requestAnimationFrame(upd); } };
+    const io = new IntersectionObserver(es => { es.forEach(e => e.isIntersecting ? vis.add(e.target) : vis.delete(e.target)); req(); }, {rootMargin:'100px'});
+    tls.forEach(t => io.observe(t));
+    addEventListener('scroll', req, {passive:true}); addEventListener('resize', req, {passive:true});
+  }
+
+  /* --- 2 & 4. pages qui se tournent, photos qui se posent, tampons --- */
+  const reveal = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('in'); reveal.unobserve(e.target);
+  }), {rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('section.day[id^="j"]').forEach(s => { s.classList.add('pg'); reveal.observe(s); });
+  document.querySelectorAll('.polaroid, .stop figure, .gallery').forEach((el, k) => {
+    el.classList.add('drop'); el.style.setProperty('--dl', (k % 3) * 0.08 + 's'); reveal.observe(el);
+  });
+
+  /* --- 3. ambiance météo --- */
+  const rnd = k => { const x = Math.sin(k * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+  function ambHtml(c){
+    const rain = n => Array.from({length:n}, (_, k) => `<i class="dr" style="--x:${Math.round(rnd(k) * 96)}%;--d:${(1.1 + rnd(k + 9) * .9).toFixed(2)}s;--dl:${(-rnd(k + 3) * 2).toFixed(2)}s"></i>`).join('');
+    const cloud = (n, dur) => Array.from({length:n}, (_, k) => `<i class="cl" style="--y:${k * 32 - 4}%;--d:${dur + k * 22}s;--dl:${-k * 17 - 6}s"></i>`).join('');
+    const sun = '<i class="sg"></i><i class="sw"></i>' + [[18,30],[62,18],[80,56]].map(([x, y], k) => `<i class="gl" style="--x:${x}%;--y:${y}%;--dl:${k * 1.3}s"></i>`).join('');
+    if (c === 0) return ['sun', sun];
+    if (c <= 2) return ['sun', sun + cloud(1, 70)];
+    if (c === 3) return ['grey', cloud(2, 60)];
+    if (c <= 48) return ['grey', cloud(3, 55)];
+    if (c <= 57) return ['grey light', cloud(2, 60) + rain(10)];
+    if (c <= 67 || (c >= 80 && c <= 82)) return ['grey', cloud(2, 60) + rain(20)];
+    if (c <= 77 || c === 85 || c === 86) return ['grey', cloud(2, 60)];
+    return ['grey', cloud(2, 50) + rain(22) + '<i class="fx"></i>'];
+  }
+  const ambObs = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('on', e.isIntersecting)), {rootMargin:'40px'});
+  window.ccAmb = days => days.forEach(x => {
+    if (!x) return;
+    const g = document.querySelector(`#${x.day.id} .gallery`); if (!g) return;
+    g.querySelector('.amb')?.remove();
+    const [cls, html] = ambHtml(x.loc.daily.weather_code[x.k]);
+    g.insertAdjacentHTML('beforeend', `<div class="amb ${cls}" aria-hidden="true" data-wmo="${x.loc.daily.weather_code[x.k]}">${html}</div>`);
+    ambObs.observe(g.querySelector('.amb'));
+  });
+
+  /* --- 5. personnages vivants --- */
+  const LOGOS = new Set();
+  const HEART = ['♥', '★', '✦', '♥', '✿'];
+  function live(svg){
+    if (svg.classList.contains('lv')) return svg;
+    svg.classList.add('lv');
+    svg.querySelectorAll(':scope > g > g[transform]').forEach((g, k) => {
+      const w = document.createElementNS(NS, 'g'); w.setAttribute('class', 'hd h' + (k + 1));
+      g.parentNode.insertBefore(w, g); w.appendChild(g);
+      const bs = document.createElementNS(NS, 'path'); bs.setAttribute('class', 'bs');
+      bs.setAttribute('d', k ? 'M27.5 57Q34 69 40.5 57Z' : 'M27.5 52Q34 64 40.5 52Z'); bs.setAttribute('fill', '#8a2f1a');
+      g.appendChild(bs);
+      w.addEventListener('animationend', () => w.classList.remove('nod'));
+    });
+    LOGOS.add(svg); return svg;
+  }
+  const brandSvg = document.querySelector('.brand svg');
+  const dnImg = document.querySelector('.dn-logo img');
+  const dnSvg = brandSvg.cloneNode(true); dnSvg.setAttribute('aria-hidden', 'true');
+  if (dnImg) dnImg.replaceWith(dnSvg);
+  live(brandSvg); live(dnSvg);
+  let turn = 0;
+  setInterval(() => {
+    if (document.hidden || still()) return;
+    turn ^= 1;
+    LOGOS.forEach(s => { if (!s.isConnected) { LOGOS.delete(s); return; }
+      const h = s.querySelector('.h' + (turn + 1)); if (!h) return;
+      h.classList.remove('nod'); void h.getBoundingClientRect(); h.classList.add('nod'); });
+  }, 8000);
+  function burst(svg){
+    svg.classList.add('smile'); clearTimeout(svg._t); svg._t = setTimeout(() => svg.classList.remove('smile'), 1700);
+    if (still()) return;
+    const r = svg.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 3;
+    for (let k = 0; k < 8; k++) {
+      const s = document.createElement('span'); s.className = 'cc-fx'; s.textContent = HEART[k % HEART.length];
+      s.style.left = cx + (rnd(k + 1) - .5) * r.width * .8 + 'px'; s.style.top = cy + 'px';
+      s.style.color = k % 3 === 2 ? 'var(--ocre)' : 'var(--primary)'; s.style.fontSize = 13 + rnd(k + 5) * 11 + 'px';
+      document.body.appendChild(s);
+      const dx = (rnd(k + 7) - .5) * 90, dy = -(50 + rnd(k + 2) * 60);
+      s.animate([{transform:'translate(0,0) scale(.4) rotate(0)', opacity:0}, {opacity:1, offset:.2},
+        {transform:`translate(${dx}px,${dy}px) scale(1.15) rotate(${(rnd(k) - .5) * 60}deg)`, opacity:0}],
+        {duration:1100 + rnd(k + 4) * 500, delay:k * 40, easing:'cubic-bezier(.2,.7,.3,1)', fill:'both'}).onfinish = () => s.remove();
+    }
+  }
+  document.addEventListener('click', e => { const a = e.target.closest('.brand, .dn-logo'); if (a) burst(a.querySelector('svg')); });
+
+  /* modèle d'un jour : étapes avec horaires décalés par « heure de départ » */
+  function dayModel(i){
+    const day = DAYS[i], sec = document.getElementById(day.id), inp = sec.querySelector('.dep input');
+    const delta = inp && inp.value ? toMin(inp.value) - toMin(inp.dataset.base) : 0;
+    const lis = [...sec.querySelectorAll('ul.tl > li:not(.trcar)')], out = []; let drive = null;
+    day.steps.forEach((s, k) => {
+      if (s.drive) { drive = s.drive; return; }
+      out.push({s:toMin(s.t) + delta, e:s.end ? toMin(s.end) + delta : null, txt:s.txt, p:s.p ? P[s.p] : null, dur:s.dur, drive, li:lis[k]}); drive = null;
+    });
+    out.forEach((o, k) => { o.e2 = o.e != null ? o.e : (out[k + 1] ? out[k + 1].s : o.s + 60); });
+    return out;
+  }
+  function whereAt(m, min){
+    let cur = null; m.forEach(o => { if (min >= o.s && min < o.e2) cur = o; });
+    return {cur, next:m.find(o => o.s > min)};
+  }
+  function placeHere(){
+    document.querySelectorAll('.here').forEach(h => h.remove());
+    document.querySelectorAll('li.is-cur').forEach(l => l.classList.remove('is-cur'));
+    const now = nowDate(), i = tripIdx(now); if (i < 0) return;
+    const {cur, next} = whereAt(dayModel(i), now.getHours() * 60 + now.getMinutes());
+    const t = cur || next; if (!t || !t.li) return;
+    const slot = t.li.querySelector('.t'); if (!slot) return;
+    const h = document.createElement('span'); h.className = 'here'; h.setAttribute('role', 'img');
+    h.setAttribute('aria-label', cur ? 'Étape en cours' : 'Prochaine étape');
+    const sv = brandSvg.cloneNode(true); sv.classList.remove('lv'); sv.setAttribute('aria-hidden', 'true'); sv.removeAttribute('style');
+    h.append(sv, cur ? 'on est là' : 'bientôt'); slot.appendChild(h); live(sv);
+    if (cur) t.li.classList.add('is-cur');
+  }
+  placeHere(); setInterval(placeHere, 30000);
+  document.addEventListener('change', e => { if (e.target.closest('.dep')) setTimeout(placeHere, 0); });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) placeHere(); });
+
+  /* --- 6. mode Aujourd'hui --- */
+  const dlg = document.getElementById('todayDlg');
+  const hh = m => fmt(m);
+  function wxNow(i, now){
+    const W = window.ccWx; if (!W || !W.days[i]) return null;
+    const x = W.days[i], h = x.loc.hourly, dl = x.loc.daily;
+    const sameDay = tripIdx(now) === i, j = sameDay ? h.time.indexOf(x.date + 'T' + String(now.getHours()).padStart(2, '0') + ':00') : -1;
+    if (j >= 0) return {code:h.weather_code[j], line:`${Math.round(h.temperature_2m[j])}°C maintenant`, sub:`pluie ${h.precipitation_probability[j] ?? '–'}% · vent ${Math.round(h.wind_speed_10m[j])} km/h · max ${Math.round(dl.temperature_2m_max[x.k])}°`};
+    return {code:dl.weather_code[x.k], line:`${Math.round(dl.temperature_2m_max[x.k])}°C / ${Math.round(dl.temperature_2m_min[x.k])}°C`, sub:`pluie ${dl.precipitation_probability_max[x.k] ?? '–'}% · vent ${Math.round(dl.wind_speed_10m_max[x.k])} km/h`};
+  }
+  function card(cls, lab, o){
+    return `<div class="td-card ${cls}"><div class="lab">${lab}</div><div class="tm">${hh(o.s)}${o.e != null ? ' → ' + hh(o.e) : ''}</div><div class="tx">${esc(o.txt)}${o.dur ? ` · ⏱ ${esc(o.dur)}` : ''}</div>${o.drive ? `<div class="rt">${esc(o.drive)}</div>` : ''}</div>`;
+  }
+  function renderToday(){
+    const now = nowDate(); let i = tripIdx(now), msg = '', min = now.getHours() * 60 + now.getMinutes();
+    if (i < 0) { const before = now < new Date(2026, 9, 5); i = before ? 0 : 6; min = before ? -1 : 99999;
+      msg = before ? 'Le voyage commence le 5 octobre : voici le Jour 1.' : 'Le voyage est terminé : voici le dernier jour.'; }
+    const day = DAYS[i], m = dayModel(i), {cur, next} = whereAt(m, min);
+    const w = wxNow(i, now), [, wtxt] = w ? WMO(w.code) : ['', ''];
+    const target = (next && next.p ? next : null) || m.find(o => o.p && o.s > min) || (cur && cur.p ? cur : null);
+    const tomorrow = !next && !cur && i < 6 && i === tripIdx(now) ? dayModel(i + 1)[0] : null;
+    dlg.innerHTML = `<div class="td-in">
+      <div class="td-top"><svg id="tdLogo" viewBox="0 0 118 72" aria-hidden="true"></svg><button class="td-x" type="button" id="tdClose">✕ Fermer</button></div>
+      <div><div class="td-kick">c’est parti !</div><h2 id="tdTitle">Aujourd’hui · Jour ${i + 1}</h2><div class="td-when">${esc(day.d)} · ${esc(day.title)}</div></div>
+      ${msg ? `<div class="td-msg" role="status">${msg}</div>` : ''}
+      <div class="td-wx">${w ? wxIcon(w.code, wtxt) : `<span style="font-size:36px">${day.meteo[0]}</span>`}<div><b>${w ? w.line : day.meteo[1]}</b><small>${w ? esc(wtxt) + ' · ' + w.sub : esc(day.meteo[2])}</small></div></div>
+      ${cur ? card('cur', 'étape en cours', {...cur, drive:null}) : (next ? '' : `<div class="td-card"><div class="lab">${i === tripIdx(now) ? 'journée terminée' : 'rien de prévu'}</div><div class="tx">${i === tripIdx(now) ? 'Plus d’étape aujourd’hui. Bonne soirée !' : 'Plus d’étape pour ce jour.'}</div></div>`)}
+      ${next ? card('', cur ? 'ensuite' : (i === tripIdx(now) ? 'prochaine étape' : 'première étape'), next) : ''}
+      ${tomorrow ? card('', 'demain, pour commencer', tomorrow) : ''}
+      <div class="td-actions">${target ? `<a class="btn btn-g" target="_blank" rel="noopener" href="${gUrl(target.p)}">🧭 Naviguer vers ${esc(target.p.name)}</a><a class="btn btn-a" target="_blank" rel="noopener" href="${aUrl(target.p)}">🍎 Plans</a>` : ''}<a class="btn btn-a td-link" href="#${day.id}" id="tdGo">📖 Programme du jour</a></div>
+    </div>`;
+    const lg = brandSvg.cloneNode(true); lg.id = 'tdLogo'; lg.classList.remove('lv'); lg.setAttribute('aria-hidden', 'true'); lg.removeAttribute('style');
+    dlg.querySelector('#tdLogo').replaceWith(lg); live(lg);
+    lg.style.cssText = ''; lg.parentNode.classList.add('td-top');
+    if (window.animWatch) window.animWatch(dlg);
+    dlg.querySelector('#tdClose').addEventListener('click', () => dlg.close());
+    dlg.querySelector('#tdGo').addEventListener('click', () => dlg.close());
+    lg.addEventListener('click', () => burst(lg));
+  }
+  function openToday(e){
+    if (e) e.preventDefault();
+    if (dlg.open) return;
+    renderToday(); dlg.showModal(); dlg.scrollTop = 0; dlg.querySelector('#tdClose').focus();
+  }
+  dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+  dlg.addEventListener('close', () => { dlg.innerHTML = ''; });
+  setInterval(() => { if (dlg.open) renderToday(); }, 60000);
+  window.ccWxReady = () => { if (dlg.open) renderToday(); placeHere(); };
+  document.getElementById('todayOrb').addEventListener('click', openToday);
+  document.getElementById('todayBtn').addEventListener('click', openToday);
+  window.openToday = openToday;
+})();
 
 /* ---------- PWA (uniquement servi en http/https) ---------- */
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
