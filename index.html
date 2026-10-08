@@ -290,8 +290,8 @@ footer .sig{display:block;color:var(--primary);font:700 28px var(--hand);margin-
 .anim.on *{animation-play-state:running}
 .tl li.drive .road{position:relative;display:block;height:22px;align-self:center}
 .road::before{content:"";position:absolute;left:0;right:0;bottom:3px;border-bottom:2.5px dotted var(--primary);opacity:.7}
-.road .car{position:absolute;left:0;bottom:4px;width:24px;height:14px;animation:cc-drive 3.6s ease-in-out infinite alternate}
-.road .car svg{width:24px;height:14px;animation:cc-bump .5s ease-in-out infinite alternate}
+.road .car{position:absolute;left:0;bottom:3px;width:26px;height:17px;animation:cc-drive 3.6s ease-in-out infinite alternate}
+.road .car svg{width:26px;height:17px;animation:cc-bump .5s ease-in-out infinite alternate}
 @keyframes cc-drive{from{transform:translateX(0)}to{transform:translateX(34px)}}
 @keyframes cc-bump{from{transform:translateY(0)}to{transform:translateY(-1.2px)}}
 .sky{position:relative;display:block;height:50px;margin-top:8px;overflow:hidden}
@@ -605,7 +605,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v27'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v28'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -735,7 +735,7 @@ document.getElementById('utiles').innerHTML = UGROUPS.map(g => `
   </details>`).join('');
 
 
-const CAR_SVG = '<svg viewBox="0 0 24 14" aria-hidden="true"><g stroke="#12324a" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"><path d="M2 10V7.5Q2 6.5 3.5 6.3L6 2.5Q6.6 1.8 8 1.8H15Q16.4 1.8 17 2.5L19.5 6.3Q22 6.6 22 8V10Z" fill="#d4601e"/><path d="M7 3.4H11V6H5.7ZM12.5 3.4H15.2L17.3 6H12.5Z" fill="#cfe8f2" stroke-width="1"/><circle cx="7" cy="10.5" r="2.3" fill="#12324a"/><circle cx="17" cy="10.5" r="2.3" fill="#12324a"/><circle cx="7" cy="10.5" r=".8" fill="#fff" stroke="none"/><circle cx="17" cy="10.5" r=".8" fill="#fff" stroke="none"/></g></svg>';
+const CAR_SVG = '<svg viewBox="0 0 26 17" aria-hidden="true"><g stroke="#12324a" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M2.5 13.4V10.2Q2.5 8.1 4.6 7.7L6.6 7.4Q7.6 2.5 13 2.3Q18.4 2.5 19.6 7.4L21.8 7.8Q23.6 8.2 23.6 10.3V13.4Z" fill="#d62828"/><path d="M7.7 5.2Q9.1 2.4 13 2.3Q16.9 2.4 18.4 5.2Z" fill="#33302e"/><path d="M7.2 7.4Q7.8 5.3 9.9 5.2H16.2Q18.3 5.3 18.9 7.4Z" fill="#bfe3ee" stroke-width=".8"/><path d="M13 5.2V7.4" stroke-width=".7"/><path d="M3.2 10.3H23" stroke="#f3eee3" stroke-width=".7"/><circle cx="22.4" cy="9" r="1" fill="#fff3c4" stroke-width=".5"/><circle cx="6.6" cy="13.6" r="2.3" fill="#12324a"/><circle cx="19.4" cy="13.6" r="2.3" fill="#12324a"/><circle cx="6.6" cy="13.6" r=".9" fill="#d9d9d9" stroke="none"/><circle cx="19.4" cy="13.6" r=".9" fill="#d9d9d9" stroke="none"/></g></svg>'; // Fiat 500c rouge, capote en toile
 const PLANE_SVG = '<svg viewBox="0 0 30 18" aria-hidden="true"><g stroke="#12324a" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"><path d="M3 9Q3 6.5 6 6.5H21Q27 6.5 28 9 27 11.5 21 11.5H6Q3 11.5 3 9Z" fill="#fff"/><path d="M12 7L9 1.5H13L18 7ZM12 11L9 16.5H13L18 11Z" fill="#f7cfa6"/><path d="M3 7.5L1.5 3.5H5L6.5 6.5Z" fill="#d4601e"/><circle cx="22" cy="8.6" r="1" fill="#12324a" stroke="none"/><circle cx="18.5" cy="8.6" r="1" fill="#12324a" stroke="none"/><circle cx="25" cy="8.6" r="1" fill="#12324a" stroke="none"/></g></svg>';
 const WALKER_SVG = '<svg viewBox="0 0 18 22" aria-hidden="true"><g stroke="#12324a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path class="lg" d="M9 13V20"/><path class="lg b" d="M9 13V20"/><path d="M9 8V13"/><path class="ar" d="M9 9V14"/><path class="ar b" d="M9 9V14"/><circle cx="9" cy="4.6" r="3" fill="#f7cfa6"/><path d="M6.3 3.6Q9 .8 11.8 3.6" stroke="#6b3a1f" stroke-width="1.5"/></g></svg>';
 const animEl = (cls, inner) => `<span class="anim ${cls}" aria-hidden="true">${inner}</span>`;
