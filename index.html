@@ -967,8 +967,24 @@ const DAYS = [
   rain:[{p:"torr",t:"Si averse : dégustation au Domaine de Torraccia (~30 min)"}],
   restos:[]},
 
- {id:'j5', walk:'~3 km · 1 h 30', d:'Vendredi 9 octobre', title:'Port de Porto-Vecchio • Saint-Cyprien • Cavu • Aléria', meteo:['🌤️','22°C / 15°C','Sec, averse possible à Aléria en fin de journée'],
-  alert:'🌤️ Prévisions : sec et ~22 °C à Porto-Vecchio (rafales ~30–40 km/h l\'après-midi), ~23 °C à Aléria avec averse possible vers 17 h (~33 %). Coucher du soleil 18 h 51 : retour de nuit depuis Aléria (~1 h 15).',
+ {id:'j5', walk:'~4,5 km · 2 h 30', d:'Vendredi 9 octobre', title:'Santa Giulia • Cimetière marin • Lavezzi', meteo:['🌦️','21°C / 13°C','Averses possibles'],
+  alert:'⛵ Sortie bateau Lavezzi à 11 h 30 : prévisions (jeudi soir) averses le matin à Bonifacio, rafales ~50 km/h, mer formée (~1,4 m). Confirmer la sortie avec la compagnie le matin ; on ajustera au fil de la journée.',
+  stops:['sg','cim','bonp','lav','ron'],
+  steps:[
+   {t:'07:30', txt:'Lever'},
+   {t:'08:00', end:'08:40', txt:'Baignade matinale à Santa Giulia', p:'sg', dur:'40 min'},
+   {drive:'🚗 Santa-Giulia → Bonifacio : ~40 min + stationnement'},
+   {t:'09:40', end:'10:45', txt:'Cimetière marin de Bonifacio', p:'cim', dur:'1 h', more:["Chapelles funéraires face à la mer, au bout du plateau du Bosco.", "Prévoir un parapluie : averses possibles le matin."]},
+   {t:'11:00', txt:'Rendez-vous au port de Bonifacio (embarquement)', p:'bonp', more:["Être au quai 20–30 min avant le départ."]},
+   {t:'11:30', end:'15:30', txt:'Sortie bateau aux îles Lavezzi', p:'lav', dur:'≈ 4 h', cond:'Selon la météo marine · baignade/snorkeling si mer calme', more:["Horaire de retour à confirmer avec la compagnie.", "Pique-nique à emporter pour le midi sur l'île."]},
+   {t:'15:45', txt:'Suite à ajuster selon la météo : Rondinara, haute-ville ou retour', p:'ron', noSwim:true},
+   {t:'18:00', txt:'Retour au gîte (~40 min)'},
+  ],
+  rain:[{p:"smm",t:"Église Sainte-Marie-Majeure et ruelles couvertes"},{p:"cana",t:"Dégustation au Clos Canarelli (Figari, sur le retour)"}],
+  restos:['La Minute Moule Bonifacio','La Bohème Bonifacio','Del Ferro Bonifacio']},
+
+ {id:'j6', walk:'~3 km · 1 h 30', d:'Samedi 10 octobre', title:'Port de Porto-Vecchio • Saint-Cyprien • Cavu • Aléria', meteo:['🌤️','22°C / 15°C','Sec, averse possible à Aléria en fin de journée'],
+  alert:'Journée déplacée au samedi (échange avec la sortie Lavezzi). Météo à revérifier la veille.',
   stops:['pvport','cyp','cavu','aleria'],
   steps:[
    {t:'09:00', txt:'Départ du gîte'},
@@ -984,22 +1000,6 @@ const DAYS = [
   ],
   rain:[{p:"aleria",t:"Si averse : musée du Fort de Matra en premier"},{p:"palo",t:"Option : Palombaggia à la place de Saint-Cyprien"}],
   restos:[]},
-
- {id:'j6', walk:'~4,5 km · 2 h 30', d:'Samedi 10 octobre', title:'Lavezzi • Bonifacio • Rondinara', meteo:['🌦️','21°C / 13°C','Averses possibles'],
-  alert:'⛵ Sortie bateau Lavezzi DÉPENDANTE de la météo marine : confirmer avec la compagnie la veille au soir / le matin. Si annulée : Bonifacio le matin, Rondinara l\'après-midi.',
-  stops:['bonp','lav','ron'],
-  steps:[
-   {t:'07:30', txt:'Départ'},
-   {drive:'🚗 Porto-Vecchio → Port de Bonifacio : ~40 min + stationnement'},
-   {t:'09:00', end:'13:00', txt:'Sortie bateau îles Lavezzi', p:'lav', dur:'4 h', cond:'Baignade / snorkeling si conditions favorables', more:["Billetteries des compagnies sur le quai du port de Bonifacio ; réserver la veille et confirmer le départ le matin (annulé si mer forte).", "Traversée ~45 min le long des falaises et des grottes (Sdragonato), puis escale de 2 à 3 h sur l'île.", "Réserve naturelle sans aucun service : emporter eau, pique-nique, crème solaire, masque et tuba. Prix habituel env. 40–50 € par adulte (à vérifier).", "Sur l'île : sentier balisé jusqu'au cimetière de la Sémillante (naufrage de 1855) et criques d'eau cristalline."]},
-   {t:'13:15', end:'14:30', txt:'Déjeuner', dur:'1 h 15'},
-   {t:'14:30', end:'16:00', txt:'Citadelle / port de Bonifacio', p:'bonp', dur:'1 h 30', more:["Flâner sur le port et la marina, puis monter en haute-ville si on ne l'a pas fait le J2.", "Pause à l'Aquarium (sur le quai) si la sortie bateau a été écourtée."]},
-   {drive:'🚗 Bonifacio → Rondinara : ~25 min (18 km)'},
-   {t:'16:15', end:'17:30', txt:'Plage de Rondinara', p:'ron', dur:'1 h 15', cond:'Si météo favorable', more:["Baie presque fermée, en forme de fer à cheval : eau calme même quand il y a du vent.", "Parking payant puis ~10 min à pied. Coucher de soleil à prévoir avant 19:00."]},
-   {t:'18:00', txt:'Retour (~25 min)'},
-  ],
-  rain:[{p:"smm",t:"Église Sainte-Marie-Majeure et ruelles couvertes"},{p:"cana",t:"Dégustation au Clos Canarelli (Figari, sur le retour)"}],
-  restos:['La Minute Moule Bonifacio','La Bohème Bonifacio','Del Ferro Bonifacio']},
 
  {id:'j7', walk:'~3 km · 1 h 30', d:'Dimanche 11 octobre', title:'Dernière baignade • Palombaggia • Sartène • Envol Figari', meteo:['🌦️','19°C / 11°C','Averses possibles'],
   alert:'✈️ Départ de Figari à 20:00 : être à l\'aéroport vers 18:45 (restitution voiture + enregistrement). Vérifier l\'heure de libération du logement.',
@@ -1039,7 +1039,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v62'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v63'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
