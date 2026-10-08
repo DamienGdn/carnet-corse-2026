@@ -21,10 +21,15 @@
 <circle cx="34" cy="42" r="22" fill="#f7cfa6"/>
 <path d="M11 43C5 22 18 13 34 15 50 13 63 22 57 43 54 33 50 29 46 28 40 32 28 32 22 28 18 30 13 34 11 43Z" fill="#d4601e"/>
 <path d="M28 15Q31 5 38 11Q41 6 44 14" fill="#d4601e"/>
+<path d="M11 43C9 36 11 31 14 29 16 33 17 38 18 43 15 40 13 41 11 43ZM57 43C59 36 57 31 54 29 52 33 51 38 50 43 53 40 55 41 57 43Z" fill="#ebe6dc" stroke-width="1.4"/>
+<path d="M12 47C12 63 23 70 34 70 45 70 56 63 56 47 53 52 49 54 44 54 40 51 28 51 24 54 19 54 15 52 12 47Z" fill="#fff"/>
+<path d="M22 60Q26 62 30 61M38 61Q42 62 46 60" fill="none" stroke="#c9c2b4" stroke-width="1.4"/>
+<path d="M21 38Q26 35 31 38M37 38Q42 35 47 38" fill="none" stroke="#b4541f" stroke-width="2"/>
 <ellipse class="eye b" cx="26" cy="44" rx="2.6" ry="3.4" fill="#12324a" stroke="none"/>
 <ellipse class="eye b" cx="42" cy="44" rx="2.6" ry="3.4" fill="#12324a" stroke="none"/>
-<g fill="#b4541f" stroke="none"><circle cx="22" cy="50" r="1"/><circle cx="25" cy="52" r="1"/><circle cx="43" cy="52" r="1"/><circle cx="46" cy="50" r="1"/></g>
-<path d="M28 53Q34 60 40 53Z" fill="#fff"/>
+<path d="M21 46Q19 47 19 49M47 46Q49 47 49 49" fill="none" stroke-width="1.2"/>
+<g fill="#b4541f" stroke="none" opacity=".7"><circle cx="21" cy="49" r="1"/><circle cx="47" cy="49" r="1"/></g>
+<path d="M29 58Q34 63 39 58" fill="none"/>
 </g>
 </g>
 </svg>
