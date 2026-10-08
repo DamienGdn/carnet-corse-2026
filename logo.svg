@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 118 72" role="img" aria-label="Anne-Gaëlle et Damien">
+<style>
+.eye{transform-box:fill-box;transform-origin:center;animation:cc-blink 4s infinite}
+.eye.b{animation-delay:1.7s}
+@keyframes cc-blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.08)}}
+@media (prefers-reduced-motion:reduce){.eye{animation:none}}
+</style>
+<g stroke="#12324a" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+<g transform="translate(8 0)">
+<path d="M15 27C-4 22-6 46 6 60 6 49 12 43 18 40Z" fill="#6b3a1f"/>
+<circle cx="34" cy="42" r="22" fill="#f7cfa6"/>
+<path d="M12 42C9 17 58 11 56 42 51 30 45 27 34 26 24 27 17 31 12 42Z" fill="#6b3a1f"/>
+<circle cx="15" cy="28" r="3.6" fill="#c2512f"/>
+<ellipse class="eye" cx="26" cy="44" rx="2.6" ry="3.4" fill="#12324a" stroke="none"/>
+<ellipse class="eye" cx="42" cy="44" rx="2.6" ry="3.4" fill="#12324a" stroke="none"/>
+<circle cx="22" cy="51" r="3.6" fill="#ee8f7c" stroke="none" opacity=".6"/>
+<circle cx="46" cy="51" r="3.6" fill="#ee8f7c" stroke="none" opacity=".6"/>
+<path d="M29 53Q34 58 39 53" fill="none"/>
+</g>
+<g transform="translate(56 0)">
+<circle cx="34" cy="42" r="22" fill="#f7cfa6"/>
+<path d="M11 43C5 22 18 13 34 15 50 13 63 22 57 43 54 33 50 29 46 28 40 32 28 32 22 28 18 30 13 34 11 43Z" fill="#d4601e"/>
+<path d="M28 15Q31 5 38 11Q41 6 44 14" fill="#d4601e"/>
+<ellipse class="eye b" cx="26" cy="44" rx="2.6" ry="3.4" fill="#12324a" stroke="none"/>
+<ellipse class="eye b" cx="42" cy="44" rx="2.6" ry="3.4" fill="#12324a" stroke="none"/>
+<g fill="#b4541f" stroke="none"><circle cx="22" cy="50" r="1"/><circle cx="25" cy="52" r="1"/><circle cx="43" cy="52" r="1"/><circle cx="46" cy="50" r="1"/></g>
+<path d="M28 53Q34 60 40 53Z" fill="#fff"/>
+</g>
+</g>
+</svg>
