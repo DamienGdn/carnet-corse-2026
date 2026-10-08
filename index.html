@@ -938,7 +938,7 @@ const DAYS = [
   ],
   restos:['Auberge du Col de Bavella']},
 
- {id:'j4', walk:'9,36 km · 3 h 56 · D+ 337 m (rando Apple Watch)', d:'Jeudi 8 octobre', title:'Randonnée autour de Santa Giulia', done:true, meteo:['☁️','25°C / 21°C','Sec, couvert, vent d\'ouest'],
+ {id:'j4', walk:'12,64 km · 19 136 pas (Apple Watch) · rando 9,36 km en 3 h 56, D+ 337 m', d:'Jeudi 8 octobre', title:'Randonnée autour de Santa Giulia', done:true, meteo:['☁️','25°C / 21°C','Sec, couvert, vent d\'ouest'],
   alert:'🌤️ Programme changé : randonnée autour de Santa Giulia, tout près du gîte. Sec toute la journée (23–25 °C), mais rafales d\'ouest ~50–58 km/h : rester sur les sentiers côtiers, éviter les crêtes exposées. Coucher du soleil 18 h 53.',
   stops:['sg','pic4','palo'],
   steps:[
@@ -1025,7 +1025,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v58'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v59'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -1841,7 +1841,7 @@ if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
   /* --- Compteurs --- */
   const num = '(\\d+(?:[.,]\\d+)?)', toN = x => parseFloat(x.replace(',', '.'));
   // Mesures réelles (compteur de la voiture, Apple Watch) : priment sur les estimations du programme
-  const MESURES = {voitureKm: 210, piqueNiques: Math.max(0, Math.min(7, tripIdx + 1)) /* pique-nique tous les midis */, marcheKm: {j1: 9.56, j2: 14.99, j3: 10.55, j4: 9.36} /* Apple Watch */};
+  const MESURES = {voitureKm: 210, piqueNiques: Math.max(0, Math.min(7, tripIdx + 1)) /* pique-nique tous les midis */, marcheKm: {j1: 9.56, j2: 14.99, j3: 10.55, j4: 12.64} /* Apple Watch */};
   const walkKm = doneDays.reduce((a, d) => {
     if (MESURES.marcheKm[d.id] != null) return a + MESURES.marcheKm[d.id];
     if (!d.walk) return a;
