@@ -649,7 +649,7 @@ const P = {
   cyp:  {name:'Plage de Saint-Cyprien (San Ciprianu)', lat:41.63241, lon:9.34601, img:wm('Plage de San Ciprianu – Lecci.jpg'), cap:'Grand arc de sable face à l\'est, abrité du vent d\'ouest', d:{"desc":"Longue plage de sable blanc à Lecci, ~15 min au nord de Porto-Vecchio. Tournée vers l'est : par vent d'ouest (libeccio), le vent souffle de la terre et la mer reste calme près du bord.","tips":["Sable soulevé par les rafales : se poser derrière les rochers au sud de la plage","Baignade possible si la mer est plate près du bord"]}},
   pvport:{name:'Port de plaisance de Porto-Vecchio', lat:41.5935, lon:9.2840, img:wm('Porto Vecchio et son port.jpg'), cap:'Marina au pied de la citadelle, voiliers et cafés', d:{"desc":"Port de plaisance et marina au pied de la vieille ville, avec quais, voiliers et cafés. Position approximative.","tips":["Parking au port, puis balade à pied le long des quais"]}},
   aleria:{name:'Aléria — site antique et Fort de Matra', lat:42.10254, lon:9.50975, img:wm('Aléria fort Matra et église.jpg'), cap:'Ancienne cité grecque puis romaine, musée dans le fort génois de Matra', d:{"desc":"Site archéologique de la ville antique d'Aléria (comptoir grec puis cité romaine) et musée archéologique Jérôme-Carcopino installé dans le Fort de Matra.","facts":{"duree":"1 h 30","acces":"~50 min au nord du Cavu par la N198"},"tips":["Horaires d'octobre et dernière entrée à vérifier avant d'y aller","Le musée est un bon abri en cas d'averse"]}},
-  pic4: {name:'Coin pique-nique — sud de la baie de Santa Giulia', lat:41.521573, lon:9.267235, img:'', cap:'Le spot du pique-nique du jeudi', d:{"desc":"Position GPS du pique-nique : N 41.521573°, E 9.267235°, au sud de la baie de Santa Giulia."}},
+  pic4: {name:'Coin pique-nique — sud de la baie de Santa Giulia', lat:41.521573, lon:9.267235, img:'photos/j4-pique-nique.jpg', cap:'Notre pause pique-nique dans le maquis (votre photo)', d:{"desc":"Position GPS du pique-nique : N 41.521573°, E 9.267235°, au sud de la baie de Santa Giulia."}},
   cim:  {name:'Cimetière marin', lat:41.38672, lon:9.15038, img:wm('Cimetière marin (Bonifacio).jpg'), cap:'Chapelles funéraires face à la mer', d:{"desc":"Chapelles et caveaux à l'extrémité ouest du plateau, face à la mer.","facts":{"duree":"30 min","acces":"À pied depuis la haute-ville","marche":"Env. 10 min depuis la haute-ville","cout":"Gratuit (horaires à vérifier)"},"dontMiss":["La vue sur les falaises et la Sardaigne","Les chapelles funéraires face à la mer"],"tips":["Cimetière en activité : rester respectueux","Se rend à pied depuis la haute-ville (env. 10 min)"]}},
 };
 
@@ -705,7 +705,7 @@ const DAYS = [
   stops:['sg','pic4'],
   steps:[
    {t:'12:00', end:'13:00', txt:'Randonnée sur le sentier côtier autour de Santa Giulia', p:'sg', dur:'1 h', more:["Boucle ou aller-retour le long des criques et pointes rocheuses autour de la baie, à adapter sur place.", "Prendre de l'eau et des chaussures fermées ; vent fort sur les pointes."]},
-   {t:'13:00', end:'13:45', txt:'Pique-nique en chemin, au sud de la baie', p:'pic4', dur:'45 min', more:["Pause pique-nique pendant la rando, à l'abri du vent d'ouest (N 41.521573°, E 9.267235°)."]},
+   {t:'13:00', end:'13:45', txt:'Pique-nique en chemin, au sud de la baie', p:'pic4', dur:'45 min', img:'photos/j4-pique-nique.jpg', imgLabel:'📸 Photo de notre pause', more:["Pause pique-nique pendant la rando, à l'abri du vent d'ouest (N 41.521573°, E 9.267235°)."]},
    {t:'13:45', end:'15:30', txt:'Suite de la randonnée et retour vers la plage', p:'sg', dur:'1 h 45'},
    {t:'15:30', end:'17:30', txt:'Plage de Santa Giulia : baignade et repos', p:'sg', dur:'2 h', cond:'Baignade si la mer est calme près du bord', more:["Plage tournée vers l'est : le vent d'ouest vient de la terre, la mer reste calme dans le lagon."]},
    {t:'17:45', txt:'Retour au gîte (5 min)'},
@@ -785,7 +785,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v42'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v43'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
