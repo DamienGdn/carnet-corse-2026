@@ -468,6 +468,12 @@ body:has(#todayDlg[open]){overflow:hidden}
 .td-actions .btn{min-height:52px;font-size:17px}
 .td-link{font-weight:700}
 @media (prefers-reduced-motion:no-preference){#todayDlg[open] .td-in>*{animation:cc-drop .6s cubic-bezier(.3,1.2,.5,1) backwards}#todayDlg[open] .td-in>*:nth-child(2){animation-delay:.05s}#todayDlg[open] .td-in>*:nth-child(3){animation-delay:.1s}#todayDlg[open] .td-in>*:nth-child(4){animation-delay:.15s}#todayDlg[open] .td-in>*:nth-child(5){animation-delay:.2s}#todayDlg[open] .td-in>*:nth-child(6){animation-delay:.25s}}
+/* r36 : correctifs revue */
+/* les raccourcis animation: plus spécifiques réinitialisaient play-state → tout tournait hors écran */
+.anim:not(.on) *,.amb:not(.on) *{animation-play-state:paused!important}
+.mapbox:not(.full){isolation:isolate} /* contrôles Leaflet (z 1000) passaient au-dessus de la barre des jours */
+.td-actions .btn{height:auto;padding-block:10px;line-height:1.25;text-align:center}
+[data-theme="dark"] .walk .wk svg,[data-theme="dark"] .tl>li.trcar,[data-theme="dark"] .swrow .sw svg{filter:drop-shadow(0 0 1.5px rgba(244,234,210,.9)) drop-shadow(0 0 1px rgba(244,234,210,.7))}
 </style>
 </head>
 <body id="top">
@@ -758,7 +764,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v36'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v37'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -1248,11 +1254,16 @@ const navObs = new IntersectionObserver(entries => entries.forEach(e => {
 }), {rootMargin:'-45% 0px -50% 0px'});
 document.querySelectorAll('section.day[id^="j"]').forEach(s => navObs.observe(s));
 
-const today = new Date();
+const today = (q => q && !isNaN(new Date(q)) ? new Date(q) : new Date())(new URLSearchParams(location.search).get('now'));
 if (today.getFullYear() === 2026 && today.getMonth() === 9 && today.getDate() >= 5 && today.getDate() <= 11)
   document.getElementById('todayOrb').href = '#j' + (today.getDate() - 4);
 if (!location.hash && today.getFullYear() === 2026 && today.getMonth() === 9 && today.getDate() >= 5 && today.getDate() <= 11) {
-  document.getElementById('j' + (today.getDate() - 4)).scrollIntoView();
+  const tj = document.getElementById('j' + (today.getDate() - 4));
+  tj.scrollIntoView({behavior:'instant'});
+  // Recalage après chargement (images/carte au-dessus décalent la page) tant que l'utilisateur n'a pas bougé
+  let moved = false; const mv = () => moved = true;
+  ['touchstart','wheel','keydown'].forEach(t => addEventListener(t, mv, {once:true, passive:true}));
+  addEventListener('load', () => setTimeout(() => { if (!moved) tj.scrollIntoView({behavior:'instant'}); }, 300));
 }
 
 /* ---------- Checklist (mémorisée localement) ---------- */
@@ -1506,8 +1517,10 @@ if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
   }
   dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
   dlg.addEventListener('close', () => { dlg.innerHTML = ''; });
-  setInterval(() => { if (dlg.open) renderToday(); }, 60000);
-  window.ccWxReady = () => { if (dlg.open) renderToday(); placeHere(); };
+  // Re-rendu sans perdre le focus ni la position (lecteurs d'écran / clavier)
+  const rerender = () => { const st = dlg.scrollTop, had = dlg.contains(document.activeElement); renderToday(); dlg.scrollTop = st; if (had) dlg.querySelector('#tdClose').focus({preventScroll:true}); };
+  setInterval(() => { if (dlg.open) rerender(); }, 60000);
+  window.ccWxReady = () => { if (dlg.open) rerender(); placeHere(); };
   document.getElementById('todayOrb').addEventListener('click', openToday);
   document.getElementById('todayBtn').addEventListener('click', openToday);
   window.openToday = openToday;
