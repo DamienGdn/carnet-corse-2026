@@ -702,10 +702,11 @@ const DAYS = [
 
  {id:'j4', walk:'~6–8 km · 2 h 30', d:'Jeudi 8 octobre', title:'Randonnée autour de Santa Giulia', meteo:['☁️','25°C / 21°C','Sec, couvert, vent d\'ouest'],
   alert:'🌤️ Programme changé : randonnée autour de Santa Giulia, tout près du gîte. Sec toute la journée (23–25 °C), mais rafales d\'ouest ~50–58 km/h : rester sur les sentiers côtiers, éviter les crêtes exposées. Coucher du soleil 18 h 53.',
-  stops:['pic4','sg'],
+  stops:['sg','pic4'],
   steps:[
-   {t:'12:00', end:'13:00', txt:'Pique-nique au bord de la baie de Santa Giulia', p:'pic4', dur:'1 h', more:["À l'abri derrière les rochers ou sous les pins, dos au vent d'ouest."]},
-   {t:'13:00', end:'15:30', txt:'Randonnée sur le sentier côtier autour de Santa Giulia', p:'sg', dur:'2 h 30', more:["Boucle ou aller-retour le long des criques et pointes rocheuses autour de la baie, à adapter sur place.", "Prendre de l'eau et des chaussures fermées ; vent fort sur les pointes."]},
+   {t:'12:00', end:'13:00', txt:'Randonnée sur le sentier côtier autour de Santa Giulia', p:'sg', dur:'1 h', more:["Boucle ou aller-retour le long des criques et pointes rocheuses autour de la baie, à adapter sur place.", "Prendre de l'eau et des chaussures fermées ; vent fort sur les pointes."]},
+   {t:'13:00', end:'13:45', txt:'Pique-nique en chemin, au sud de la baie', p:'pic4', dur:'45 min', more:["Pause pique-nique pendant la rando, à l'abri du vent d'ouest (N 41.521573°, E 9.267235°)."]},
+   {t:'13:45', end:'15:30', txt:'Suite de la randonnée et retour vers la plage', p:'sg', dur:'1 h 45'},
    {t:'15:30', end:'17:30', txt:'Plage de Santa Giulia : baignade et repos', p:'sg', dur:'2 h', cond:'Baignade si la mer est calme près du bord', more:["Plage tournée vers l'est : le vent d'ouest vient de la terre, la mer reste calme dans le lagon."]},
    {t:'17:45', txt:'Retour au gîte (5 min)'},
   ],
@@ -784,7 +785,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v41'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v42'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
