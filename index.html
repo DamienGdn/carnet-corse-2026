@@ -280,6 +280,48 @@ h3.sub::after{content:"";flex:1;border-top:3px dotted var(--hairline)}
 .lb p{color:#fff;margin:14px 0 0;text-align:center;font-size:15px}
 .lb button{position:absolute;top:calc(16px + env(safe-area-inset-top));left:16px;width:44px;height:44px;border-radius:12px;border:2px solid #16313f;font-size:18px;background:#fffaf0;color:#16313f;cursor:pointer}
 
+/* ---- Souvenirs : compteurs brodés, album polaroïds, trajet, carte postale ---- */
+.sv-stats{margin-top:20px}
+.sv-t{font:600 19px var(--display);margin:0 0 4px;color:var(--ink)}
+.sv-sub{font:700 19px var(--hand);color:var(--primary);margin:0 0 12px}
+.stitches{list-style:none;margin:0;padding:6px 0 4px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 10px}
+.stitch{--c:var(--primary);position:relative;aspect-ratio:1;border-radius:50%;background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:2.5px dashed var(--c);box-shadow:var(--shadow);transform:rotate(var(--r,-2deg));padding:0 4px;min-width:0}
+.stitch::before{content:"";position:absolute;inset:5px;border-radius:50%;border:1.5px dotted var(--c);opacity:.65;pointer-events:none}
+.stitch:nth-child(2){--c:var(--sea);--r:2deg}.stitch:nth-child(3){--c:var(--maquis);--r:-1deg}
+.stitch:nth-child(4){--c:var(--ocre);--r:1.5deg}.stitch:nth-child(5){--c:var(--sea);--r:-2.5deg}.stitch:nth-child(6){--c:var(--primary);--r:1deg}
+.stitch .bi{font-size:21px;line-height:1}
+.stitch .bn{font:600 26px/1.05 var(--display);color:var(--ink);font-variant-numeric:tabular-nums}
+.stitch .bl{font:700 16px/1 var(--hand);color:var(--c);max-width:100%}
+.album-day h3{font:700 22px var(--hand);color:var(--primary);margin:14px 0 2px}
+.pols{display:flex;flex-wrap:wrap;gap:20px 14px;padding:12px 2px 6px}
+.pol{appearance:none;font:inherit;border:0;margin:0;cursor:pointer;position:relative;width:calc(50% - 7px);min-width:0;background:#fffaf0;color:#16313f;padding:8px 8px 9px;text-align:center;box-shadow:0 1px 0 rgba(0,0,0,.06),0 6px 14px rgba(40,25,5,.28);transform:rotate(var(--rot,-2deg));transition:transform .2s}
+.pol:nth-child(even){--rot:2.2deg}.pol:nth-child(3n){--rot:-1deg}
+.pol::before{content:"";position:absolute;top:-10px;left:50%;width:54px;height:19px;margin-left:-27px;background:rgba(232,196,110,.78);box-shadow:0 1px 2px rgba(0,0,0,.2);transform:rotate(var(--tp,3deg))}
+.pol:nth-child(even)::before{--tp:-4deg}
+.pol img{display:block;width:100%;aspect-ratio:1;object-fit:cover;background:#dcebee}
+.pol .c{display:block;font:700 18px/1.05 var(--hand);margin-top:7px;overflow-wrap:anywhere}
+.pol .j{display:block;font:700 11px var(--font);color:#566468;margin-top:2px}
+.pol:hover,.pol:focus-visible{transform:rotate(0) scale(1.04);z-index:1}
+.pol:focus-visible{outline:3px solid var(--primary);outline-offset:3px}
+.tr-map{height:340px;border-radius:var(--r-md);border:2px solid var(--ink);margin:12px 0;background:var(--sea-soft)}
+.tp{width:38px;height:38px;border-radius:50%;background:rgba(255,250,240,.95);border:3px solid #12324a;color:#12324a;font:600 17px/32px var(--display);text-align:center;box-shadow:0 0 0 2px rgba(255,250,240,.85),0 2px 5px rgba(0,0,0,.35);transform:rotate(var(--r,-6deg));animation:tp-pop .5s cubic-bezier(.3,1.6,.5,1) both;animation-delay:var(--d,0s);position:relative}
+.tp::after{content:"";position:absolute;inset:3px;border-radius:50%;border:1.5px dashed #a8401f}
+@keyframes tp-pop{from{opacity:0;transform:rotate(var(--r,-6deg)) scale(2.2)}to{opacity:1;transform:rotate(var(--r,-6deg)) scale(1)}}
+.pc-row{margin:14px 0 0}
+.pc-btn{display:inline-flex;align-items:center;gap:6px}
+.pcdlg{border:2px solid var(--ink);border-radius:var(--r-lg);background:var(--paper);color:var(--body);padding:16px;width:min(92vw,440px);max-height:94dvh;overflow:auto;box-shadow:5px 5px 0 var(--ink)}
+.pcdlg::backdrop{background:rgba(10,20,26,.7)}
+.pcdlg h2{font:600 20px var(--display);margin:0 0 10px;color:var(--ink)}
+.pcdlg canvas{display:block;width:100%;height:auto;border-radius:4px;box-shadow:var(--shadow);background:var(--canvas)}
+.pcdlg .pc-st{font-size:13.5px;color:var(--muted);margin:8px 0;min-height:1.3em}
+.pcdlg .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.pcdlg .row .btn{flex:1 1 auto;justify-content:center}
+.pcdlg [hidden]{display:none!important}
+.lb .lbn{top:50%;left:auto;right:12px;transform:translateY(-50%);display:none}
+.lb .lbn.p{left:12px;right:auto}
+.lb.album .lbn{display:block}
+@media (prefers-reduced-motion:reduce){.tp{animation:none}.pol{transition:none}}
+
 footer{border-top:2px dashed var(--hairline);color:var(--muted);font-size:13.5px;padding:32px 20px calc(32px + env(safe-area-inset-bottom));text-align:center}
 footer .sig{display:block;color:var(--primary);font:700 28px var(--hand);margin-bottom:4px}
 
@@ -575,6 +617,21 @@ body:has(#todayDlg[open]){overflow:hidden}
     <div class="wx-hours" id="wxHours"></div>
     <p class="note" id="wxStamp"></p>
   </details>
+  <section class="sv-stats" aria-labelledby="svT">
+    <h2 class="sv-t" id="svT">Le séjour en chiffres</h2>
+    <p class="sv-sub">cousu main, jour après jour</p>
+    <ul class="stitches" id="stitches"></ul>
+  </section>
+  <details class="fold" id="souvenirs">
+    <summary><span class="sub-t">📸 Nos souvenirs</span><span class="cnt" id="albCnt"></span></summary>
+    <div id="album"></div>
+  </details>
+  <details class="fold" id="trajet">
+    <summary><span class="sub-t">🗺️ Notre trajet</span><span class="cnt" id="trCnt"></span></summary>
+    <p class="note">Les lieux déjà visités, dans l'ordre, tamponnés du numéro du jour.</p>
+    <div class="tr-map" id="trMap" role="region" aria-label="Carte du trajet réel"></div>
+    <p class="note" id="trList"></p>
+  </details>
   <div id="utiles"></div>
   <p class="note">Adresses OpenStreetMap ; distances à vol d'oiseau depuis Santa-Giulia. Horaires à vérifier, souvent réduits en octobre.</p>
 </section>
@@ -608,6 +665,16 @@ body:has(#todayDlg[open]){overflow:hidden}
   <img id="lbImg" alt="">
   <p id="lbCap"></p>
 </div>
+<dialog id="pcDlg" class="pcdlg" aria-labelledby="pcT">
+  <h2 id="pcT">💌 Carte postale</h2>
+  <div id="pcBox"></div>
+  <p class="pc-st" id="pcSt" role="status" aria-live="polite"></p>
+  <div class="row">
+    <button class="btn btn-a" id="pcShare" hidden>📤 Partager</button>
+    <button class="btn btn-g" id="pcDl" disabled>⬇️ Télécharger</button>
+    <button class="btn" id="pcClose">Fermer</button>
+  </div>
+</dialog>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <dialog id="todayDlg" aria-labelledby="tdTitle"></dialog>
@@ -790,7 +857,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v44'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v45'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -957,7 +1024,7 @@ DAYS.forEach((day, i) => {
     if (s.drive) return `<li class="drive">${animEl('road', '<span class="car">' + CAR_SVG + '</span>')}<span>${esc(s.drive)}</span></li>`;
     const idx = s.p ? order.indexOf(s.p) + 1 : 0;
     return `<li><span class="t"><span data-t="${s.t}">${s.t}</span>${s.end ? `<br><span class="d">→ <span data-t="${s.end}">${s.end}</span></span>` : ''}</span>
-      <span>${idx ? `<span class="badge">${idx}</span>` : ''}${esc(s.txt)}
+      <span>${idx ? `<span class="stitch">${idx}</span>` : ''}${esc(s.txt)}
       ${s.dur ? `<br><span class="tag">⏱ ${s.dur}</span>` : ''}${s.cond ? `<span class="tag cond">⚠ ${esc(s.cond)}</span>` : ''}
       ${isPlane(s.txt) ? animEl('sky ' + (/Décollage/.test(s.txt) ? 'up' : 'down'), '<span class="plane">' + PLANE_SVG + '</span>') : ''}${isPicnic(s.txt) ? picEl() : isHike(s.txt) ? animEl('wkrow', '<span class="wk">' + WALKER_SVG + '</span>') : (isSwim(s) ? swimEl(s) : '')}
       ${s.more ? `<ul class="more">${s.more.map(m => `<li>${esc(m)}</li>`).join('')}</ul>` : ''}
@@ -969,7 +1036,7 @@ DAYS.forEach((day, i) => {
     <article class="stop">
       <figure><img src="${p.img}" alt="${esc(p.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="imgFail(this)" data-cap="${esc(p.cap)}"></figure>
       <div class="body">
-        <h3><span class="badge">${j+1}</span>${esc(p.name)}</h3>
+        <h3><span class="stitch">${j+1}</span>${esc(p.name)}</h3>
         <div class="cap">${esc(p.cap)}</div>
         ${detailHtml(p)}${phHtml(k)}
         <div class="gps">${p.lat.toFixed(4)}° N · ${p.lon.toFixed(4)}° E</div>
@@ -1005,6 +1072,7 @@ DAYS.forEach((day, i) => {
       <div><h2>${esc(day.title)}</h2><div class="when">${day.d} 2026${day.done ? '<span class="sr-only"> · Fait</span>' : ''}</div>${day.walk ? `<div class="walk anim"><span class="wk">${WALKER_SVG}</span>Marche : ${day.walk}</div>` : ''}</div>
       <div class="meteo"><span class="ico">${day.meteo[0]}</span><div><b>${day.meteo[1]}</b><span class="m">${day.meteo[2]}</span></div></div>
     </div>
+    <div class="pc-row"><button type="button" class="btn btn-a pc-btn" data-day="${day.id}">💌 Carte postale</button></div>
     ${day.alert ? `<div class="alert">${esc(day.alert)}</div>` : ''}${day.note ? `<div class="alert">ℹ️ ${esc(day.note)}</div>` : ''}
     <div class="grid">
       <div class="mapbox" id="box-${day.id}">
@@ -1280,7 +1348,8 @@ document.addEventListener('click', e => {
   lbCap.textContent = img.alt + ' — ' + img.dataset.cap;
   lb.classList.add('open');
 });
-function closeLb(){ lb.classList.remove('open'); }
+let lbReturn = null;
+function closeLb(){ lb.classList.remove('open', 'album'); if (lbReturn) { lbReturn.focus({preventScroll:true}); lbReturn = null; } }
 lb.addEventListener('click', e => { if (e.target !== lbImg) closeLb(); });
 
 /* ---------- Nav active + ouverture sur le jour courant ---------- */
@@ -1565,6 +1634,304 @@ if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
   document.getElementById('todayOrb').addEventListener('click', openToday);
   document.getElementById('todayBtn').addEventListener('click', openToday);
   window.openToday = openToday;
+})();
+
+/* ---------- Souvenirs : compteurs, album, trajet, carte postale ---------- */
+(() => {
+  const $ = id => document.getElementById(id);
+  const still = () => matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const fr = (n, dec) => n.toLocaleString('fr-FR', {minimumFractionDigits:dec, maximumFractionDigits:dec});
+  const tripIdx = today.getFullYear() === 2026 && today.getMonth() === 9 ? today.getDate() - 5 : (today < new Date(2026, 9, 5) ? -1 : 99);
+  const nowMin = today.getHours() * 60 + today.getMinutes();
+  const minOf = t => { const m = /^(\d+):(\d+)/.exec(t || ''); return m ? +m[1] * 60 + +m[2] : null; };
+  const shortName = n => String(n || '').split(' — ')[0];
+  const dayShort = i => `Jour ${i + 1} · ${new Date(2026, 9, 5 + i).toLocaleDateString('fr-FR', {day:'numeric', month:'short'})}`;
+
+  // Étapes « vécues » : jours done + jour en cours jusqu'à l'heure actuelle
+  const visited = [];
+  DAYS.forEach((day, i) => {
+    const cur = i === tripIdx && !day.done;
+    if (!day.done && !cur) return;
+    day.steps.forEach(s => { if (cur) { const m = minOf(s.t); if (m === null || m > nowMin) return; } visited.push({i, day, s}); });
+  });
+  const doneDays = DAYS.filter(d => d.done);
+
+  /* --- Compteurs --- */
+  const num = '(\\d+(?:[.,]\\d+)?)', toN = x => parseFloat(x.replace(',', '.'));
+  const walkKm = doneDays.reduce((a, d) => {
+    if (!d.walk) return a;
+    const w = d.walk.split('·')[0];
+    const r = new RegExp(num + '\\s*[–-]\\s*' + num).exec(w), one = new RegExp(num).exec(w);
+    return a + (r ? (toN(r[1]) + toN(r[2])) / 2 : one ? toN(one[1]) : 0);
+  }, 0);
+  const driveKm = doneDays.reduce((a, d) => a + d.steps.reduce((b, s) => { const m = s.drive && /\((\d+)\s*km\)/.exec(s.drive); return b + (m ? +m[1] : 0); }, 0), 0);
+  const swims = visited.filter(v => v.s.txt && /plage|baignade|snorkeling/i.test(v.s.txt) && !/annul/i.test(v.s.txt)).length;
+  const picnics = visited.filter(v => v.s.txt && /pique-?nique/i.test(v.s.txt)).length;
+  const places = new Set(visited.filter(v => v.s.p && P[v.s.p]).map(v => v.s.p)).size;
+  const elapsed = Math.max(0, Math.min(7, tripIdx + 1));
+  const STATS = [
+    ['🥾', walkKm, 1, 'km marchés', 'kilomètres marchés'],
+    ['🚗', driveKm, 0, 'km en voiture', 'kilomètres en voiture'],
+    ['🏊', swims, 0, 'baignades', 'baignades'],
+    ['🧺', picnics, 0, 'pique-niques', 'pique-niques'],
+    ['📍', places, 0, 'lieux visités', 'lieux visités'],
+    ['☀️', elapsed, 0, 'jours de voyage', 'jours de voyage écoulés']
+  ];
+  $('stitches').innerHTML = STATS.map(([ic, v, dec, lab, sr]) =>
+    `<li class="stitch"><span class="sr-only">${fr(v, dec)} ${sr}</span><span class="bi" aria-hidden="true">${ic}</span><span class="bn" aria-hidden="true" data-v="${v}" data-dec="${dec}">${still() ? fr(v, dec) : fr(0, dec)}</span><span class="bl" aria-hidden="true">${lab}</span></li>`).join('');
+  const countUp = () => document.querySelectorAll('#stitches .bn').forEach(el => {
+    const v = +el.dataset.v, dec = +el.dataset.dec;
+    if (still() || !v) { el.textContent = fr(v, dec); return; }
+    const t0 = performance.now(), D = 1300;
+    const step = t => { const k = Math.min(1, (t - t0) / D); el.textContent = fr(v * (1 - Math.pow(1 - k, 3)), dec); if (k < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  });
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { io.disconnect(); countUp(); } }, {threshold:.4});
+    io.observe($('stitches'));
+  } else countUp();
+
+  /* --- Album --- */
+  const album = [];
+  DAYS.forEach((day, i) => {
+    const seen = new Set();
+    const add = (src, key, step) => {
+      if (!src || !src.startsWith('photos/') || seen.has(src)) return;
+      seen.add(src);
+      const name = key && P[key] ? shortName(P[key].name) : '';
+      const lab = step && step.imgLabel ? step.imgLabel.replace(/^[^\p{L}\p{N}]+/u, '') : '';
+      album.push({i, src, cap: name || lab || 'Souvenir', alt: [name, lab].filter(Boolean).join(' · ') || 'Photo du voyage'});
+    };
+    day.steps.forEach(s => { add(s.img, s.p, s); if (s.p && P[s.p]) add(P[s.p].img, s.p); });
+    day.stops.forEach(k => P[k] && add(P[k].img, k));
+  });
+  $('albCnt').textContent = album.length ? album.length + ' photo' + (album.length > 1 ? 's' : '') : 'bientôt';
+  $('album').innerHTML = album.length ? DAYS.map((d, i) => {
+    const ph = album.map((a, k) => ({a, k})).filter(x => x.a.i === i);
+    return ph.length ? `<div class="album-day"><h3>Jour ${i + 1} · ${esc(d.d)}</h3><div class="pols">${ph.map(({a, k}) =>
+      `<button type="button" class="pol" data-k="${k}" aria-label="Agrandir : ${esc(a.cap)}, ${esc(dayShort(i))}"><img src="${a.src}" alt="${esc(a.alt)}" loading="lazy" decoding="async"><span class="c">${esc(a.cap)}</span><span class="j">${esc(dayShort(i))}</span></button>`).join('')}</div></div>` : '';
+  }).join('') : '<p class="note">Les photos du séjour apparaîtront ici.</p>';
+
+  // Visionneuse : réutilise la lightbox existante (+ précédent/suivant, flèches, swipe)
+  let cur = 0;
+  const showAlb = k => {
+    cur = (k + album.length) % album.length;
+    const a = album[cur];
+    lbImg.src = a.src; lbImg.alt = a.alt;
+    lbCap.textContent = `${a.cap} — ${dayShort(a.i)} (${cur + 1}/${album.length})`;
+  };
+  lb.setAttribute('aria-label', 'Visionneuse de photos');
+  lb.insertAdjacentHTML('beforeend', '<button type="button" class="lbn p" id="lbPrev" aria-label="Photo précédente">‹</button><button type="button" class="lbn" id="lbNext" aria-label="Photo suivante">›</button>');
+  $('lbPrev').onclick = e => { e.stopPropagation(); showAlb(cur - 1); };
+  $('lbNext').onclick = e => { e.stopPropagation(); showAlb(cur + 1); };
+  $('lbClose').onclick = e => { e.stopPropagation(); closeLb(); };
+  $('album').addEventListener('click', e => {
+    const b = e.target.closest('.pol'); if (!b) return;
+    lbReturn = b; showAlb(+b.dataset.k);
+    lb.classList.add('album', 'open'); $('lbClose').focus();
+  });
+  document.addEventListener('keydown', e => {
+    if (!lb.classList.contains('open')) return;
+    if (lb.classList.contains('album')) { if (e.key === 'ArrowLeft') showAlb(cur - 1); else if (e.key === 'ArrowRight') showAlb(cur + 1); }
+    if (e.key === 'Tab') {
+      const bs = [...lb.querySelectorAll('button')].filter(b => b.offsetParent !== null || b === document.activeElement);
+      if (!bs.length) return;
+      const f = bs[0], l = bs[bs.length - 1];
+      if (e.shiftKey && document.activeElement === f) { e.preventDefault(); l.focus(); }
+      else if (!e.shiftKey && document.activeElement === l) { e.preventDefault(); f.focus(); }
+      else if (!lb.contains(document.activeElement)) { e.preventDefault(); f.focus(); }
+    }
+  });
+  let sx = null;
+  lb.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, {passive:true});
+  lb.addEventListener('touchend', e => {
+    if (sx === null || !lb.classList.contains('album')) return;
+    const dx = e.changedTouches[0].clientX - sx; sx = null;
+    if (Math.abs(dx) > 50) showAlb(cur + (dx < 0 ? 1 : -1));
+  }, {passive:true});
+
+  /* --- Trajet réel --- */
+  const seq = [];
+  visited.forEach(({i, s}) => { if (s.p && P[s.p] && (!seq.length || seq[seq.length - 1].k !== s.p)) seq.push({k:s.p, i}); });
+  const uniq = new Map();
+  seq.forEach(({k, i}) => { if (!uniq.has(k)) uniq.set(k, {k, days:new Set()}); uniq.get(k).days.add(i + 1); });
+  $('trCnt').textContent = uniq.size ? uniq.size + ' lieu' + (uniq.size > 1 ? 'x' : '') : 'à venir';
+  $('trList').textContent = uniq.size ? 'Étapes : ' + seq.map(x => shortName(P[x.k].name)).join(' → ') : 'Le tracé apparaîtra au fil du voyage.';
+  let trMap = null;
+  function buildTrajet(){
+    const map = L.map('trMap', {scrollWheelZoom:false, dragging:!L.Browser.mobile, tap:false});
+    L.tileLayer(TILE_URL, {maxZoom:19, attribution:'© OpenStreetMap'}).addTo(map);
+    const ll = seq.map(x => [P[x.k].lat, P[x.k].lon]);
+    if (!ll.length) { map.setView([42.1, 9.1], 8); trMap = map; return; }
+    map.fitBounds(L.latLngBounds(ll), {padding:[44, 44], maxZoom:12, animate:false});
+    let n = 0;
+    uniq.forEach(({k, days}) => {
+      const first = Math.min(...days), p = P[k], r = [-7, 5, -3, 8, -5][n % 5];
+      const icon = L.divIcon({className:'', html:`<div class="tp" style="--r:${r}deg;--d:${still() ? 0 : 0.5 + n * 0.35}s"><span>${first}</span></div>`, iconSize:[38, 38], iconAnchor:[19, 19], popupAnchor:[0, -18]});
+      L.marker([p.lat, p.lon], {icon, title:`${shortName(p.name)} (jour ${[...days].join(', ')})`, alt:`Tampon jour ${first} : ${shortName(p.name)}`}).addTo(map)
+        .bindPopup(`<b>📍 ${esc(shortName(p.name))}</b><br>${days.size > 1 ? 'Jours' : 'Jour'} ${[...days].join(', ')}`);
+      n++;
+    });
+    if (ll.length > 1) {
+      const line = L.polyline(ll, {color:'#a8401f', weight:4, opacity:.9, dashArray:'1 9', lineCap:'round'}).addTo(map);
+      const path = line.getElement && line.getElement();
+      if (path && !still() && path.getTotalLength) {
+        try {
+          const NS = 'http://www.w3.org/2000/svg', svg = path.ownerSVGElement, len = path.getTotalLength();
+          const mk = document.createElementNS(NS, 'mask'), mp = document.createElementNS(NS, 'path');
+          mk.id = 'trMask'; mk.setAttribute('maskUnits', 'userSpaceOnUse');
+          ['x', 'y'].forEach(a => mk.setAttribute(a, -20000)); ['width', 'height'].forEach(a => mk.setAttribute(a, 40000));
+          mp.setAttribute('d', path.getAttribute('d')); mp.setAttribute('fill', 'none'); mp.setAttribute('stroke', '#fff'); mp.setAttribute('stroke-width', 12);
+          mp.style.strokeDasharray = len; mp.style.strokeDashoffset = len;
+          mk.appendChild(mp); svg.insertBefore(mk, svg.firstChild); path.setAttribute('mask', 'url(#trMask)');
+          void mp.getBoundingClientRect();
+          mp.style.transition = 'stroke-dashoffset 2.6s ease-in-out'; mp.style.strokeDashoffset = 0;
+          const end = () => { path.removeAttribute('mask'); mk.remove(); };
+          mp.addEventListener('transitionend', end, {once:true}); setTimeout(end, 3200);
+        } catch (e) {}
+      }
+    }
+    trMap = map;
+  }
+  $('trajet').addEventListener('toggle', () => {
+    if (!$('trajet').open) return;
+    if (!trMap) buildTrajet();
+    setTimeout(() => trMap.invalidateSize(), 60);
+  });
+
+  /* --- Carte postale --- */
+  const dlg = $('pcDlg'), box = $('pcBox'), st = $('pcSt'), shareB = $('pcShare'), dlB = $('pcDl');
+  let pcFile = null, pcSeq = 0;
+  const loadImg = (src, cors) => new Promise((res, rej) => { const im = new Image(); if (cors) im.crossOrigin = 'anonymous'; im.onload = () => res(im); im.onerror = () => rej(new Error('img')); im.src = src; });
+  const CREAM = '#f7efdc', SEA = '#14566f', TERRA = '#a8401f', INK = '#16313f', OCRE = '#c88a1f', MAQ = '#41612f';
+  function wrap(ctx, text, maxW, maxLines){
+    const words = text.split(' '), lines = []; let l = '';
+    words.forEach(w => { const t = l ? l + ' ' + w : w; if (ctx.measureText(t).width > maxW && l) { lines.push(l); l = w; } else l = t; });
+    if (l) lines.push(l);
+    if (lines.length > maxLines) { const keep = lines.slice(0, maxLines); keep[maxLines - 1] = keep[maxLines - 1].replace(/\s?\S*$/, '') + '…'; return keep; }
+    return lines;
+  }
+  function illus(ctx, x, y, w, h){
+    ctx.save(); ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
+    const g = ctx.createLinearGradient(0, y, 0, y + h); g.addColorStop(0, '#9fd6e0'); g.addColorStop(.55, '#f7e6b4'); g.addColorStop(.56, '#2a8a9a'); g.addColorStop(1, '#0e5a6b');
+    ctx.fillStyle = g; ctx.fillRect(x, y, w, h);
+    ctx.fillStyle = '#f2b632'; ctx.beginPath(); ctx.arc(x + w * .75, y + h * .22, 70, 0, 7); ctx.fill();
+    ctx.fillStyle = MAQ; ctx.beginPath(); ctx.moveTo(x, y + h * .56); ctx.lineTo(x + w * .2, y + h * .3); ctx.lineTo(x + w * .38, y + h * .46); ctx.lineTo(x + w * .55, y + h * .24); ctx.lineTo(x + w * .8, y + h * .56); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,.7)'; ctx.lineWidth = 5; ctx.lineCap = 'round';
+    for (let r = 0; r < 5; r++) { const yy = y + h * (.64 + r * .07); ctx.beginPath(); for (let xx = x; xx <= x + w; xx += 40) ctx.quadraticCurveTo(xx + 10, yy - 12, xx + 20, yy), ctx.quadraticCurveTo(xx + 30, yy + 12, xx + 40, yy); ctx.stroke(); }
+    ctx.restore();
+  }
+  function stamp(W, H){
+    const c = document.createElement('canvas'), w = 200, h = 240; c.width = w; c.height = h;
+    const x = c.getContext('2d');
+    x.fillStyle = '#fffaf0'; x.fillRect(0, 0, w, h);
+    x.globalCompositeOperation = 'destination-out';
+    for (let i = 0; i <= w; i += 20) { x.beginPath(); x.arc(i, 0, 7, 0, 7); x.arc(i, h, 7, 0, 7); x.fill(); }
+    for (let i = 0; i <= h; i += 20) { x.beginPath(); x.arc(0, i, 7, 0, 7); x.arc(w, i, 7, 0, 7); x.fill(); }
+    x.globalCompositeOperation = 'source-over';
+    illus(x, 16, 16, w - 32, h - 76);
+    x.fillStyle = SEA; x.font = '600 30px Fredoka, "Arial Rounded MT Bold", sans-serif'; x.textAlign = 'center';
+    x.fillText('CORSE', w / 2, h - 30); x.fillStyle = TERRA; x.font = '700 26px Caveat, cursive'; x.fillText('2026 · 0,99', w / 2, h - 10);
+    return c;
+  }
+  async function drawCard(i){
+    const day = DAYS[i], W = 1080, H = 1350, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+    const ctx = cv.getContext('2d');
+    try { await Promise.all([document.fonts.load('600 64px Fredoka'), document.fonts.load('700 60px Caveat')]); } catch (e) {}
+    // photo : perso du jour sinon couverture
+    const mine = album.find(a => a.i === i && !/carte/i.test(a.alt)) || album.find(a => a.i === i);
+    const ck = day.cover || day.stops[0], cp = P[ck];
+    const src = mine ? mine.src : cp && cp.img, cap = mine ? mine.cap : cp ? shortName(cp.name) : 'Corse';
+    let photo = null;
+    if (src) { try { photo = await loadImg(src, true); } catch (e) { photo = null; } }
+    let logo = null;
+    try {
+      const t = await (await fetch('logo.svg')).text();
+      const svg = t.replace(/<style>[\s\S]*?<\/style>/, '').replace('<svg ', '<svg width="472" height="288" ');
+      const url = URL.createObjectURL(new Blob([svg], {type:'image/svg+xml'}));
+      try { logo = await loadImg(url); } finally { setTimeout(() => URL.revokeObjectURL(url), 2000); }
+    } catch (e) {}
+    // fond + grain
+    ctx.fillStyle = CREAM; ctx.fillRect(0, 0, W, H);
+    const g = document.createElement('canvas'); g.width = g.height = 220; const gx = g.getContext('2d'), id = gx.createImageData(220, 220);
+    for (let p = 0; p < id.data.length; p += 4) { id.data[p] = 90; id.data[p + 1] = 62; id.data[p + 2] = 25; id.data[p + 3] = Math.random() * 26; }
+    gx.putImageData(id, 0, 0); ctx.fillStyle = ctx.createPattern(g, 'repeat'); ctx.fillRect(0, 0, W, H);
+    // cadre « par avion »
+    ctx.save(); ctx.beginPath(); ctx.rect(0, 0, W, H); ctx.rect(26, 26, W - 52, H - 52); ctx.clip('evenodd');
+    ctx.lineWidth = 24;
+    for (let k = -30; k < 60; k++) { ctx.strokeStyle = k % 2 ? SEA : TERRA; ctx.beginPath(); ctx.moveTo(k * 46, 0); ctx.lineTo(k * 46 + H, H); ctx.stroke(); }
+    ctx.restore();
+    ctx.strokeStyle = '#c9b88f'; ctx.lineWidth = 3; ctx.strokeRect(26, 26, W - 52, H - 52);
+    // polaroïd
+    ctx.save(); ctx.translate(520, 440); ctx.rotate(-0.035);
+    ctx.shadowColor = 'rgba(40,25,5,.4)'; ctx.shadowBlur = 28; ctx.shadowOffsetY = 12;
+    ctx.fillStyle = '#fffaf0'; ctx.fillRect(-440, -360, 880, 780);
+    ctx.shadowColor = 'transparent';
+    const px = -405, py = -325, pw = 810, ph = 620;
+    if (photo) {
+      const s = Math.max(pw / photo.width, ph / photo.height), dw = photo.width * s, dh = photo.height * s;
+      ctx.save(); ctx.beginPath(); ctx.rect(px, py, pw, ph); ctx.clip(); ctx.drawImage(photo, px + (pw - dw) / 2, py + (ph - dh) / 2, dw, dh); ctx.restore();
+    } else illus(ctx, px, py, pw, ph);
+    ctx.fillStyle = INK; ctx.textAlign = 'center'; ctx.font = '700 58px Caveat, "Bradley Hand", cursive'; ctx.fillText(cap, 0, 385);
+    ctx.fillStyle = 'rgba(232,196,110,.8)';
+    ctx.save(); ctx.translate(-330, -360); ctx.rotate(-.5); ctx.fillRect(-60, -20, 120, 40); ctx.restore();
+    ctx.save(); ctx.translate(330, -360); ctx.rotate(.45); ctx.fillRect(-60, -20, 120, 40); ctx.restore();
+    ctx.restore();
+    // timbre + cachet
+    ctx.save(); ctx.translate(890, 175); ctx.rotate(.1); ctx.shadowColor = 'rgba(40,25,5,.4)'; ctx.shadowBlur = 14; ctx.shadowOffsetY = 6;
+    ctx.drawImage(stamp(), -100, -120); ctx.restore();
+    ctx.save(); ctx.translate(780, 240); ctx.globalAlpha = .55; ctx.strokeStyle = INK; ctx.fillStyle = INK; ctx.lineWidth = 5;
+    ctx.beginPath(); ctx.arc(0, 0, 72, 0, 7); ctx.stroke(); ctx.beginPath(); ctx.arc(0, 0, 60, 0, 7); ctx.lineWidth = 2; ctx.stroke();
+    ctx.textAlign = 'center'; ctx.font = '600 24px Fredoka, sans-serif'; ctx.fillText('CORSE', 0, -6); ctx.font = '600 20px Fredoka, sans-serif'; ctx.fillText(new Date(2026, 9, 5 + i).toLocaleDateString('fr-FR', {day:'numeric', month:'short'}).toUpperCase(), 0, 24);
+    ctx.lineWidth = 4; ctx.lineCap = 'round';
+    for (let r = 0; r < 3; r++) { ctx.beginPath(); for (let xx = 70; xx < 250; xx += 30) ctx.quadraticCurveTo(xx + 8, 12 + r * 18 - 8, xx + 15, 12 + r * 18), ctx.quadraticCurveTo(xx + 23, 12 + r * 18 + 8, xx + 30, 12 + r * 18); ctx.stroke(); }
+    ctx.restore();
+    // titre + date
+    ctx.textAlign = 'center'; ctx.fillStyle = SEA; ctx.font = '600 62px Fredoka, "Arial Rounded MT Bold", sans-serif';
+    const lines = wrap(ctx, day.title, 900, 2); lines.forEach((l, k) => ctx.fillText(l, W / 2, 945 + k * 68));
+    ctx.fillStyle = TERRA; ctx.font = '700 58px Caveat, cursive';
+    ctx.fillText(`Jour ${i + 1} · ${day.d} 2026`, W / 2, 945 + lines.length * 68 + 28);
+    // logo + texte
+    if (logo) ctx.drawImage(logo, 62, 1112, 236, 144);
+    ctx.textAlign = 'left'; ctx.fillStyle = TERRA; ctx.font = '700 100px Caveat, cursive'; ctx.fillText('Bises de Corse !', 320, 1196);
+    ctx.fillStyle = INK; ctx.font = '700 52px Caveat, cursive'; ctx.fillText('— Anne-Gaëlle & Damien', 320, 1262);
+    return {cv, ok:!!photo};
+  }
+  async function openCard(i, opener){
+    const my = ++pcSeq; pcFile = null; shareB.hidden = true; dlB.disabled = true;
+    box.innerHTML = ''; st.textContent = 'Création de la carte postale…';
+    dlg.showModal(); (dlB.disabled ? $('pcClose') : dlB).focus();
+    try {
+      const {cv, ok} = await drawCard(i);
+      if (my !== pcSeq) return;
+      cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', `Carte postale du jour ${i + 1} : ${DAYS[i].title}. Bises de Corse, Anne-Gaëlle et Damien.`);
+      box.appendChild(cv);
+      cv.toBlob(b => {
+        if (my !== pcSeq || !b) { if (!b) st.textContent = 'Impossible de générer l’image.'; return; }
+        pcFile = new File([b], `carte-postale-corse-j${i + 1}.png`, {type:'image/png'});
+        dlB.disabled = false; dlB.focus();
+        shareB.hidden = !(navigator.canShare && navigator.canShare({files:[pcFile]}));
+        st.textContent = ok ? 'Prête ! Partagez-la ou enregistrez-la.' : 'Prête (photo distante indisponible : fond illustré).';
+      }, 'image/png');
+    } catch (e) { st.textContent = 'Impossible de générer la carte postale.'; }
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest('.pc-btn'); if (!b) return;
+    openCard(DAYS.findIndex(d => d.id === b.dataset.day), b);
+  });
+  shareB.onclick = async () => {
+    if (!pcFile) return;
+    try { await navigator.share({files:[pcFile], title:'Bises de Corse !', text:'Bises de Corse ! — Anne-Gaëlle & Damien'}); }
+    catch (e) { if (e.name !== 'AbortError') st.textContent = 'Partage impossible : utilisez Télécharger.'; }
+  };
+  dlB.onclick = () => {
+    if (!pcFile) return;
+    const u = URL.createObjectURL(pcFile), a = document.createElement('a');
+    a.href = u; a.download = pcFile.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000);
+  };
+  $('pcClose').onclick = () => dlg.close();
+  dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+  dlg.addEventListener('close', () => { pcSeq++; box.innerHTML = ''; });
 })();
 
 /* ---------- PWA (uniquement servi en http/https) ---------- */
