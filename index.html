@@ -991,7 +991,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v50'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v51'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -2078,9 +2078,10 @@ if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
 // Source : Open-Meteo (api.open-meteo.com/v1/forecast, start_date/end_date) au lieu principal de chaque jour : Santa Giulia (j1, j4), Bonifacio (j2), Col de Bavella (j3).
 // Relevé du 2026-10-08 (j4 = jour en cours, valeurs provisoires). Prioritaire pour les jours done. code = code WMO, gust = rafales max en km/h.
 const METEO_VECUE = {
-  j1: {code:95, tmax:25.6, tmin:18.5, gust:23.4},
-  j2: {code:80, tmax:24.4, tmin:19.8, gust:44.6},
-  j3: {code:80, tmax:18.1, tmin:11.2, gust:83.2},
+  // Corrigé d'après le vécu (Anne-Gaëlle & Damien) : J1 faibles averses, J2 grand soleil à Bonifacio, J3 soleil et nuages pendant la rando puis gros orage le soir.
+  j1: {code:80, tmax:25.6, tmin:18.5, gust:23.4},
+  j2: {code:0, tmax:24.4, tmin:19.8, gust:44.6},
+  j3: {code:2, tmax:18.1, tmin:11.2, gust:83.2, soir:'orage'},
   j4: {code:96, tmax:24.8, tmin:19.5, gust:54.4}
 };
 /* ===== v46 : ciel, croquis, météo sur les personnages, bruitages, intro ===== */
@@ -2214,7 +2215,7 @@ const METEO_VECUE = {
     return {code: e in DW_EMO ? DW_EMO[e] : 3, gust: e === '💨' || /vent fort|rafale/i.test(day.meteo[2] || '') ? 50 : 0, tmax: m ? +m[1] : null, tmin: m ? +m[2] : null, src: 'indicatif'}; };
   function dwData(day, i){
     const V = METEO_VECUE[day.id];
-    if (day.done && V) return {code: V.code, gust: V.gust, tmax: V.tmax, tmin: V.tmin, src: 'vécu'};
+    if (day.done && V) return {code: V.code, gust: V.gust, tmax: V.tmax, tmin: V.tmin, soir: V.soir, src: 'vécu'};
     const W = window.ccWx, x = W && W.days && W.days[i];
     if (x && x.loc.daily.weather_code[x.k] != null) { const dl = x.loc.daily, g = dl.wind_gusts_10m_max ? dl.wind_gusts_10m_max[x.k] : (dl.wind_speed_10m_max[x.k] || 0) * 1.4;
       return {code: dl.weather_code[x.k], gust: Math.round(g || 0), tmax: Math.round(dl.temperature_2m_max[x.k]), tmin: Math.round(dl.temperature_2m_min[x.k]), src: 'api'}; }
@@ -2243,6 +2244,7 @@ const METEO_VECUE = {
     if (sun) { if (heads[1]) heads[1].insertAdjacentHTML('beforeend', DW_CAP); if (heads[0]) heads[0].insertAdjacentHTML('beforeend', SUNG);
       if (c <= 1 && heads[1]) heads[1].insertAdjacentHTML('beforeend', SUNG); items.push('casquette et lunettes de soleil'); }
     if (rain) { svg.insertAdjacentHTML('beforeend', UMB); items.push('parapluie'); }
+    else if (d.soir) { svg.insertAdjacentHTML('beforeend', UMB); items.push('parapluie pour l\'orage du soir'); }
     if (cloud) { if (heads[0]) heads[0].insertAdjacentHTML('beforeend', dwScarf('#c9532f')); if (heads[1]) heads[1].insertAdjacentHTML('beforeend', dwScarf('#3f8a9e')); items.push('petites écharpes'); }
     if (wind) { svg.insertAdjacentHTML('beforeend', WIND); const p = heads[0] && heads[0].querySelector('path'); if (p) p.classList.add('dw-pony'); items.push('cheveux au vent'); }
     const txt = WMO(c)[1] + (d.tmax != null ? `, ${Math.round(d.tmax)}°C max` : '') + (wind ? `, rafales ${Math.round(d.gust)} km/h` : '');
