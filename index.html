@@ -333,6 +333,25 @@ footer .sig{display:block;color:var(--primary);font:700 28px var(--hand);margin-
 @keyframes cc-wave{from{transform:translateX(0)}to{transform:translateX(-10px)}}
 @keyframes cc-bub{0%{transform:translateY(0);opacity:0}15%{opacity:.9}100%{transform:translateY(-7px);opacity:0}}
 @keyframes cc-bob{from{transform:translateY(0)}to{transform:translateY(-.8px)}}
+
+/* pique-nique : deux personnages mangent un sandwich */
+.picrow{display:block;margin-top:6px;height:46px;width:112px;max-width:100%;position:relative}
+.picrow svg{width:112px;height:46px;max-width:100%}
+.pic .pb{animation:cc-pic 6.4s ease-in-out infinite}
+.pic .pb2{animation-delay:-2.9s}
+.pic .full{animation:cc-pic-full 6.4s step-end infinite}
+.pic .bit{animation:cc-pic-bit 6.4s step-end infinite}
+.pic .pb2 .full,.pic .pb2 .bit,.pic .pb2 .cr{animation-delay:-2.9s}
+.pic .cr{opacity:0;animation:cc-pic-cr 6.4s ease-in infinite}
+.pic .cr.b{animation-name:cc-pic-cr2}
+.pic .ch{transform-box:fill-box;transform-origin:50% 100%;animation:cc-pic-ch 6.4s ease-in-out infinite}
+.pic .ch2{animation-delay:-2.9s}
+@keyframes cc-pic{0%,10%{transform:translate(0,0)}27%,40%{transform:translate(var(--dx),var(--dy))}44%{transform:translate(calc(var(--dx)*.75),calc(var(--dy)*.75))}48%,52%{transform:translate(var(--dx),var(--dy))}64%,100%{transform:translate(0,0)}}
+@keyframes cc-pic-full{0%{opacity:1}46%{opacity:0}98%{opacity:1}}
+@keyframes cc-pic-bit{0%{opacity:0}46%{opacity:1}98%{opacity:0}}
+@keyframes cc-pic-cr{0%,46%{opacity:0;transform:translate(0,0)}52%{opacity:1}72%,100%{opacity:0;transform:translate(1px,9px)}}
+@keyframes cc-pic-cr2{0%,48%{opacity:0;transform:translate(0,0)}54%{opacity:1}74%,100%{opacity:0;transform:translate(-1px,8px)}}
+@keyframes cc-pic-ch{0%,60%{transform:none}64%{transform:scale(1.04,.95)}68%{transform:none}72%{transform:scale(1.04,.95)}76%{transform:none}80%{transform:scale(1.04,.95)}84%,100%{transform:none}}
 @media (prefers-reduced-motion:reduce){.anim *{animation:none!important}.swrow .sw{transform:translateX(90px)}.sw .bub{opacity:.8}.sky .plane{transform:translateX(120px)}.road .car{transform:translateX(16px)}.wkrow .wk{transform:translateX(100px)}}
 
 /* ---- Icônes météo animées + vol hero ---- */
@@ -473,7 +492,7 @@ body:has(#todayDlg[open]){overflow:hidden}
 .anim:not(.on) *,.amb:not(.on) *{animation-play-state:paused!important}
 .mapbox:not(.full){isolation:isolate} /* contrôles Leaflet (z 1000) passaient au-dessus de la barre des jours */
 .td-actions .btn{height:auto;padding-block:10px;line-height:1.25;text-align:center}
-[data-theme="dark"] .walk .wk svg,[data-theme="dark"] .tl>li.trcar,[data-theme="dark"] .swrow .sw svg{filter:drop-shadow(0 0 1.5px rgba(244,234,210,.9)) drop-shadow(0 0 1px rgba(244,234,210,.7))}
+[data-theme="dark"] .walk .wk svg,[data-theme="dark"] .tl>li.trcar,[data-theme="dark"] .swrow .sw svg,[data-theme="dark"] .picrow svg{filter:drop-shadow(0 0 1.5px rgba(244,234,210,.9)) drop-shadow(0 0 1px rgba(244,234,210,.7))}
 </style>
 </head>
 <body id="top">
@@ -764,7 +783,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v39'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v40'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -904,6 +923,21 @@ const SWIM_SVG = '<svg viewBox="0 0 30 22" aria-hidden="true"><g stroke="#12324a
 const DIVE_SVG = '<svg viewBox="0 0 30 22" aria-hidden="true"><g>' + WAVE(9) + '</g><g stroke="#12324a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path class="kk" d="M8 16L2 17.5"/><path d="M8 16H20"/><path d="M19 16L22 18.5"/><circle cx="23.5" cy="15" r="3" fill="#f7cfa6"/><path d="M24 13.6H27.2V16.4H24Z" fill="#bcdde4" stroke-width="1.1"/><path d="M22.2 12Q20 10 21 4" stroke-width="1.3"/><path d="M21 4H19.5" stroke="#d62828" stroke-width="1.6"/></g><g fill="none" stroke="#14566f" stroke-width=".8"><circle class="bub" cx="28" cy="13" r="1"/><circle class="bub b" cx="26.5" cy="12" r="1.2"/></g></svg>';
 const isSwim = (s) => /^Plage/i.test((P[s.p] || {}).name || '') || /plage|baignade|snorkeling/i.test(s.txt);
 const swimEl = s => animEl('swrow', '<span class="sw">' + (/snorkeling/i.test(s.txt) ? DIVE_SVG : SWIM_SVG) + '</span>');
+const SKIN = '#f7cfa6';
+const pSand = (bit) => {
+  const body = '<g stroke-width=".75"><path d="M-8 2.6H8Q8 5.6 5.6 5.6H-5.6Q-8 5.6 -8 2.6Z" fill="#e9b25a"/><path d="M-8 .6Q-5 3.4 -2.5 .6T2.5 .6T8 .6V2.6H-8Z" fill="#6fae3f"/><circle cx="-3.6" cy="1.6" r="1.7" fill="#d62828"/><circle cx="3.6" cy="1.6" r="1.7" fill="#d62828"/><path d="M-8 -.6Q-8.6 -6 0 -6 8.6 -6 8 -.6Z" fill="#f0bd62"/><path d="M-4 -3.6Q0 -5 4 -3.6" stroke="#fff3c4" stroke-width=".9" fill="none"/></g>';
+  return bit ? '<g class="bit" mask="url(#picM)">' + body + '</g>' : '<g class="full">' + body + '</g>';
+};
+const PICNIC_SVG = '<svg class="pic" viewBox="0 0 112 46" aria-hidden="true"><defs><mask id="picM" maskUnits="userSpaceOnUse" x="-12" y="-10" width="24" height="20"><rect x="-12" y="-10" width="24" height="20" fill="#fff"/><circle cx="-8.2" cy="-3" r="2.6"/><circle cx="-8.6" cy="1.2" r="2.4"/><circle cx="-8" cy="4.6" r="2.2"/></mask><pattern id="picC" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="8" fill="#fff8ea"/><rect width="4" height="4" fill="#c2512f" opacity=".85"/><rect x="4" y="4" width="4" height="4" fill="#c2512f" opacity=".85"/></pattern></defs>'
+  + '<g stroke="#12324a" stroke-width="1.1" stroke-linejoin="round" stroke-linecap="round">'
+  + '<path d="M0 39.5H112L109 45.5H3Z" fill="url(#picC)"/>'
+  + '<g transform="translate(4 2) scale(.5)"><g class="ch"><g transform="translate(8 0)"><path d="M15 27C-4 22-6 46 6 60 6 49 12 43 18 40Z" fill="#6b3a1f"/><circle cx="34" cy="42" r="22" fill="#f7cfa6"/><path d="M12 42C9 17 58 11 56 42 51 30 45 27 34 26 24 27 17 31 12 42Z" fill="#6b3a1f"/><circle cx="15" cy="28" r="3.6" fill="#c2512f"/><ellipse cx="26" cy="44" rx="2.6" ry="3.4" fill="#12324a" stroke="none"/><ellipse cx="42" cy="44" rx="2.6" ry="3.4" fill="#12324a" stroke="none"/><circle cx="22" cy="51" r="3.6" fill="#ee8f7c" stroke="none" opacity=".6"/><circle cx="46" cy="51" r="3.6" fill="#ee8f7c" stroke="none" opacity=".6"/><path d="M29 53Q34 58 39 53" fill="none"/></g></g></g>'
+  + '<g transform="translate(44 2) scale(.5)"><g class="ch ch2"><g transform="translate(56 0)"><circle cx="34" cy="42" r="22" fill="#f7cfa6"/><path d="M12 40C9 22 20 14 34 15 48 14 60 22 56 40 53 31 47 27 40 26 34 30 24 31 18 28 15 31 13 35 12 40Z" fill="#d4601e"/><path d="M12 40C11 35 12 31 14 29 15 33 16 37 17 41 15 39 13 39 12 40ZM56 40C57 35 56 31 54 29 53 33 52 37 51 41 53 39 55 39 56 40Z" fill="#ebe6dc" stroke-width="1.2"/><path d="M21 37Q26 34 31 37M37 37Q42 34 47 37" fill="none" stroke="#b4541f" stroke-width="2"/><ellipse cx="26" cy="44" rx="2.6" ry="3.4" fill="#12324a" stroke="none"/><ellipse cx="42" cy="44" rx="2.6" ry="3.4" fill="#12324a" stroke="none"/><g fill="#fff" stroke="#cfc7b8" stroke-width=".3"><circle cx="35.5" cy="55.1" r="0.8"/><circle cx="30.8" cy="61.6" r="0.8"/><circle cx="18.2" cy="53.1" r="0.8"/><circle cx="49.1" cy="54.1" r="0.8"/><circle cx="39.8" cy="55.2" r="0.8"/><circle cx="26.2" cy="58.2" r="0.8"/><circle cx="32.0" cy="54.2" r="0.8"/><circle cx="23.3" cy="58.0" r="0.8"/><circle cx="43.6" cy="54.0" r="0.8"/><circle cx="45.1" cy="58.0" r="0.8"/><circle cx="42.2" cy="58.3" r="0.8"/><circle cx="37.4" cy="56.4" r="0.8"/><circle cx="24.7" cy="55.8" r="0.8"/><circle cx="37.7" cy="53.7" r="0.8"/><circle cx="29.5" cy="55.6" r="0.8"/><circle cx="27.4" cy="53.7" r="0.8"/><circle cx="35.4" cy="60.9" r="0.8"/><circle cx="19.8" cy="56.0" r="0.8"/><circle cx="21.2" cy="54.5" r="0.8"/><circle cx="41.9" cy="56.0" r="0.8"/><circle cx="47.4" cy="56.1" r="0.8"/><circle cx="33.9" cy="53.1" r="0.8"/><circle cx="40.2" cy="60.7" r="0.8"/><circle cx="27.2" cy="55.9" r="0.8"/><circle cx="32.9" cy="61.5" r="0.8"/><circle cx="28.1" cy="60.7" r="0.8"/><circle cx="30.1" cy="53.3" r="0.8"/><circle cx="37.8" cy="60.6" r="0.8"/></g><path d="M29 54Q34 58 39 54" fill="none"/></g></g></g>'
+  + '<g transform="translate(48 35)"><g class="pb" style="--dx:-12px;--dy:-5px">' + pSand(0) + pSand(1) + '<circle cx="3" cy="4.6" r="2.4" fill="' + SKIN + '"/><g class="cr" fill="#e9b25a" stroke="none"><circle cx="-8" cy="1" r=".9"/><circle cx="-6" cy="3" r=".7"/></g></g></g>'
+  + '<g transform="translate(66 35) scale(-1 1)"><g class="pb pb2" style="--dx:-12px;--dy:-5px">' + pSand(0) + pSand(1) + '<circle cx="3" cy="4.6" r="2.4" fill="' + SKIN + '"/><g class="cr b" fill="#e9b25a" stroke="none"><circle cx="-8" cy="1" r=".9"/><circle cx="-6" cy="3" r=".7"/></g></g></g>'
+  + '</g></svg>';
+const isPicnic = t => /pique-?nique|picnic/i.test(t);
+const picEl = () => animEl('picrow', PICNIC_SVG);
 const isHike = t => /^(Randonnée|Marche)/.test(t);
 
 const seenImg = new Set();
@@ -918,7 +952,7 @@ DAYS.forEach((day, i) => {
     return `<li><span class="t"><span data-t="${s.t}">${s.t}</span>${s.end ? `<br><span class="d">→ <span data-t="${s.end}">${s.end}</span></span>` : ''}</span>
       <span>${idx ? `<span class="badge">${idx}</span>` : ''}${esc(s.txt)}
       ${s.dur ? `<br><span class="tag">⏱ ${s.dur}</span>` : ''}${s.cond ? `<span class="tag cond">⚠ ${esc(s.cond)}</span>` : ''}
-      ${isPlane(s.txt) ? animEl('sky ' + (/Décollage/.test(s.txt) ? 'up' : 'down'), '<span class="plane">' + PLANE_SVG + '</span>') : ''}${isHike(s.txt) ? animEl('wkrow', '<span class="wk">' + WALKER_SVG + '</span>') : (isSwim(s) ? swimEl(s) : '')}
+      ${isPlane(s.txt) ? animEl('sky ' + (/Décollage/.test(s.txt) ? 'up' : 'down'), '<span class="plane">' + PLANE_SVG + '</span>') : ''}${isPicnic(s.txt) ? picEl() : isHike(s.txt) ? animEl('wkrow', '<span class="wk">' + WALKER_SVG + '</span>') : (isSwim(s) ? swimEl(s) : '')}
       ${s.more ? `<ul class="more">${s.more.map(m => `<li>${esc(m)}</li>`).join('')}</ul>` : ''}
       ${s.img ? `<details class="more-d"><summary>${s.imgLabel || '📷 Photo'}</summary><a href="${s.img}" target="_blank" rel="noopener"><img class="track" src="${s.img}" alt="${esc(s.imgLabel || s.txt)}" loading="lazy"></a></details>` : ''}
       ${s.p ? phHtml(s.p) : ''}</span></li>`;
