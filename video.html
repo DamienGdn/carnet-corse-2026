@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Le film du voyage · Carnet de voyage en Corse</title>
+<meta name="theme-color" content="#14566f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Fredoka:wght@500;600&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#a8401f; --sea:#14566f; --ink:#16313f; --muted:#566468; --hairline:#c9b88f;
+  --canvas:#f7efdc; --paper:#fffaf0; --ocre:#c88a1f; --ocre-soft:#f3dca0; --pol:#fffdf6;
+  --shadow:0 1px 0 rgba(22,49,63,.08),0 6px 16px rgba(80,55,20,.25);
+  --display:Fredoka,"Arial Rounded MT Bold",Nunito,sans-serif;
+  --hand:Caveat,"Bradley Hand","Segoe Print",cursive;
+  --font:Nunito,"Avenir Next",system-ui,sans-serif;
+}
+@media(prefers-color-scheme:dark){:root{
+  --primary:#e8957a; --sea:#8fcfe2; --ink:#f4ead2; --muted:#b9b296; --hairline:#5a5a48;
+  --canvas:#172228; --paper:#22323a; --ocre:#e3b04f; --ocre-soft:#4a3d1a; --pol:#ece3cc;
+  --shadow:0 1px 0 rgba(255,255,255,.05),0 6px 18px rgba(0,0,0,.6);
+}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--canvas);color:var(--ink);font:500 16px/1.55 var(--font);-webkit-text-size-adjust:100%;
+  padding:max(16px,env(safe-area-inset-top)) 16px max(24px,env(safe-area-inset-bottom))}
+:focus-visible{outline:3px solid var(--ocre);outline-offset:3px}
+.wrap{max-width:900px;margin:0 auto}
+.top{display:flex;justify-content:space-between;gap:8px;margin-bottom:18px}
+.chip{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:8px 16px;border-radius:999px;background:var(--paper);
+  color:var(--ink);border:1.5px solid var(--hairline);box-shadow:var(--shadow);font:800 15px var(--font);text-decoration:none}
+header{text-align:center;margin-bottom:18px}
+.kick{font:700 22px/1 var(--hand);color:var(--primary);margin:0}
+h1{font:600 clamp(30px,8.5vw,44px)/1.1 var(--display);color:var(--sea);margin:4px 0}
+.sub{color:var(--muted);font-weight:700;margin:0}
+.pol{background:var(--pol);padding:10px 10px 6px;border-radius:3px;box-shadow:var(--shadow);transform:rotate(-1deg);position:relative;margin:26px auto 22px}
+.pol::before{content:"";position:absolute;top:-12px;left:50%;width:84px;height:24px;margin-left:-42px;background:rgba(236,208,120,.8);transform:rotate(3deg);z-index:2}
+video{display:block;width:100%;aspect-ratio:16/9;height:auto;background:#000;border-radius:3px}
+.cap{font:700 20px var(--hand);color:#16313f;text-align:center;margin:6px 0 0}
+.actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:10px 20px;border-radius:999px;
+  font:600 17px var(--display);text-decoration:none;box-shadow:var(--shadow)}
+.dl{background:var(--sea);color:#fff}
+@media(prefers-color-scheme:dark){.dl{color:#10242c}}
+.alt{background:var(--paper);color:var(--ink);border:1.5px solid var(--hairline)}
+.note{color:var(--muted);font-size:14px;text-align:center;margin:10px 0 0}
+footer{text-align:center;color:var(--muted);font:700 20px var(--hand);margin-top:28px}
+@media(max-width:600px){.actions .btn{width:100%}.pol{transform:none}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="top" aria-label="Navigation">
+    <a class="chip" href="index.html">← Retour au carnet</a>
+    <a class="chip" href="livre.html">Livre photo →</a>
+  </nav>
+  <header>
+    <p class="kick">le film du voyage</p>
+    <h1>Le voyage en Corse</h1>
+    <p class="sub">Porto-Vecchio · 5 → 11 octobre 2026 · 2 min 17</p>
+  </header>
+
+  <figure class="pol" style="margin-left:auto;margin-right:auto">
+    <video controls playsinline preload="metadata" poster="video/affiche.jpg" aria-label="Film du voyage en Corse, 2 minutes 17, avec musique">
+      <source src="video/film-corse.mp4" type="video/mp4">
+      Votre navigateur ne lit pas cette vidéo : <a href="video/film-corse.mp4">téléchargez-la</a>.
+    </video>
+    <figcaption class="cap">49 photos, en musique</figcaption>
+  </figure>
+
+  <div class="actions">
+    <a class="btn dl" href="video/film-corse.mp4" download="film-corse-2026.mp4">⬇ Télécharger la vidéo</a>
+    <a class="btn alt" href="livre.html">📖 Le livre photo</a>
+    <a class="btn alt" href="livre-print.html">🖨️ Version imprimable</a>
+  </div>
+  <p class="note">MP4 · 54 Mo — de préférence en Wi-Fi.</p>
+
+  <footer>Bises de Corse ! · Anne-Gaëlle &amp; Damien</footer>
+</div>
+</body>
+</html>

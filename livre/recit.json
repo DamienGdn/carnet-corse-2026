@@ -1,0 +1,18 @@
+{
+  "titre": "Le voyage en Corse d'Anne-Gaëlle et Damien",
+  "sousTitre": "Porto-Vecchio · 5 → 11 octobre 2026",
+  "auteurs": "Anne-Gaëlle & Damien",
+  "jours": {
+    "avant": {"titre": "Avant le départ", "texte": "Le sac est prêt, direction Nantes et l'aéroport."},
+    "j1": {"titre": "Lundi 5 · L'arrivée", "texte": "Envol de Nantes, atterrissage à Figari et récupération de notre Fiat 500c rouge. Installation à la Villa Occhiatana, pique-nique, première baignade dans le lagon de Santa Giulia, puis la vieille ville de Porto-Vecchio en fin de journée. Quelques faibles averses pour nous accueillir."},
+    "j2": {"titre": "Mardi 6 · Bonifacio", "texte": "Baignade matinale avant la route. Grand soleil sur Bonifacio : la citadelle perchée sur ses falaises, une heure de bateau au pied des calanques et des grottes, un pique-nique, puis la randonnée jusqu'à la plage de Fazzio. Près de 15 km à pied."},
+    "j3": {"titre": "Mercredi 7 · Bavella", "texte": "Baignade avant de partir, puis les aiguilles de Bavella et la montée jusqu'au Trou de la Bombe : 5,3 km en 2 h 46, pique-nique sur le parcours, soleil et nuages. Arrêt au bord de la Solenzara. Un énorme orage le soir : la plage est annulée, on attend à la Cantina di u Palace avec une bière, retour au gîte à 19 h 50."},
+    "j4": {"titre": "Jeudi 8 · Santa Giulia et Palombaggia", "texte": "Programme chamboulé par le vent et la pluie en montagne. Baignade du matin, puis une randonnée de 9,4 km autour de Santa Giulia, pique-nique dans le maquis. En fin de journée, Palombaggia sous un ciel d'orage, une Pietra ambrée et une gaufre au chocolat face à la mer."},
+    "j5": {"titre": "Vendredi 9", "texte": "Port de Porto-Vecchio, plage de Saint-Cyprien, pique-nique aux piscines naturelles du Cavu, puis Aléria."},
+    "j6": {"titre": "Samedi 10", "texte": "Lavezzi, Bonifacio et Rondinara (selon la météo)."},
+    "j7": {"titre": "Dimanche 11 · Le retour", "texte": "Dernière baignade, Palombaggia, un tour express à Sartène, et l'envol depuis Figari."}
+  },
+  "chiffres": "Plus de 47 km à pied, 210 km en Fiat 500c, 5 baignades, un pique-nique chaque midi.",
+  "gouts": ["Pietra blonde", "Pietra ambrée à la châtaigne", "Colomba (bière blanche)", "Paolina", "Gaufre au chocolat à Palombaggia"],
+  "fin": "Bises de Corse !"
+}

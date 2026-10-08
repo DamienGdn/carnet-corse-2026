@@ -237,6 +237,7 @@ h3.sub::after{content:"";flex:1;border-top:3px dotted var(--hairline)}
 .cu-it h4{margin:0;font:600 16px var(--display);color:var(--ink)}
 .cu-it .cu-k{font:700 15px var(--hand);color:var(--primary)}
 .cu-it p{margin:2px 0 0;font-size:13px;color:var(--muted)}
+.bk-links{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 4px}.bk-links .btn{flex:1 1 140px;justify-content:center}
 .fold,.rain{border:2px solid var(--ink);border-radius:var(--r-md);padding:2px 16px;margin-top:12px;background:var(--paper);box-shadow:3px 3px 0 var(--ink)}
 .rain{margin-top:32px;border-color:var(--sea);box-shadow:3px 3px 0 var(--sea)}
 .fold summary,.rain summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;min-height:60px;flex-wrap:wrap}
@@ -779,6 +780,10 @@ html.intro-on #intro.skip{animation:cc-in-skip .2s ease-out forwards}
     <p class="sv-sub">cousu main, jour après jour</p>
     <ul class="stitches" id="stitches"></ul>
   </section>
+  <nav class="bk-links" aria-label="Livre photo et film">
+    <a class="btn btn-g" href="livre.html">📖 Le livre photo</a>
+    <a class="btn btn-a" href="video.html">🎬 Le film du voyage</a>
+  </nav>
   <details class="fold" id="souvenirs">
     <summary><span class="sub-t">📸 Nos souvenirs</span><span class="cnt" id="albCnt"></span></summary>
     <div id="album"></div>
@@ -1033,7 +1038,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v60'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v61'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
