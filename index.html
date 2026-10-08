@@ -909,6 +909,8 @@ const DAYS = [
  {id:'j2', walk:'14,99 km · 21 269 pas (Apple Watch)', d:'Mardi 6 octobre', title:'Bonifacio • Citadelle • Bateau • Plage de Fazzio', done:true, meteo:['⛈️','24°C / 19°C',"Risque d'orage"],
   stops:['bonc','bat','fazz'],
   steps:[
+   {t:'07:45', end:'08:15', txt:'Baignade matinale à Santa Giulia avant de partir', p:'sg', dur:'30 min', more:["✅ Fait : baignade juste à côté du gîte."]},
+   {drive:'🚗 Santa-Giulia → Bonifacio : ~40 min'},
    {t:'09:00', end:'11:30', txt:"Visite de la citadelle de Bonifacio", p:'bonc', dur:'2 h 30', more:["✅ Fait : haute-ville, bastion de l'Étendard, ruelles et belvédères."]},
    {t:'11:45', end:'12:45', txt:'Sortie en bateau — falaises et calanques', p:'bat', dur:'1 h', more:["✅ Fait : environ 1 h de mer au pied des falaises, avec vue sur les calanques et les grottes."]},
    {t:'13:00', end:'14:15', txt:'Pique-nique du midi à Bonifacio', dur:'1 h 15'},
@@ -923,6 +925,7 @@ const DAYS = [
   alert:'✅ Trou de la Bombe fait (5,33 km en 2 h 46). Orage violent en fin de journée : plage annulée, pause bière sur la route, retour au gîte à 19:50.',
   stops:['bav','trou','sol','cant'], cover:'bav',
   steps:[
+   {t:'09:15', end:'09:50', txt:'Baignade matinale à Santa Giulia avant la rando', p:'sg', dur:'35 min', more:["✅ Fait."]},
    {t:'10:15', txt:'Départ de Porto-Vecchio'},
    {drive:'🚗 Porto-Vecchio → Col de Bavella via Zonza : ~1 h 15 (50 km)'},
    {t:'11:30', txt:'Arrivée Col de Bavella (parking)', p:'bav', more:["Col à 1 218 m, statue de Notre-Dame-des-Neiges, vue directe sur les aiguilles de granit rouge.", "Parking payant au col, souvent plein en milieu de journée : se garer le long de la route si besoin. Cochons et vaches en liberté : ne pas les nourrir.", "Il fait 6 à 8 °C de moins qu'à Porto-Vecchio : prendre une polaire."]},
@@ -939,6 +942,7 @@ const DAYS = [
   alert:'🌤️ Programme changé : randonnée autour de Santa Giulia, tout près du gîte. Sec toute la journée (23–25 °C), mais rafales d\'ouest ~50–58 km/h : rester sur les sentiers côtiers, éviter les crêtes exposées. Coucher du soleil 18 h 53.',
   stops:['sg','pic4','palo'],
   steps:[
+   {t:'10:45', end:'11:30', txt:'Baignade du matin à Santa Giulia avant la rando', p:'sg', dur:'45 min', more:["✅ Fait."]},
    {t:'11:54', end:'13:00', txt:'Départ de la randonnée autour de Santa Giulia', p:'sg', noSwim:true, dur:'1 h', img:'photos/j4-trace-rando.jpg', imgLabel:'🗺️ Trace Apple Watch de la rando', more:["✅ Fait : 9,36 km en 3 h 56 (11:54 → 16:17), D+ 337 m d'après l'Apple Watch.", "Itinéraire Visorando : 8,2 km, D+ 188 m, départ N 41.530294° / E 9.283452° — visorando.com/randonnee-109519658"]},
    {t:'13:00', end:'13:45', txt:'Pique-nique en chemin, au sud de la baie', p:'pic4', dur:'45 min', img:'photos/j4-pique-nique.jpg', imgLabel:'📸 Photo de notre pause', more:["Pause pique-nique pendant la rando, dans le maquis (N 41.521573°, E 9.267235°)."]},
    {t:'13:45', end:'16:17', txt:'Suite de la randonnée et retour', p:'sg', noSwim:true, dur:'2 h 30'},
@@ -1021,7 +1025,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v57'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v58'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
