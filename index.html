@@ -908,12 +908,13 @@ const DAYS = [
 
  {id:'j4', walk:'9,36 km · 3 h 56 · D+ 337 m (rando Apple Watch)', d:'Jeudi 8 octobre', title:'Randonnée autour de Santa Giulia', done:true, meteo:['☁️','25°C / 21°C','Sec, couvert, vent d\'ouest'],
   alert:'🌤️ Programme changé : randonnée autour de Santa Giulia, tout près du gîte. Sec toute la journée (23–25 °C), mais rafales d\'ouest ~50–58 km/h : rester sur les sentiers côtiers, éviter les crêtes exposées. Coucher du soleil 18 h 53.',
-  stops:['sg','pic4'],
+  stops:['sg','pic4','palo'],
   steps:[
    {t:'11:54', end:'13:00', txt:'Départ de la randonnée autour de Santa Giulia', p:'sg', dur:'1 h', img:'photos/j4-trace-rando.jpg', imgLabel:'🗺️ Trace Apple Watch de la rando', more:["✅ Fait : 9,36 km en 3 h 56 (11:54 → 16:17), D+ 337 m d'après l'Apple Watch.", "Itinéraire Visorando : 8,2 km, D+ 188 m, départ N 41.530294° / E 9.283452° — visorando.com/randonnee-109519658"]},
    {t:'13:00', end:'13:45', txt:'Pique-nique en chemin, au sud de la baie', p:'pic4', dur:'45 min', img:'photos/j4-pique-nique.jpg', imgLabel:'📸 Photo de notre pause', more:["Pause pique-nique pendant la rando, dans le maquis (N 41.521573°, E 9.267235°)."]},
    {t:'13:45', end:'16:17', txt:'Suite de la randonnée et retour', p:'sg', dur:'2 h 30'},
-   {t:'16:30', txt:'Fin d\'après-midi au gîte ou à la plage selon l\'orage'},
+   {drive:'🚗 Santa-Giulia → Palombaggia : ~20 min'},
+   {t:'17:30', txt:'Plage de Palombaggia : juste pour la voir, sans baignade', p:'palo', noSwim:true, img:'photos/j4-palombaggia.jpg', imgLabel:'📸 Panorama de Palombaggia', more:["Ciel d'orage sur la baie, eau turquoise et rochers de granit."]},
   ],
   rain:[{p:"torr",t:"Si averse : dégustation au Domaine de Torraccia (~30 min)"}],
   restos:[]},
@@ -990,7 +991,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v52'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v53'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -1128,7 +1129,7 @@ const isPlane = t => /✈|Décollage|Atterrissage/.test(t);
 const WAVE = y => '<path class="wv" d="M-10 ' + y + 'Q-7.5 ' + (y - 2.2) + ' -5 ' + y + 'T0 ' + y + 'T5 ' + y + 'T10 ' + y + 'T15 ' + y + 'T20 ' + y + 'T25 ' + y + 'T30 ' + y + 'T35 ' + y + 'T40 ' + y + 'V22H-10Z" fill="#bcdde4" fill-opacity=".85" stroke="#14566f" stroke-width="1"/>';
 const SWIM_SVG = '<svg viewBox="0 0 30 22" aria-hidden="true"><g stroke="#12324a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path class="kk" d="M8 13L3 14"/><path d="M8 12.5H20"/><circle cx="23.5" cy="10.5" r="3" fill="#f7cfa6"/><path d="M21 9.5Q23.5 6.8 26.2 9.2" stroke="#6b3a1f" stroke-width="1.5"/><path class="cw" d="M20 13L20 6"/><path class="cw b" d="M20 13L20 6"/></g><g>' + WAVE(14) + '</g></svg>';
 const DIVE_SVG = '<svg viewBox="0 0 30 22" aria-hidden="true"><g>' + WAVE(9) + '</g><g stroke="#12324a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path class="kk" d="M8 16L2 17.5"/><path d="M8 16H20"/><path d="M19 16L22 18.5"/><circle cx="23.5" cy="15" r="3" fill="#f7cfa6"/><path d="M24 13.6H27.2V16.4H24Z" fill="#bcdde4" stroke-width="1.1"/><path d="M22.2 12Q20 10 21 4" stroke-width="1.3"/><path d="M21 4H19.5" stroke="#d62828" stroke-width="1.6"/></g><g fill="none" stroke="#14566f" stroke-width=".8"><circle class="bub" cx="28" cy="13" r="1"/><circle class="bub b" cx="26.5" cy="12" r="1.2"/></g></svg>';
-const isSwim = (s) => /^Plage/i.test((P[s.p] || {}).name || '') || /plage|baignade|snorkeling/i.test(s.txt);
+const isSwim = (s) => !s.noSwim && /^Plage/i.test((P[s.p] || {}).name || '') || /plage|baignade|snorkeling/i.test(s.txt);
 const swimEl = s => animEl('swrow', '<span class="sw">' + (/snorkeling/i.test(s.txt) ? DIVE_SVG : SWIM_SVG) + '</span>');
 const SKIN = '#f7cfa6';
 const pSand = (bit) => {
@@ -1801,7 +1802,7 @@ if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
     return a + (r ? (toN(r[1]) + toN(r[2])) / 2 : one ? toN(one[1]) : 0);
   }, 0);
   const driveKm = MESURES.voitureKm != null ? MESURES.voitureKm : doneDays.reduce((a, d) => a + d.steps.reduce((b, s) => { const m = s.drive && /\((\d+)\s*km\)/.exec(s.drive); return b + (m ? +m[1] : 0); }, 0), 0);
-  const swims = visited.filter(v => v.s.txt && /plage|baignade|snorkeling/i.test(v.s.txt) && !/annul/i.test(v.s.txt)).length;
+  const swims = visited.filter(v => v.s.txt && !v.s.noSwim && /plage|baignade|snorkeling/i.test(v.s.txt) && !/annul/i.test(v.s.txt)).length;
   const picnics = MESURES.piqueNiques != null ? MESURES.piqueNiques : visited.filter(v => v.s.txt && /pique-?nique/i.test(v.s.txt)).length;
   const places = new Set(visited.filter(v => v.s.p && P[v.s.p]).map(v => v.s.p)).size;
   const elapsed = Math.max(0, Math.min(7, tripIdx + 1));
