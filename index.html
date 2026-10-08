@@ -867,7 +867,7 @@ const DAYS = [
   steps:[
    {t:'12:30', txt:'Atterrissage à Figari + récupération voiture de location', p:'fig', dur:'45 min', more:["Comptoirs des loueurs dans le hall, voitures sur le parking en face du terminal.", "Photographier la voiture (rayures, jantes) avant de partir et noter le niveau d'essence.", "Route : N198 direction Porto-Vecchio, ~30 min sans difficulté."]},
    {drive:'🚗 Figari → Porto-Vecchio : ~30 min (25 km)'},
-   {t:'13:45', end:'14:30', txt:'Déjeuner rapide', dur:'45 min'},
+   {t:'13:45', end:'14:30', txt:'Pique-nique du midi', dur:'45 min'},
    {t:'14:30', end:'15:30', txt:'Installation au gîte (Villa Occhiatana, Santa-Giulia) + courses', dur:'1 h', more:["Adresse : Villa Occhiatana, Santa-Giulia, 20137 Porto-Vecchio.", "Grandes surfaces à l'entrée de Porto-Vecchio : faire le plein d'eau, crème solaire et de quoi pique-niquer pour les journées rando.", "Prévoir des sacs isothermes pour les pique-niques du J3 et du J4."]},
    {t:'15:45', end:'17:15', txt:'Santa Giulia — première baignade', p:'sg', dur:'1 h 30', cond:'Snorkeling si mer calme', more:["Lagon très peu profond, eau souvent plus chaude qu'ailleurs : idéal pour une première baignade.", "Snorkeling : longer les rochers aux deux extrémités de la plage, plus de poissons qu'au centre (sable).", "Soleil couché vers 19:05 : rester jusqu'au bout pour la lumière sur la baie."]},
    {drive:'🚗 Santa Giulia → Porto-Vecchio : ~15 min (8 km)'},
@@ -882,7 +882,7 @@ const DAYS = [
   steps:[
    {t:'09:00', end:'11:30', txt:"Visite de la citadelle de Bonifacio", p:'bonc', dur:'2 h 30', more:["✅ Fait : haute-ville, bastion de l'Étendard, ruelles et belvédères."]},
    {t:'11:45', end:'12:45', txt:'Sortie en bateau — falaises et calanques', p:'bat', dur:'1 h', more:["✅ Fait : environ 1 h de mer au pied des falaises, avec vue sur les calanques et les grottes."]},
-   {t:'13:00', end:'14:15', txt:'Déjeuner à Bonifacio', dur:'1 h 15'},
+   {t:'13:00', end:'14:15', txt:'Pique-nique du midi à Bonifacio', dur:'1 h 15'},
    {t:'14:30', end:'17:00', txt:'Randonnée jusqu\'à la plage de Fazzio', p:'fazz', dur:'2 h 30', more:["✅ Fait : marche à pied jusqu'à la plage de Fazzio."]},
    {t:'17:15', txt:'Retour à Porto-Vecchio (~40 min)'},
   ],
@@ -991,7 +991,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v49'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v50'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -1793,7 +1793,7 @@ if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
   /* --- Compteurs --- */
   const num = '(\\d+(?:[.,]\\d+)?)', toN = x => parseFloat(x.replace(',', '.'));
   // Mesures réelles (compteur de la voiture, Apple Watch) : priment sur les estimations du programme
-  const MESURES = {voitureKm: 210, marcheKm: {/* j1: 4.2, j2: 9.1 … */}};
+  const MESURES = {voitureKm: 210, piqueNiques: Math.max(0, Math.min(7, tripIdx + 1)) /* pique-nique tous les midis */, marcheKm: {/* j1: 4.2, j2: 9.1 … */}};
   const walkKm = doneDays.reduce((a, d) => {
     if (MESURES.marcheKm[d.id] != null) return a + MESURES.marcheKm[d.id];
     if (!d.walk) return a;
@@ -1803,7 +1803,7 @@ if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
   }, 0);
   const driveKm = MESURES.voitureKm != null ? MESURES.voitureKm : doneDays.reduce((a, d) => a + d.steps.reduce((b, s) => { const m = s.drive && /\((\d+)\s*km\)/.exec(s.drive); return b + (m ? +m[1] : 0); }, 0), 0);
   const swims = visited.filter(v => v.s.txt && /plage|baignade|snorkeling/i.test(v.s.txt) && !/annul/i.test(v.s.txt)).length;
-  const picnics = visited.filter(v => v.s.txt && /pique-?nique/i.test(v.s.txt)).length;
+  const picnics = MESURES.piqueNiques != null ? MESURES.piqueNiques : visited.filter(v => v.s.txt && /pique-?nique/i.test(v.s.txt)).length;
   const places = new Set(visited.filter(v => v.s.p && P[v.s.p]).map(v => v.s.p)).size;
   const elapsed = Math.max(0, Math.min(7, tripIdx + 1));
   const STATS = [
