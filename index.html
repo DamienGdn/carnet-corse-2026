@@ -628,6 +628,8 @@ const P = {
   sol:  {name:'La Solenzara — arrêt au bord de la rivière', lat:41.83427, lon:9.31907, img:'photos/j3-riviere.jpg', cap:'Vasques de granit et eau limpide, sur la route de Bavella vers la côte (votre photo)', d:{"desc":"Arrêt sur la Strada di Bavella (D268), au bord de la Solenzara, entre le col de Bavella et la côte.","tips":["Eau claire dans les vasques de granit : baignade possible l'été, fraîche en octobre"]}},
   cant: {name:'Cantina di u Palace', lat:41.6963, lon:9.3408, img:'', cap:'Bar sur la route, à Sainte-Lucie-de-Porto-Vecchio — pause bière pendant l\'orage', d:{"desc":"440 Strada di Portivechju, Sainte-Lucie de Porto-Vecchio, 20124 Zonza. Point sur la carte approximatif (le long de la route, numéro non localisé)."}},
   cyp:  {name:'Plage de Saint-Cyprien (San Ciprianu)', lat:41.63241, lon:9.34601, img:wm('Plage de San Ciprianu – Lecci.jpg'), cap:'Grand arc de sable face à l\'est, abrité du vent d\'ouest', d:{"desc":"Longue plage de sable blanc à Lecci, ~15 min au nord de Porto-Vecchio. Tournée vers l'est : par vent d'ouest (libeccio), le vent souffle de la terre et la mer reste calme près du bord.","tips":["Sable soulevé par les rafales : se poser derrière les rochers au sud de la plage","Baignade possible si la mer est plate près du bord"]}},
+  pvport:{name:'Port de plaisance de Porto-Vecchio', lat:41.5935, lon:9.2840, img:wm('Porto Vecchio et son port.jpg'), cap:'Marina au pied de la citadelle, voiliers et cafés', d:{"desc":"Port de plaisance et marina au pied de la vieille ville, avec quais, voiliers et cafés. Position approximative.","tips":["Parking au port, puis balade à pied le long des quais"]}},
+  aleria:{name:'Aléria — site antique et Fort de Matra', lat:42.10254, lon:9.50975, img:wm('Aléria fort Matra et église.jpg'), cap:'Ancienne cité grecque puis romaine, musée dans le fort génois de Matra', d:{"desc":"Site archéologique de la ville antique d'Aléria (comptoir grec puis cité romaine) et musée archéologique Jérôme-Carcopino installé dans le Fort de Matra.","facts":{"duree":"1 h 30","acces":"~50 min au nord du Cavu par la N198"},"tips":["Horaires d'octobre et dernière entrée à vérifier avant d'y aller","Le musée est un bon abri en cas d'averse"]}},
   cim:  {name:'Cimetière marin', lat:41.38672, lon:9.15038, img:wm('Cimetière marin (Bonifacio).jpg'), cap:'Chapelles funéraires face à la mer', d:{"desc":"Chapelles et caveaux à l'extrémité ouest du plateau, face à la mer.","facts":{"duree":"30 min","acces":"À pied depuis la haute-ville","marche":"Env. 10 min depuis la haute-ville","cout":"Gratuit (horaires à vérifier)"},"dontMiss":["La vue sur les falaises et la Sardaigne","Les chapelles funéraires face à la mer"],"tips":["Cimetière en activité : rester respectueux","Se rend à pied depuis la haute-ville (env. 10 min)"]}},
 };
 
@@ -692,23 +694,23 @@ const DAYS = [
   rain:[{p:"cana",t:"Si averse : dégustation au Clos Canarelli (Figari, au sec aujourd'hui, ~30 min)"}],
   restos:[]},
 
- {id:'j5', walk:'~4 km · 2 h', d:'Vendredi 9 octobre', title:'Palombaggia • Tamaricciu • piscines du Cavu', meteo:['💨','21°C / 16°C',"Vent d'ouest potentiellement fort"],
-  alert:'🌊 Snorkeling CONDITIONNEL. Si mer agitée ou vent fort : alternative terrestre → sentier côtier Palombaggia–Tamaricciu à pied, puis vieille ville de Porto-Vecchio ou salines.',
-  stops:['palo','tama','cavu'],
+ {id:'j5', walk:'~3 km · 1 h 30', d:'Vendredi 9 octobre', title:'Port de Porto-Vecchio • Saint-Cyprien • Cavu • Aléria', meteo:['🌤️','22°C / 15°C','Sec, averse possible à Aléria en fin de journée'],
+  alert:'🌤️ Prévisions : sec et ~22 °C à Porto-Vecchio (rafales ~30–40 km/h l\'après-midi), ~23 °C à Aléria avec averse possible vers 17 h (~33 %). Coucher du soleil 18 h 51 : retour de nuit depuis Aléria (~1 h 15).',
+  stops:['pvport','cyp','cavu','aleria'],
   steps:[
-   {t:'08:30', txt:'Départ'},
-   {drive:'🚗 Porto-Vecchio → Palombaggia : ~20 min (12 km)'},
-   {t:'09:00', end:'11:00', txt:'Palombaggia', p:'palo', dur:'2 h', cond:'Snorkeling si mer calme', more:["Parkings privés payants le long de la route, ou places gratuites plus loin à pied.", "Sable blanc, pins parasols et rochers rouges ; mer plus agitée qu'à Santa Giulia quand le vent d'ouest souffle.", "Snorkeling : rochers rouges à l'extrémité sud de la plage. Ne pas y aller si drapeau orange ou rouge."]},
-   {t:'11:00', end:'12:00', txt:'Marche côtière vers Tamaricciu', p:'tama', dur:'1 h', more:["Sentier côtier vers le sud, ~15–20 min à travers les rochers et les petites criques.", "Tamaricciu est plus petite et plus abritée : bonne alternative si Palombaggia est trop agitée."]},
-   {t:'12:00', end:'13:30', txt:'Déjeuner', dur:'1 h 30'},
-   {t:'13:30', end:'15:15', txt:'Deuxième session snorkeling', p:'tama', dur:'2 h', cond:'Si conditions OK', more:["Explorer les rochers entre les deux plages, en restant près du bord.", "Si le vent s'est levé : sieste à l'ombre des pins ou retour vers la vieille ville."]},
-   {drive:'🚗 Palombaggia → Sainte-Lucie (Cavu) : ~40 min'},
-   {t:'16:15', end:'17:30', txt:'Piscines naturelles du Cavu en rentrant', p:'cavu', dur:'1 h 15', cond:'Baignade fraîche, seulement si le ciel est dégagé', more:["Vasques de granit le long de la rivière, accès en quelques minutes depuis la route.", "Sec et ~22 °C annoncés au Cavu vendredi après-midi."]},
-   {t:'17:30', txt:'Retour au gîte (~35 min)'},
-   {t:'19:30', txt:'Dîner'},
+   {t:'09:00', txt:'Départ du gîte'},
+   {drive:'🚗 Santa-Giulia → port de Porto-Vecchio : ~20 min'},
+   {t:'09:30', end:'10:30', txt:'Port et marina de Porto-Vecchio', p:'pvport', dur:'1 h', more:["Balade le long des quais et des voiliers, café face au port."]},
+   {drive:'🚗 Porto-Vecchio → Saint-Cyprien : ~20 min'},
+   {t:'11:00', end:'13:00', txt:'Plage de Saint-Cyprien', p:'cyp', dur:'2 h', cond:'Baignade si la mer est calme', more:["Grand arc de sable au nord de Porto-Vecchio."]},
+   {drive:'🚗 Saint-Cyprien → piscines du Cavu : ~20 min'},
+   {t:'13:30', end:'15:00', txt:'Piscines naturelles du Cavu + pique-nique', p:'cavu', dur:'1 h 30', cond:'Baignade fraîche', more:["Pique-nique sur les dalles de granit au bord des vasques.", "Accès en quelques minutes à pied depuis la route."]},
+   {drive:'🚗 Cavu → Aléria par la N198 : ~50 min (55 km)'},
+   {t:'16:00', end:'17:30', txt:'Aléria : site antique et musée du Fort de Matra', p:'aleria', dur:'1 h 30', cond:'Horaires d\'octobre à vérifier', more:["Ruines de la cité grecque puis romaine, et musée archéologique dans le fort génois.", "Averse possible vers 17 h : finir par le musée."]},
+   {t:'17:45', txt:'Retour au gîte (~1 h 15)'},
   ],
-  rain:[{p:"torr",t:"Dégustation au Domaine de Torraccia (~20 min)"},{p:"arag",t:"Castellu d'Araghju (si simple bruine)"}],
-  restos:['OMEA Beach Porto-Vecchio',"L'Ardoise Porto-Vecchio"]},
+  rain:[{p:"aleria",t:"Si averse : musée du Fort de Matra en premier"},{p:"palo",t:"Option : Palombaggia à la place de Saint-Cyprien"}],
+  restos:[]},
 
  {id:'j6', walk:'~4,5 km · 2 h 30', d:'Samedi 10 octobre', title:'Lavezzi • Bonifacio • Rondinara', meteo:['🌦️','21°C / 13°C','Averses possibles'],
   alert:'⛵ Sortie bateau Lavezzi DÉPENDANTE de la météo marine : confirmer avec la compagnie la veille au soir / le matin. Si annulée : Bonifacio le matin, Rondinara l\'après-midi.',
@@ -764,7 +766,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v37'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v38'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
