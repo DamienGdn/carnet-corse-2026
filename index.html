@@ -550,22 +550,20 @@ const DAYS = [
   ],
   restos:['Auberge du Col de Bavella']},
 
- {id:'j4', walk:'~3 km · 1 h 30', d:'Jeudi 8 octobre', title:'Porto-Vecchio • Torraccia • Saint-Cyprien (journée à l\'abri)', meteo:['💨','20°C / 15°C','Vent d\'ouest, côte est au sec'],
-  alert:'💨 Programme changé : Ospedale annulé (pluie et vent fort en montagne). Le vent d\'ouest (rafales 35–45 km/h à Porto-Vecchio, ~70 km/h en Alta Rocca) laisse la côte est au sec et la mer calme près du bord. Pluie à l\'ouest (Sartène) : éviter ce côté-là.',
-  stops:['pv','torr','cyp'],
+ {id:'j4', walk:'~2 km · 1 h', d:'Jeudi 8 octobre', title:'Torraccia • Saint-Cyprien (journée à l\'abri)', meteo:['💨','20°C / 15°C','Vent d\'ouest, côte est au sec'],
+  alert:'💨 Programme changé : Ospedale annulé (pluie et vent fort en montagne). Côte est la plus abritée du vent d\'ouest. Plage seulement s\'il ne pleut pas, sinon plan B.',
+  stops:['torr','cyp'],
   steps:[
-   {t:'10:00', txt:'Départ tranquille du gîte'},
-   {drive:'🚗 Santa-Giulia → Porto-Vecchio : ~15 min'},
-   {t:'10:30', end:'12:30', txt:'Vieille ville de Porto-Vecchio : ruelles, citadelle, boutiques', p:'pv', dur:'2 h', more:["Ruelles abritées du vent, cafés en terrasse côté est.", "Courses de produits corses à rapporter (charcuterie, fromages, vins)."]},
-   {t:'12:30', end:'14:00', txt:'Déjeuner à Porto-Vecchio', dur:'1 h 30'},
-   {drive:'🚗 Porto-Vecchio → Lecci : ~20 min'},
-   {t:'14:30', end:'15:30', txt:'Dégustation au Domaine de Torraccia', p:'torr', dur:'1 h', more:["Domaine bio de Lecci, dégustation au caveau à l'abri.", "Horaires d'octobre à confirmer par téléphone avant d'y aller."]},
-   {drive:'🚗 Torraccia → Saint-Cyprien : ~10 min'},
-   {t:'15:45', end:'17:45', txt:'Plage de Saint-Cyprien, abritée du vent d\'ouest', p:'cyp', dur:'2 h', cond:'Baignade si la mer est plate près du bord', more:["Plage tournée vers l'est : le vent vient de la terre, la mer reste calme.", "Se poser au sud de la plage, derrière les rochers, pour éviter le sable soulevé."]},
-   {t:'18:00', txt:'Retour au gîte (~25 min)'},
+   {t:'10:30', txt:'Départ tranquille du gîte'},
+   {drive:'🚗 Santa-Giulia → Lecci : ~30 min'},
+   {t:'11:00', end:'12:00', txt:'Dégustation au Domaine de Torraccia', p:'torr', dur:'1 h', more:["Domaine bio de Lecci, dégustation au caveau, à l'abri.", "Horaires d'octobre à confirmer par téléphone avant d'y aller."]},
+   {t:'12:15', end:'13:30', txt:'Pique-nique à l\'abri ou déjeuner au gîte', dur:'1 h 15'},
+   {drive:'🚗 → Saint-Cyprien : ~10 min depuis Lecci'},
+   {t:'14:30', end:'16:30', txt:'Plage de Saint-Cyprien, abritée du vent d\'ouest', p:'cyp', dur:'2 h', cond:'Seulement s\'il ne pleut pas · baignade si la mer est plate', more:["Plage tournée vers l'est : le vent vient de la terre, la mer reste calme près du bord.", "Se poser au sud de la plage, derrière les rochers, pour éviter le sable soulevé."]},
+   {t:'16:45', txt:'Retour au gîte (~25 min)'},
   ],
-  rain:[{p:"egl",t:"Si averse : cafés et boutiques couvertes de la vieille ville"},{p:"cana",t:"Dégustation au Clos Canarelli (Figari, ~30 min)"}],
-  restos:["L'Ardoise Porto-Vecchio","Casa Corsa Porto-Vecchio"]},
+  rain:[{p:"cana",t:"Dégustation au Clos Canarelli (Figari, ~30 min)"},{p:"aqua",t:"Aquarium de Bonifacio (~40 min)"}],
+  restos:[]},
 
  {id:'j5', walk:'~4 km · 2 h', d:'Vendredi 9 octobre', title:'Palombaggia • Tamaricciu • Snorkeling', meteo:['💨','21°C / 16°C',"Vent d'ouest potentiellement fort"],
   alert:'🌊 Snorkeling CONDITIONNEL. Si mer agitée ou vent fort : alternative terrestre → sentier côtier Palombaggia–Tamaricciu à pied, puis vieille ville de Porto-Vecchio ou salines.',
@@ -636,7 +634,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v31'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v32'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -870,7 +868,7 @@ DAYS.forEach((day, i) => {
         </article>`; }).join('')}</div>
       <p class="note">Horaires relevés en octobre 2026 sur les sites touristiques officiels : un coup de fil la veille reste prudent.</p>
     </details>` : ''}
-    ${day.done ? '' : `<div class="restos"><h3 class="sub">Où manger</h3><div class="resto-grid">${restoHtml}</div><p class="resto-foot">Prix et horaires relevés en ligne, à vérifier : beaucoup de restaurants réduisent leurs jours d'ouverture en octobre.</p></div>`}
+    ${day.done || !day.restos.length ? '' : `<div class="restos"><h3 class="sub">Où manger</h3><div class="resto-grid">${restoHtml}</div><p class="resto-foot">Prix et horaires relevés en ligne, à vérifier : beaucoup de restaurants réduisent leurs jours d'ouverture en octobre.</p></div>`}
   </section>`);
 });
 
