@@ -602,6 +602,11 @@ html[data-sky="dim"] .brand span,html[data-sky="dim"] .kicker-hand{color:#f6d9bd
 .a-wind .leaf{animation:cc-leaf 5s linear infinite}
 @keyframes cc-leaf{0%{transform:translate(-16px,50px) rotate(0);opacity:0}8%{opacity:1}30%{transform:translate(30px,18px) rotate(170deg)}58%{transform:translate(78px,50px) rotate(340deg)}92%{opacity:1}100%{transform:translate(140px,14px) rotate(560deg);opacity:0}}
 @media (prefers-reduced-motion:reduce){.acc *,.wx-wind .pony{animation:none!important}.a-wind .leaf{opacity:0}.wx-wind .pony{transform:rotate(10deg)}}
+/* personnages du jour (dw-) */
+.dw-pair{flex:0 0 auto;width:62px;align-self:flex-end;margin:0 0 4px}
+.dw-pair .dw-svg{display:block;width:62px;height:auto;overflow:visible;filter:drop-shadow(0 1px 1px rgba(22,49,63,.25))}
+.dw-svg .dw-pony{transform-box:fill-box;transform-origin:100% 15%;animation:cc-pony .6s ease-in-out infinite alternate}
+@media (prefers-reduced-motion:reduce){.dw-svg .dw-pony{animation:none!important;transform:rotate(10deg)}}
 /* 8bis. retour tactile */
 .pk{animation:cc-pk .35s ease-out}
 @keyframes cc-pk{30%{transform:translateY(-3px) scale(1.12)}}
@@ -986,7 +991,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v48'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v49'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -1356,7 +1361,7 @@ function renderWx(data, stamp){
 }
 (async () => {
   const locs = DAYS.map(d => P[d.stops[0] === 'fig' ? d.stops[1] : d.stops[0]]);
-  const url = 'https://api.open-meteo.com/v1/forecast?timezone=Europe%2FParis&forecast_days=16'
+  const url = 'https://api.open-meteo.com/v1/forecast?timezone=Europe%2FParis&forecast_days=16&past_days=7'
     + '&latitude=' + locs.map(p => p.lat).join(',') + '&longitude=' + locs.map(p => p.lon).join(',')
     + '&hourly=temperature_2m,precipitation_probability,weather_code,wind_speed_10m'
     + '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max,wind_gusts_10m_max';
@@ -2069,6 +2074,15 @@ if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
   dlg.addEventListener('close', () => { pcSeq++; box.innerHTML = ''; });
 })();
 
+// Météo réellement vécue, figée dans le fichier (les prévisions disparaissent une fois le jour passé).
+// Source : Open-Meteo (api.open-meteo.com/v1/forecast, start_date/end_date) au lieu principal de chaque jour : Santa Giulia (j1, j4), Bonifacio (j2), Col de Bavella (j3).
+// Relevé du 2026-10-08 (j4 = jour en cours, valeurs provisoires). Prioritaire pour les jours done. code = code WMO, gust = rafales max en km/h.
+const METEO_VECUE = {
+  j1: {code:95, tmax:25.6, tmin:18.5, gust:23.4},
+  j2: {code:80, tmax:24.4, tmin:19.8, gust:44.6},
+  j3: {code:80, tmax:18.1, tmin:11.2, gust:83.2},
+  j4: {code:96, tmax:24.8, tmin:19.5, gust:54.4}
+};
 /* ===== v46 : ciel, croquis, météo sur les personnages, bruitages, intro ===== */
 (() => {
   const $ = id => document.getElementById(id);
@@ -2191,6 +2205,58 @@ if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
   new MutationObserver(ms => { if (ms.some(m => [...m.addedNodes].some(n => n.nodeType === 1 && (n.classList.contains('here') || (n.querySelector && n.querySelector('.here, .td-top svg')))))) applyWx(); })
     .observe(document.body, {childList: true, subtree: true});
   applyWx(); setInterval(applyWx, 300000);
+
+  /* --- 7bis. personnages du jour : tenue selon la météo de CHAQUE jour (météo stockée) --- */
+  const DW_CAP = '<g class="acc dw-cap"><path d="M13 31Q12 8 34 8Q56 8 55 31Q34 24 13 31Z" fill="#c9532f"/><path d="M45 27Q61 25 69 33Q57 37 43 32Z" fill="#a8401f"/><circle cx="34" cy="8.5" r="2" fill="#a8401f"/><path d="M34 9Q30 18 29 27" fill="none" stroke="#a8401f" stroke-width="1" opacity=".6"/></g>';
+  const dwScarf = c => `<g class="acc dw-scarf"><path d="M18 60Q34 70 50 60L52 67Q34 77 16 67Z" fill="${c}"/><path d="M43 66L46 76L52 74L50 66Z" fill="${c}"/><path d="M22 66Q34 71 46 66" fill="none" stroke="#fff" stroke-width="1" stroke-dasharray="2 3" opacity=".7"/></g>`;
+  const DW_EMO = {'☀':0, '🌤':2, '⛅':2, '☁':3, '🌫':45, '🌦':80, '🌧':63, '⛈':95, '💨':3};
+  const dwStatic = day => { const e = (day.meteo[0] || '').replace(/️/g, ''); const m = /(\d+)\D+(\d+)/.exec(day.meteo[1] || '');
+    return {code: e in DW_EMO ? DW_EMO[e] : 3, gust: e === '💨' || /vent fort|rafale/i.test(day.meteo[2] || '') ? 50 : 0, tmax: m ? +m[1] : null, tmin: m ? +m[2] : null, src: 'indicatif'}; };
+  function dwData(day, i){
+    const V = METEO_VECUE[day.id];
+    if (day.done && V) return {code: V.code, gust: V.gust, tmax: V.tmax, tmin: V.tmin, src: 'vécu'};
+    const W = window.ccWx, x = W && W.days && W.days[i];
+    if (x && x.loc.daily.weather_code[x.k] != null) { const dl = x.loc.daily, g = dl.wind_gusts_10m_max ? dl.wind_gusts_10m_max[x.k] : (dl.wind_speed_10m_max[x.k] || 0) * 1.4;
+      return {code: dl.weather_code[x.k], gust: Math.round(g || 0), tmax: Math.round(dl.temperature_2m_max[x.k]), tmin: Math.round(dl.temperature_2m_min[x.k]), src: 'api'}; }
+    try { const s = JSON.parse(localStorage.getItem('wxd') || '{}')[day.id]; if (s && s.code != null) return {...s, src: 'mémorisé'}; } catch (e) {}
+    return dwStatic(day);
+  }
+  function dwSave(){
+    const W = window.ccWx; if (!W) return; let o = {};
+    try { o = JSON.parse(localStorage.getItem('wxd') || '{}') || {}; } catch (e) {}
+    DAYS.forEach((day, i) => { const x = W.days[i]; if (!x || x.loc.daily.weather_code[x.k] == null) return; const dl = x.loc.daily;
+      const g = dl.wind_gusts_10m_max ? dl.wind_gusts_10m_max[x.k] : (dl.wind_speed_10m_max[x.k] || 0) * 1.4;
+      o[day.id] = {code: dl.weather_code[x.k], gust: Math.round(g || 0), tmax: Math.round(dl.temperature_2m_max[x.k]), tmin: Math.round(dl.temperature_2m_min[x.k]), t: Date.now()}; });
+    try { localStorage.setItem('wxd', JSON.stringify(o)); } catch (e) {}
+  }
+  const DW_BASE = (() => { const b = document.querySelector('.brand svg'); if (!b) return null; const s = b.cloneNode(true);
+    s.querySelectorAll('style, .acc').forEach(n => n.remove()); s.querySelectorAll('.pony').forEach(p => p.classList.remove('pony'));
+    s.removeAttribute('class'); s.removeAttribute('aria-hidden'); s.removeAttribute('focusable'); return s; })();
+  function dwDress(day, i){
+    const host = document.querySelector(`#${day.id} .dw-pair`); if (!host || !DW_BASE) return;
+    const d = dwData(day, i), c = d.code;
+    const rain = (c >= 51 && c <= 67) || (c >= 80 && c <= 82) || c >= 95, sun = !rain && c <= 2, wind = d.gust >= 45, cloud = !rain && !sun;
+    const svg = DW_BASE.cloneNode(true);
+    svg.setAttribute('class', 'dw-svg'); svg.setAttribute('role', 'img');
+    const heads = [...svg.querySelectorAll(':scope > g > g[transform], :scope > g > .hd > g[transform]')];
+    const items = [];
+    if (sun) { if (heads[1]) heads[1].insertAdjacentHTML('beforeend', DW_CAP); if (heads[0]) heads[0].insertAdjacentHTML('beforeend', SUNG);
+      if (c <= 1 && heads[1]) heads[1].insertAdjacentHTML('beforeend', SUNG); items.push('casquette et lunettes de soleil'); }
+    if (rain) { svg.insertAdjacentHTML('beforeend', UMB); items.push('parapluie'); }
+    if (cloud) { if (heads[0]) heads[0].insertAdjacentHTML('beforeend', dwScarf('#c9532f')); if (heads[1]) heads[1].insertAdjacentHTML('beforeend', dwScarf('#3f8a9e')); items.push('petites écharpes'); }
+    if (wind) { svg.insertAdjacentHTML('beforeend', WIND); const p = heads[0] && heads[0].querySelector('path'); if (p) p.classList.add('dw-pony'); items.push('cheveux au vent'); }
+    const txt = WMO(c)[1] + (d.tmax != null ? `, ${Math.round(d.tmax)}°C max` : '') + (wind ? `, rafales ${Math.round(d.gust)} km/h` : '');
+    host.dataset.wx = [sun ? 'sun' : rain ? 'rain' : 'cloud', wind ? 'wind' : ''].filter(Boolean).join('+'); host.dataset.code = c; host.dataset.src = d.src;
+    host.title = `${txt} (${d.src})`;
+    svg.setAttribute('aria-label', `Anne-Gaëlle et Damien, temps du jour : ${txt}. ${items.join(', ')}.`);
+    host.replaceChildren(svg);
+    if (window.animWatch) window.animWatch(host.parentNode);
+  }
+  function dwAll(){ DAYS.forEach((day, i) => dwDress(day, i)); }
+  DAYS.forEach(day => { const m = document.querySelector(`#${day.id} .dayhead .meteo`);
+    if (m && !document.querySelector(`#${day.id} .dw-pair`)) m.insertAdjacentHTML('beforebegin', '<div class="dw-pair anim"></div>'); });
+  dwAll();
+  const prevReady2 = window.ccWxReady; window.ccWxReady = () => { if (prevReady2) prevReady2(); dwSave(); dwAll(); };
 
   /* --- 8. bruitages (WebAudio, désactivés par défaut) --- */
   const btn = $('sndBtn'); let on = false, ctx = null, master = null, armed = false;
