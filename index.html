@@ -910,9 +910,9 @@ const DAYS = [
   alert:'🌤️ Programme changé : randonnée autour de Santa Giulia, tout près du gîte. Sec toute la journée (23–25 °C), mais rafales d\'ouest ~50–58 km/h : rester sur les sentiers côtiers, éviter les crêtes exposées. Coucher du soleil 18 h 53.',
   stops:['sg','pic4','palo'],
   steps:[
-   {t:'11:54', end:'13:00', txt:'Départ de la randonnée autour de Santa Giulia', p:'sg', dur:'1 h', img:'photos/j4-trace-rando.jpg', imgLabel:'🗺️ Trace Apple Watch de la rando', more:["✅ Fait : 9,36 km en 3 h 56 (11:54 → 16:17), D+ 337 m d'après l'Apple Watch.", "Itinéraire Visorando : 8,2 km, D+ 188 m, départ N 41.530294° / E 9.283452° — visorando.com/randonnee-109519658"]},
+   {t:'11:54', end:'13:00', txt:'Départ de la randonnée autour de Santa Giulia', p:'sg', noSwim:true, dur:'1 h', img:'photos/j4-trace-rando.jpg', imgLabel:'🗺️ Trace Apple Watch de la rando', more:["✅ Fait : 9,36 km en 3 h 56 (11:54 → 16:17), D+ 337 m d'après l'Apple Watch.", "Itinéraire Visorando : 8,2 km, D+ 188 m, départ N 41.530294° / E 9.283452° — visorando.com/randonnee-109519658"]},
    {t:'13:00', end:'13:45', txt:'Pique-nique en chemin, au sud de la baie', p:'pic4', dur:'45 min', img:'photos/j4-pique-nique.jpg', imgLabel:'📸 Photo de notre pause', more:["Pause pique-nique pendant la rando, dans le maquis (N 41.521573°, E 9.267235°)."]},
-   {t:'13:45', end:'16:17', txt:'Suite de la randonnée et retour', p:'sg', dur:'2 h 30'},
+   {t:'13:45', end:'16:17', txt:'Suite de la randonnée et retour', p:'sg', noSwim:true, dur:'2 h 30'},
    {drive:'🚗 Santa-Giulia → Palombaggia : ~20 min'},
    {t:'17:30', txt:'Plage de Palombaggia : juste pour la voir, sans baignade', p:'palo', noSwim:true, img:'photos/j4-palombaggia.jpg', imgLabel:'📸 Panorama de Palombaggia', more:["Ciel d'orage sur la baie, eau turquoise et rochers de granit."]},
   ],
@@ -991,7 +991,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v53'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v54'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
