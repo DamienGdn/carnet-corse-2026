@@ -986,7 +986,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v46'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v47'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -1153,7 +1153,7 @@ DAYS.forEach((day, i) => {
     if (s.drive) return `<li class="drive">${animEl('road', '<span class="car">' + CAR_SVG + '</span>')}<span>${esc(s.drive)}</span></li>`;
     const idx = s.p ? order.indexOf(s.p) + 1 : 0;
     return `<li><span class="t"><span data-t="${s.t}">${s.t}</span>${s.end ? `<br><span class="d">→ <span data-t="${s.end}">${s.end}</span></span>` : ''}</span>
-      <span>${idx ? `<span class="stitch">${idx}</span>` : ''}${esc(s.txt)}
+      <span>${idx ? `<span class="badge">${idx}</span>` : ''}${esc(s.txt)}
       ${s.dur ? `<br><span class="tag">⏱ ${s.dur}</span>` : ''}${s.cond ? `<span class="tag cond">⚠ ${esc(s.cond)}</span>` : ''}
       ${isPlane(s.txt) ? animEl('sky ' + (/Décollage/.test(s.txt) ? 'up' : 'down'), '<span class="plane">' + PLANE_SVG + '</span>') : ''}${isPicnic(s.txt) ? picEl() : isHike(s.txt) ? animEl('wkrow', '<span class="wk">' + WALKER_SVG + '</span>') : (isSwim(s) ? swimEl(s) : '')}
       ${s.more ? `<ul class="more">${s.more.map(m => `<li>${esc(m)}</li>`).join('')}</ul>` : ''}
@@ -1165,7 +1165,7 @@ DAYS.forEach((day, i) => {
     <article class="stop">
       <figure><img src="${p.img}" alt="${esc(p.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="imgFail(this)" data-cap="${esc(p.cap)}"></figure>
       <div class="body">
-        <h3><span class="stitch">${j+1}</span>${esc(p.name)}</h3>
+        <h3><span class="badge">${j+1}</span>${esc(p.name)}</h3>
         <div class="cap">${esc(p.cap)}</div>
         ${detailHtml(p)}${phHtml(k)}
         <div class="gps">${p.lat.toFixed(4)}° N · ${p.lon.toFixed(4)}° E</div>
