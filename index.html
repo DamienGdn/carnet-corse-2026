@@ -1039,7 +1039,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v63'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v64'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -1268,7 +1268,7 @@ DAYS.forEach((day, i) => {
       <div><h3 class="sub">Programme</h3>${/^Départ/.test(day.steps[0].txt) ? `<label class="dep">🕗 Heure de départ <input type="time" step="900" value="${day.steps[0].t}" data-day="${day.id}" data-base="${day.steps[0].t}"></label>` : ''}<ul class="tl"><li class="trcar" role="presentation" aria-hidden="true">${CAR_SVG}</li>${stepsHtml}</ul></div>
     </div>
     <div class="stops">${stopsHtml}</div>
-    ${day.rain ? `<details class="rain" data-day="${day.id}">
+    ${day.rain && !day.done ? `<details class="rain" data-day="${day.id}">
       <summary><span class="sub-t">☔ Plan B pluie</span><span class="cnt">${day.rain.length} idées</span></summary>
       <div class="mapbox" id="box-r${day.id}">
         <div class="map" id="map-r${day.id}"></div>
