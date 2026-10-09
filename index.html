@@ -903,6 +903,7 @@ const P = {
   aleria:{name:'Aléria — site antique et Fort de Matra', lat:42.10254, lon:9.50975, img:wm('Aléria fort Matra et église.jpg'), cap:'Ancienne cité grecque puis romaine, musée dans le fort génois de Matra', d:{"desc":"Site archéologique de la ville antique d'Aléria (comptoir grec puis cité romaine) et musée archéologique Jérôme-Carcopino installé dans le Fort de Matra.","facts":{"duree":"1 h 30","acces":"~50 min au nord du Cavu par la N198"},"tips":["Horaires d'octobre et dernière entrée à vérifier avant d'y aller","Le musée est un bon abri en cas d'averse"]}},
   pic4: {name:'Coin pique-nique — sud de la baie de Santa Giulia', lat:41.521573, lon:9.267235, img:'photos/j4-pique-nique.jpg', cap:'Notre pause pique-nique dans le maquis (votre photo)', d:{"desc":"Position GPS du pique-nique : N 41.521573°, E 9.267235°, au sud de la baie de Santa Giulia."}},
   escar:{name:"Escalier du Roi d'Aragon", lat:41.38624, lon:9.15618, img:wm("Bonifacio Escalier du roi d'Aragon 1.jpg"), cap:'187 marches taillées dans la falaise jusqu\'à la mer', d:{"desc":"Escalier d'environ 187 marches taillé dans la falaise calcaire, de la haute-ville jusqu'au niveau de la mer.","tips":["Payant, fermé si vent fort","Chaussures fermées, prévoir ~45 min aller-retour"]}},
+  gouv: {name:'Le Gouvernail de la Corse', lat:41.38511, lon:9.14908, img:'', cap:'Galerie creusée dans la falaise, au bout de la haute-ville', d:{"desc":"Site de la falaise de Bonifacio, au bout de l'allée Saint-Boniface, avec passage creusé dans la roche face à la mer."}},
   cim:  {name:'Cimetière marin', lat:41.38672, lon:9.15038, img:wm('Cimetière marin (Bonifacio).jpg'), cap:'Chapelles funéraires face à la mer', d:{"desc":"Chapelles et caveaux à l'extrémité ouest du plateau, face à la mer.","facts":{"duree":"30 min","acces":"À pied depuis la haute-ville","marche":"Env. 10 min depuis la haute-ville","cout":"Gratuit (horaires à vérifier)"},"dontMiss":["La vue sur les falaises et la Sardaigne","Les chapelles funéraires face à la mer"],"tips":["Cimetière en activité : rester respectueux","Se rend à pied depuis la haute-ville (env. 10 min)"]}},
 };
 
@@ -973,16 +974,16 @@ const DAYS = [
 
  {id:'j5', walk:'~4,5 km · 2 h 30', d:'Vendredi 9 octobre', title:'Santa Giulia • Bastion • Cimetière marin • Escalier du Roi d\'Aragon', meteo:['🌦️','21°C / 13°C','Averses possibles'],
   alert:'⛵ Sortie en mer aux Lavezzi annulée (mer formée et vent). Programme à terre à Bonifacio, on ajuste au fil de la journée.',
-  stops:['sg','etend','cim','escar'],
+  stops:['sg','etend','cim','gouv','escar'],
   steps:[
    {t:'07:30', txt:'Lever'},
    {t:'08:00', end:'08:40', txt:'Baignade matinale à Santa Giulia', p:'sg', dur:'40 min'},
    {drive:'🚗 Santa-Giulia → Bonifacio : ~40 min + stationnement'},
    {t:'11:00', txt:'⛵ Sortie en mer aux Lavezzi annulée (météo)', noSwim:true},
    {t:'11:30', end:'12:30', txt:"Visite du bastion de l'Étendard", p:'etend', dur:'1 h'},
-   {t:'12:30', end:'13:30', txt:'Pique-nique face au cimetière marin, vue sur la Sardaigne', p:'cim', noSwim:true, dur:'1 h', more:["Au bout du plateau du Bosco, face à la mer et aux côtes de la Sardaigne à ~12 km."]},
-   {t:'13:30', end:'14:30', txt:'Cimetière marin de Bonifacio', p:'cim', dur:'1 h', more:["Chapelles funéraires face à la mer, au bout du plateau du Bosco."]},
-   {t:'14:45', end:'15:30', txt:"Escalier du Roi d'Aragon", p:'escar', dur:'45 min', cond:'Fermé si vent fort', more:["~187 marches taillées dans la falaise jusqu'à la mer, payant."]},
+   {t:'12:30', end:'13:30', txt:'Pique-nique face au cimetière marin, vue sur la Sardaigne, et visite du cimetière', p:'cim', noSwim:true, dur:'1 h', more:["Au bout du plateau du Bosco, face à la mer et aux côtes de la Sardaigne à ~12 km."]},
+   {t:'13:30', end:'14:15', txt:'Visite du Gouvernail de la Corse', p:'gouv', dur:'45 min', more:["✅ Fait vers 13 h 30, juste avant l'escalier."]},
+   {t:'14:15', end:'15:00', txt:"Escalier du Roi d'Aragon", p:'escar', dur:'45 min', img:'photos/j5-escalier.jpg', imgLabel:'📸 Sur le sentier au pied de la falaise', more:["✅ Fait : ~187 marches taillées dans la falaise jusqu'à la mer.", "Casque obligatoire, fourni à l'entrée. La descente donne le vertige !"]},
    {t:'15:45', txt:'Suite à ajuster au fil de la journée'},
   ],
   rain:[{p:"smm",t:"Église Sainte-Marie-Majeure et ruelles couvertes"},{p:"cana",t:"Dégustation au Clos Canarelli (Figari, sur le retour)"}],
@@ -1044,7 +1045,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v71'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v72'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
