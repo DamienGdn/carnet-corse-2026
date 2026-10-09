@@ -992,8 +992,9 @@ const DAYS = [
 
  {id:'j6', walk:'~1 km · 30 min', d:'Samedi 10 octobre', title:'Sortie en mer vers les îles Lavezzi depuis Bonifacio', meteo:['🌤️','22°C / 15°C','Mer et vent à revérifier la veille'],
   alert:'⛵ Sortie en mer aux Lavezzi reportée à samedi. Heure de départ à confirmer ; mer et vent à revérifier la veille.',
-  stops:['lav'],
+  stops:['sg','lav'],
   steps:[
+   {t:'08:00', end:'08:40', txt:'Baignade matinale à Santa Giulia', p:'sg', dur:'40 min'},
    {t:'09:00', txt:'Départ du gîte'},
    {drive:'🚗 Santa-Giulia → Bonifacio : ~40 min + stationnement'},
    {t:'11:30', txt:'⛵ Sortie en mer vers les îles Lavezzi', p:'lav', dur:'2 h', cond:'Heure de départ à confirmer', more:["Réserve naturelle des Bouches de Bonifacio, granit sculpté et eaux cristallines."]},
@@ -1040,7 +1041,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v76'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v77'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
