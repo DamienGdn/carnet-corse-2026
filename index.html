@@ -943,7 +943,7 @@ const DAYS = [
    {t:'10:15', txt:'Départ de Porto-Vecchio'},
    {drive:'🚗 Porto-Vecchio → Col de Bavella via Zonza : ~1 h 15 (50 km)'},
    {t:'11:30', txt:'Arrivée Col de Bavella (parking)', p:'bav', more:["Col à 1 218 m, statue de Notre-Dame-des-Neiges, vue directe sur les aiguilles de granit rouge.", "Parking payant au col, souvent plein en milieu de journée : se garer le long de la route si besoin. Cochons et vaches en liberté : ne pas les nourrir.", "Il fait 6 à 8 °C de moins qu'à Porto-Vecchio : prendre une polaire."]},
-   {t:'12:15', end:'15:00', txt:'Montée jusqu\'au Trou de la Bombe (aller-retour)', p:'trou', dur:'2 h 46', img:'photos/j3-rando-bombe.jpg', imgLabel:'🗺️ Carte de la rando', more:["✅ Fait : 5,33 km en 2 h 46, aller et retour par deux sentiers différents (via la Bocca Furesta et la Bocca di Velaco).", "🥪 Pique-nique en chemin, sur le parcours de la rando.", "Fin de montée rocheuse sous la crête, au pied de l'arche."]},
+   {t:'12:15', end:'15:00', txt:'Montée jusqu\'au Trou de la Bombe (aller-retour)', p:'trou', dur:'2 h 46', img:'photos/j3-rando-bombe.jpg', imgLabel:'🗺️ Carte de la rando', more:["✅ Fait : 5,33 km en 2 h 46, aller et retour par deux sentiers différents (via la Bocca Furesta et la Bocca di Velaco). Trace GPS : départ 12:35 du col, au Trou vers 13:30, pique-nique ~14:05–14:30, retour 15:21 ; D+ 291 m, point haut 1 314 m (fichier GPX : traces/j3-trou-de-la-bombe.gpx).", "🥪 Pique-nique en chemin, sur le parcours de la rando.", "Fin de montée rocheuse sous la crête, au pied de l'arche."]},
    {t:'15:00', txt:'Retour au col de Bavella'},
    {drive:'🚗 Bavella → route de la côte (Solenzara)'},
    {t:'17:00', txt:'Arrêt au bord de la Solenzara', p:'sol', img:'photos/j3-riviere.jpg', imgLabel:'📸 Photo de l\'arrêt', more:["Vasques de granit et eau limpide, pins et rochers autour, sur la route de Bavella vers la côte."]},
@@ -1039,7 +1039,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v64'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v65'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -1330,6 +1330,8 @@ DAYS.forEach((day, i) => {
 /* ---------- Cartes (création paresseuse quand visibles) ---------- */
 const maps = {};
 // items : [{p: lieu, label: 1 ou 'A', info: texte popup}] ; line : relier les points dans l'ordre
+const TRACES = {j3: [[41.79326,9.22515],[41.79261,9.22535],[41.79208,9.22579],[41.79151,9.22589],[41.79122,9.22614],[41.79053,9.22616],[41.78986,9.22611],[41.78923,9.22575],[41.78861,9.22542],[41.78791,9.22542],[41.78724,9.22517],[41.78670,9.22458],[41.78605,9.22432],[41.78541,9.22468],[41.78516,9.22550],[41.78494,9.22638],[41.78467,9.22725],[41.78426,9.22801],[41.78360,9.22774],[41.78294,9.22788],[41.78235,9.22833],[41.78174,9.22874],[41.78107,9.22894],[41.78040,9.22914],[41.77981,9.22960],[41.77934,9.22997],[41.77885,9.23060],[41.77834,9.23122],[41.77809,9.23184],[41.77844,9.23262],[41.77903,9.23312],[41.77945,9.23386],[41.77954,9.23471],[41.77929,9.23547],[41.77930,9.23508],[41.77968,9.23435],[41.77926,9.23363],[41.77882,9.23295],[41.77825,9.23245],[41.77801,9.23157],[41.77847,9.23107],[41.77894,9.23042],[41.77935,9.22973],[41.77999,9.22942],[41.78058,9.22904],[41.78125,9.22888],[41.78190,9.22859],[41.78251,9.22815],[41.78314,9.22779],[41.78380,9.22781],[41.78441,9.22826],[41.78511,9.22840],[41.78580,9.22844],[41.78648,9.22830],[41.78713,9.22800],[41.78766,9.22815],[41.78824,9.22865],[41.78889,9.22881],[41.78959,9.22880],[41.79025,9.22892],[41.79088,9.22929],[41.79154,9.22898],[41.79220,9.22868],[41.79273,9.22810],[41.79320,9.22802],[41.79378,9.22790],[41.79445,9.22765],[41.79499,9.22706],[41.79547,9.22641],[41.79566,9.22556],[41.79574,9.22498]]};
+const TRACE_INFO = {j3: 'Trace GPS : Trou de la Bombe — 5,33 km, D+ 291 m, 12:35 → 15:21 (Visorando)'};
 function buildMap(key, items, line){
   // Sur écran tactile, la carte intégrée ne capte pas le glisser à un doigt (sinon la page se bloque) :
   // déplacement activé seulement en plein écran.
@@ -1493,7 +1495,9 @@ const CUISINE = [
 const mapObs = new IntersectionObserver(entries => entries.forEach(e => {
   if (!e.isIntersecting) return;
   const day = DAYS.find(d => 'map-' + d.id === e.target.id);
-  if (!maps[day.id]) buildMap(day.id, dayItems(day), true);
+  if (!maps[day.id]) { buildMap(day.id, dayItems(day), true);
+    // Trace GPS réelle de la rando (fichier GPX Visorando)
+    if (TRACES[day.id]) L.polyline(TRACES[day.id], {color:'#41612f', weight:4, opacity:.9}).addTo(maps[day.id].map).bindPopup(TRACE_INFO[day.id]); }
   mapObs.unobserve(e.target);
 }), {rootMargin:'300px'});
 DAYS.forEach(d => mapObs.observe(document.getElementById('map-' + d.id)));
