@@ -974,7 +974,7 @@ const DAYS = [
 
  {id:'j5', walk:'~4,5 km · 2 h 30', d:'Vendredi 9 octobre', title:'Santa Giulia • Bastion • Cimetière marin • Escalier du Roi d\'Aragon', meteo:['🌦️','21°C / 13°C','Averses possibles'],
   alert:'⛵ Sortie en mer aux Lavezzi annulée (mer formée et vent). Programme à terre à Bonifacio, on ajuste au fil de la journée.',
-  stops:['sg','etend','cim','gouv','escar'],
+  stops:['sg','etend','cim','gouv','escar','cavu','pvport'],
   steps:[
    {t:'07:30', txt:'Lever'},
    {t:'08:00', end:'08:40', txt:'Baignade matinale à Santa Giulia', p:'sg', dur:'40 min'},
@@ -984,7 +984,8 @@ const DAYS = [
    {t:'12:30', end:'13:30', txt:'Pique-nique face au cimetière marin, vue sur la Sardaigne, et visite du cimetière', p:'cim', noSwim:true, dur:'1 h', more:["Au bout du plateau du Bosco, face à la mer et aux côtes de la Sardaigne à ~12 km."]},
    {t:'13:30', end:'14:15', txt:'Visite du Gouvernail de la Corse', p:'gouv', dur:'45 min', more:["✅ Fait vers 13 h 30, juste avant l'escalier."]},
    {t:'14:15', end:'15:00', txt:"Escalier du Roi d'Aragon", p:'escar', dur:'45 min', img:'photos/j5-escalier.jpg', imgLabel:'📸 Sur le sentier au pied de la falaise', more:["✅ Fait : ~187 marches taillées dans la falaise jusqu'à la mer.", "Casque obligatoire, fourni à l'entrée. La descente donne le vertige !"]},
-   {t:'15:45', txt:'Suite à ajuster au fil de la journée'},
+   {t:'17:00', end:'18:00', txt:'Piscines naturelles du Cavu', p:'cavu', dur:'1 h', more:["✅ Fait en fin de journée. Heure à confirmer."]},
+   {t:'18:15', end:'19:00', txt:'Port de plaisance de Porto-Vecchio', p:'pvport', dur:'45 min', more:["✅ Fait en fin de journée. Heure à confirmer."]},
   ],
   rain:[{p:"smm",t:"Église Sainte-Marie-Majeure et ruelles couvertes"},{p:"cana",t:"Dégustation au Clos Canarelli (Figari, sur le retour)"}],
   restos:['La Minute Moule Bonifacio','La Bohème Bonifacio','Del Ferro Bonifacio']},
@@ -1045,7 +1046,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v72'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v73'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
