@@ -990,22 +990,16 @@ const DAYS = [
   rain:[{p:"smm",t:"Église Sainte-Marie-Majeure et ruelles couvertes"},{p:"cana",t:"Dégustation au Clos Canarelli (Figari, sur le retour)"}],
   restos:['La Minute Moule Bonifacio','La Bohème Bonifacio','Del Ferro Bonifacio']},
 
- {id:'j6', walk:'~3 km · 1 h 30', d:'Samedi 10 octobre', title:'Port de Porto-Vecchio • Saint-Cyprien • Cavu • Aléria', meteo:['🌤️','22°C / 15°C','Sec, averse possible à Aléria en fin de journée'],
-  alert:'Journée déplacée au samedi (échange avec la sortie Lavezzi). Météo à revérifier la veille.',
-  stops:['pvport','cyp','cavu','aleria'],
+ {id:'j6', walk:'~3 km · 1 h 30', d:'Samedi 10 octobre', title:'Sortie en mer vers les îles Lavezzi depuis Bonifacio', meteo:['🌤️','22°C / 15°C','Mer et vent à revérifier la veille'],
+  alert:'⛵ Sortie en mer aux Lavezzi reportée à samedi. Heure de départ à confirmer ; mer et vent à revérifier la veille.',
+  stops:['lav'],
   steps:[
    {t:'09:00', txt:'Départ du gîte'},
-   {drive:'🚗 Santa-Giulia → port de Porto-Vecchio : ~20 min'},
-   {t:'09:30', end:'10:30', txt:'Port et marina de Porto-Vecchio', p:'pvport', dur:'1 h', more:["Balade le long des quais et des voiliers, café face au port."]},
-   {drive:'🚗 Porto-Vecchio → Saint-Cyprien : ~20 min'},
-   {t:'11:00', end:'13:00', txt:'Plage de Saint-Cyprien', p:'cyp', dur:'2 h', cond:'Baignade si la mer est calme', more:["Grand arc de sable au nord de Porto-Vecchio."]},
-   {drive:'🚗 Saint-Cyprien → piscines du Cavu : ~20 min'},
-   {t:'13:30', end:'15:00', txt:'Piscines naturelles du Cavu + pique-nique', p:'cavu', dur:'1 h 30', cond:'Baignade fraîche', more:["Pique-nique sur les dalles de granit au bord des vasques.", "Accès en quelques minutes à pied depuis la route."]},
-   {drive:'🚗 Cavu → Aléria par la N198 : ~50 min (55 km)'},
-   {t:'16:00', end:'17:30', txt:'Aléria : site antique et musée du Fort de Matra', p:'aleria', dur:'1 h 30', cond:'Horaires d\'octobre à vérifier', more:["Ruines de la cité grecque puis romaine, et musée archéologique dans le fort génois.", "Averse possible vers 17 h : finir par le musée."]},
-   {t:'17:45', txt:'Retour au gîte (~1 h 15)'},
+   {drive:'🚗 Santa-Giulia → Bonifacio : ~40 min + stationnement'},
+   {t:'11:30', txt:'⛵ Sortie en mer vers les îles Lavezzi', p:'lav', dur:'2 h', cond:'Heure de départ à confirmer', more:["Réserve naturelle des Bouches de Bonifacio, granit sculpté et eaux cristallines."]},
+   {drive:'🚗 Bonifacio → Santa-Giulia : ~40 min'},
   ],
-  rain:[{p:"aleria",t:"Si averse : musée du Fort de Matra en premier"},{p:"palo",t:"Option : Palombaggia à la place de Saint-Cyprien"}],
+  rain:[{p:"smm",t:"Si mer trop formée : Église Sainte-Marie-Majeure et ruelles couvertes"}],
   restos:[]},
 
  {id:'j7', walk:'~3 km · 1 h 30', d:'Dimanche 11 octobre', title:'Dernière baignade • Palombaggia • Sartène • Envol Figari', meteo:['🌦️','19°C / 11°C','Averses possibles'],
@@ -1046,7 +1040,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v73'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v74'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
