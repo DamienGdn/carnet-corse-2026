@@ -980,7 +980,7 @@ const DAYS = [
    {drive:'🚗 Santa-Giulia → Bonifacio : ~40 min + stationnement'},
    {t:'11:00', txt:'⛵ Sortie en mer aux Lavezzi annulée (météo)', noSwim:true},
    {t:'11:30', end:'12:30', txt:"Visite du bastion de l'Étendard", p:'etend', dur:'1 h'},
-   {t:'12:30', end:'13:30', txt:'Pique-nique du midi dans la haute-ville', dur:'1 h'},
+   {t:'12:30', end:'13:30', txt:'Pique-nique face au cimetière marin, vue sur la Sardaigne', p:'cim', noSwim:true, dur:'1 h', more:["Au bout du plateau du Bosco, face à la mer et aux côtes de la Sardaigne à ~12 km."]},
    {t:'13:30', end:'14:30', txt:'Cimetière marin de Bonifacio', p:'cim', dur:'1 h', more:["Chapelles funéraires face à la mer, au bout du plateau du Bosco."]},
    {t:'14:45', end:'15:30', txt:"Escalier du Roi d'Aragon", p:'escar', dur:'45 min', cond:'Fermé si vent fort', more:["~187 marches taillées dans la falaise jusqu'à la mer, payant."]},
    {t:'15:45', txt:'Suite à ajuster au fil de la journée'},
@@ -1044,7 +1044,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v70'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v71'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
