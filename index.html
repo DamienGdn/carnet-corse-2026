@@ -1039,7 +1039,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v66'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v67'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -1393,6 +1393,9 @@ function renderWx(data, stamp){
     return `<button class="wx-day" data-i="${x.i}" aria-pressed="false"><div class="d">J${x.i + 1} · ${wdShort(x.day)} ${x.date.slice(8)}/10</div><div class="i">${ico}</div><div class="t">${Math.round(dl.temperature_2m_max[x.k])}° / ${Math.round(dl.temperature_2m_min[x.k])}°</div><div class="r">💧 ${dl.precipitation_probability_max[x.k] ?? '–'}% · 💨 ${Math.round(dl.wind_speed_10m_max[x.k])} km/h</div></button>`; }).join('') || '<p class="note">Prévisions pas encore disponibles pour ces dates.</p>';
   days.forEach(x => { if (!x) return; const dl = x.loc.daily, [, txt] = WMO(dl.weather_code[x.k]), ico = wxIcon(dl.weather_code[x.k], txt);
     const el = document.querySelector(`#${x.day.id} .meteo`);
+    // Jours passés : météo réellement vécue (METEO_VECUE) plutôt que les prévisions
+    const V = x.day.done && typeof METEO_VECUE !== 'undefined' && METEO_VECUE[x.day.id];
+    if (el && V) { const [, vt] = WMO(V.code); el.innerHTML = `<span class="ico">${wxIcon(V.code, vt)}</span><div><b>${Math.round(V.tmax)}°C / ${Math.round(V.tmin)}°C</b><span class="m">${V.note || vt}${V.soir ? ' · ' + V.soir + ' le soir' : ''} · météo vécue</span></div>`; return; }
     if (el) el.innerHTML = `<span class="ico">${ico}</span><div><b>${Math.round(dl.temperature_2m_max[x.k])}°C / ${Math.round(dl.temperature_2m_min[x.k])}°C</b><span class="m">${txt} · pluie ${dl.precipitation_probability_max[x.k] ?? '–'}% · vent ${Math.round(dl.wind_speed_10m_max[x.k])} km/h</span></div>`; });
   const show = i => { const x = days[i]; if (!x) return;
     box.querySelectorAll('.wx-day').forEach(b => b.setAttribute('aria-pressed', b.dataset.i == i));
@@ -2237,9 +2240,9 @@ if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
 const METEO_VECUE = {
   // Corrigé d'après le vécu (Anne-Gaëlle & Damien) : J1 faibles averses, J2 grand soleil à Bonifacio, J3 soleil et nuages pendant la rando puis gros orage le soir.
   j1: {code:80, tmax:25.6, tmin:18.5, gust:23.4},
-  j2: {code:0, tmax:24.4, tmin:19.8, gust:44.6},
-  j3: {code:2, tmax:18.1, tmin:11.2, gust:83.2, soir:'orage'},
-  j4: {code:96, tmax:24.8, tmin:19.5, gust:54.4}
+  j2: {code:0, note:'Grand soleil à Bonifacio', tmax:24.4, tmin:19.8, gust:44.6},
+  j3: {code:2, tmax:18.1, tmin:11.2, gust:83.2, soir:'orage', note:'Soleil et nuages pendant la rando'},
+  j4: {code:2, tmax:24.8, tmin:19.5, gust:54.4, note:'Soleil et nuages, sec'}
 };
 /* ===== v46 : ciel, croquis, météo sur les personnages, bruitages, intro ===== */
 (() => {
