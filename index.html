@@ -972,7 +972,7 @@ const DAYS = [
   rain:[{p:"torr",t:"Si averse : dégustation au Domaine de Torraccia (~30 min)"}],
   restos:[]},
 
- {id:'j5', walk:'~4,5 km · 2 h 30', d:'Vendredi 9 octobre', title:'Santa Giulia • Bastion • Cimetière marin • Escalier du Roi d\'Aragon', meteo:['🌦️','21°C / 13°C','Averses possibles'],
+ {id:'j5', done:true, walk:'13,85 km · 20 413 pas (Apple Watch)', d:'Vendredi 9 octobre', title:'Santa Giulia • Bastion • Cimetière marin • Escalier du Roi d\'Aragon', meteo:['🌦️','21°C / 13°C','Averses possibles'],
   alert:'⛵ Sortie en mer aux Lavezzi annulée (mer formée et vent). Programme à terre à Bonifacio, on ajuste au fil de la journée.',
   stops:['sg','etend','cim','gouv','escar','cavu','pvport'],
   steps:[
@@ -1040,7 +1040,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v75'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v76'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -1872,7 +1872,7 @@ if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
   /* --- Compteurs --- */
   const num = '(\\d+(?:[.,]\\d+)?)', toN = x => parseFloat(x.replace(',', '.'));
   // Mesures réelles (compteur de la voiture, Apple Watch) : priment sur les estimations du programme
-  const MESURES = {voitureKm: 210, piqueNiques: Math.max(0, Math.min(7, tripIdx + 1)) /* pique-nique tous les midis */, marcheKm: {j1: 9.56, j2: 14.99, j3: 10.55, j4: 12.64} /* Apple Watch */};
+  const MESURES = {voitureKm: 210, piqueNiques: Math.max(0, Math.min(7, tripIdx + 1)) /* pique-nique tous les midis */, marcheKm: {j1: 9.56, j2: 14.99, j3: 10.55, j4: 12.64, j5: 13.85} /* Apple Watch */};
   const walkKm = doneDays.reduce((a, d) => {
     if (MESURES.marcheKm[d.id] != null) return a + MESURES.marcheKm[d.id];
     if (!d.walk) return a;
