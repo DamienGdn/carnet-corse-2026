@@ -40,6 +40,8 @@
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:72px}
+html{overflow-x:clip}
+.gallery{overflow-x:clip}
 body{margin:0;background:var(--canvas) var(--grain);color:var(--ink);font:500 16px/1.55 var(--font);-webkit-text-size-adjust:100%;overflow-x:clip}
 h1,h2,h3,h4{margin:0;font-family:var(--display);font-weight:600;line-height:1.2;color:var(--ink)}
 a{color:var(--sea)}
@@ -1039,7 +1041,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v67'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v68'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
