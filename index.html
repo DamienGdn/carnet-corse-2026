@@ -1003,22 +1003,25 @@ const DAYS = [
   rain:[{p:"smm",t:"Si mer trop formée : Église Sainte-Marie-Majeure et ruelles couvertes"}],
   restos:[]},
 
- {id:'j7', walk:'~3 km · 1 h 30', d:'Dimanche 11 octobre', title:'Dernière baignade • Palombaggia • Sartène • Envol Figari', meteo:['🌦️','19°C / 11°C','Averses possibles'],
-  alert:'✈️ Départ de Figari à 20:00 : être à l\'aéroport vers 18:45 (restitution voiture + enregistrement). Vérifier l\'heure de libération du logement.',
-  stops:['sg','pv','palo','sart','fig'], cover:'palo',
+ {id:'j7', walk:'~3 km · 1 h 30', d:'Dimanche 11 octobre', title:'Dernière baignade • Palombaggia • Sartène • Vol Figari → Nantes', meteo:['🌦️','19°C / 11°C','Averses possibles'],
+  alert:'✈️ Vol à 20:35 depuis Figari, atterrissage à Nantes à 22:35. Clés du gîte à rendre vers 13:00. Lavage et plein de la voiture avant la restitution (vers 18:30).',
+  stops:['sg','palo','sart','fig'], cover:'palo',
   steps:[
-   {t:'08:30', txt:'Petit-déjeuner + bagages', dur:'1 h'},
+   {t:'08:30', txt:'Petit-déjeuner au gîte + bagages', dur:'1 h'},
    {drive:'🚗 → Santa Giulia : ~15 min'},
-   {t:'09:30', end:'11:30', txt:'Santa Giulia (ou Saint-Cyprien)', p:'sg', dur:'2 h', cond:'Baignade si mer calme', more:["Dernière baignade dans le lagon. Variante : plage de Saint-Cyprien (au nord), plus calme hors saison.", "Garder une serviette sèche et des vêtements de rechange dans la voiture."]},
-   {t:'11:45', end:'12:30', txt:'Libération du gîte / bagages dans la voiture', dur:'45 min'},
-   {t:'12:30', end:'14:00', txt:'Déjeuner à Porto-Vecchio', p:'pv', dur:'1 h 30'},
-   {drive:'🚗 Porto-Vecchio → Palombaggia : ~20 min'},
-   {t:'14:15', end:'15:45', txt:'Palombaggia — dernière baignade & sieste sous les pins', p:'palo', dur:'1 h 30', cond:'Si météo favorable, sinon vieille ville', more:["Dernier après-midi sous les pins. Si temps couvert : vieille ville de Porto-Vecchio pour les derniers achats.", "Faire le plein d'essence avant l'aéroport (le loueur facture le carburant manquant)."]},
+   {t:'09:30', end:'11:30', txt:'Santa Giulia — dernière baignade', p:'sg', dur:'2 h', cond:'Baignade si mer calme', more:["Dernière baignade dans le lagon.", "Garder une serviette sèche et des vêtements de rechange dans la voiture."]},
+   {t:'11:45', end:'12:45', txt:'Déjeuner au gîte', dur:'1 h'},
+   {t:'13:00', txt:'Rendre les clés du gîte'},
+   {drive:'🚗 Santa-Giulia → Palombaggia : ~25 min'},
+   {t:'13:30', end:'15:00', txt:'Palombaggia — dernière baignade & sieste sous les pins', p:'palo', dur:'1 h 30', cond:'Si météo favorable, sinon vieille ville', more:["Dernier après-midi sous les pins. Si temps couvert : vieille ville de Porto-Vecchio pour les derniers achats."]},
    {drive:'🚗 Palombaggia → Sartène par Figari : ~1 h 10'},
-   {t:'17:00', end:'17:55', txt:'Sartène : petit tour express (place Porta)', p:'sart', dur:'55 min', cond:'Partir à 17:55 au plus tard pour l\'aéroport', more:["Tour rapide de la place Porta et des ruelles autour, se garer au plus près du centre."]},
-   {drive:'🚗 Sartène → Aéroport de Figari : ~40 min (35 km) + plein d\'essence'},
-   {t:'18:45', txt:'Aéroport : restitution voiture + enregistrement', p:'fig', dur:'1 h 15', more:["Retour de la voiture au parking du loueur, puis enregistrement. Petit aéroport : 1 h 15 avant le vol suffit."]},
-   {t:'20:00', txt:'Décollage ✈️'},
+   {t:'16:15', end:'17:15', txt:'Sartène : petit tour express (place Porta)', p:'sart', dur:'1 h', cond:'Partir à 17:15 au plus tard', more:["Tour rapide de la place Porta et des ruelles autour, se garer au plus près du centre."]},
+   {drive:'🚗 Sartène → Aéroport de Figari : ~40 min (35 km)'},
+   {t:'18:30', txt:'Lavage de la voiture', dur:'30 min'},
+   {t:'19:00', end:'19:30', txt:"Plein d'essence puis restitution de la voiture", p:'fig', dur:'30 min', more:["Le loueur facture le carburant manquant : plein avant de rendre la voiture."]},
+   {t:'19:30', end:'20:00', txt:'Enregistrement à l\'aéroport de Figari', p:'fig', dur:'30 min'},
+   {t:'20:35', txt:'Décollage Figari → Nantes ✈️'},
+   {t:'22:35', txt:'Atterrissage à Nantes 🛬 — fin des vacances'},
   ],
   rain:[{p:"pv",t:"Derniers achats en vieille ville (charcuterie, fromages, vins)"}],
   restos:['Casa Corsa Porto-Vecchio',"L'Ardoise Porto-Vecchio"]},
@@ -1041,7 +1044,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v77'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v78'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
