@@ -528,6 +528,15 @@ footer .sig{display:block;color:var(--primary);font:700 28px var(--hand);margin-
 .bs{opacity:0;transition:opacity .2s}
 .lv.smile .bs{opacity:1}
 .lv.smile .eye{animation:none;transform:scaleY(.55) translateY(-1px)}
+.cry-duo{display:block;width:124px;margin:8px 0 4px}
+.cry-duo svg{display:block;width:100%;height:auto;overflow:visible}
+.cry .mo{display:none}
+.cry .eye{animation:none;transform:scaleY(.5)}
+.cry .sad{fill:none;stroke:#12324a;stroke-width:2;stroke-linecap:round}
+.cry .tear{fill:#8fd3f4;stroke:#2f74c0;stroke-width:.6;transform-box:fill-box;transform-origin:50% 0;animation:cc-tear 1.8s ease-in infinite}
+.cry .tear.t2{animation-delay:.9s}
+@keyframes cc-tear{0%{transform:translateY(-2px);opacity:0}15%{opacity:1}100%{transform:translateY(12px);opacity:0}}
+@media (prefers-reduced-motion:reduce){.cry .tear{animation:none;opacity:1}}
 .dn-logo svg{display:block;width:64px;height:auto;overflow:visible}
 .brand,.dn-logo{-webkit-tap-highlight-color:transparent}
 .cc-fx{position:fixed;z-index:2000;pointer-events:none;font:700 18px/1 var(--display);will-change:transform,opacity}
@@ -1021,7 +1030,7 @@ const DAYS = [
    {t:'19:00', end:'19:30', txt:"Plein d'essence puis restitution de la voiture", p:'fig', dur:'30 min', more:["Le loueur facture le carburant manquant : plein avant de rendre la voiture."]},
    {t:'19:30', end:'20:00', txt:'Enregistrement à l\'aéroport de Figari', p:'fig', dur:'30 min'},
    {t:'20:35', txt:'Décollage Figari → Nantes ✈️'},
-   {t:'22:35', txt:'Atterrissage à Nantes 🛬 — fin des vacances'},
+   {t:'22:35', txt:'Atterrissage à Nantes 🛬 — fin des vacances', cry:true},
   ],
   rain:[{p:"pv",t:"Derniers achats en vieille ville (charcuterie, fromages, vins)"}],
   restos:['Casa Corsa Porto-Vecchio',"L'Ardoise Porto-Vecchio"]},
@@ -1044,7 +1053,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v78'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v79'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -1214,6 +1223,7 @@ DAYS.forEach((day, i) => {
       <span>${idx ? `<span class="badge">${idx}</span>` : ''}${esc(s.txt)}
       ${s.dur ? `<br><span class="tag">⏱ ${s.dur}</span>` : ''}${s.cond ? `<span class="tag cond">⚠ ${esc(s.cond)}</span>` : ''}
       ${isPlane(s.txt) ? animEl('sky ' + (/Décollage/.test(s.txt) ? 'up' : 'down'), '<span class="plane">' + PLANE_SVG + '</span>') : ''}${isPicnic(s.txt) ? picEl() : isHike(s.txt) ? animEl('wkrow', '<span class="wk">' + WALKER_SVG + '</span>') : (isSwim(s) ? swimEl(s) : '')}
+      ${s.cry ? '<span class="cry-duo" data-cry></span>' : ''}
       ${s.more ? `<ul class="more">${s.more.map(m => `<li>${esc(m)}</li>`).join('')}</ul>` : ''}
       ${s.img ? `<details class="more-d"><summary>${s.imgLabel || '📷 Photo'}</summary><a href="${s.img}" target="_blank" rel="noopener"><img class="track" src="${s.img}" alt="${esc(s.imgLabel || s.txt)}" loading="lazy"></a></details>` : ''}
       ${s.p ? phHtml(s.p) : ''}</span></li>`;
@@ -1739,7 +1749,22 @@ if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
   const dnImg = document.querySelector('.dn-logo img');
   const dnSvg = brandSvg.cloneNode(true); dnSvg.setAttribute('aria-hidden', 'true');
   if (dnImg) dnImg.replaceWith(dnSvg);
+  const crySrc = brandSvg.cloneNode(true);
+  crySrc.querySelectorAll(':scope > g > g[transform]').forEach((g, k) => {
+    g.querySelectorAll('path').forEach(p => { if ((p.getAttribute('d') || '').startsWith('M29 5')) p.classList.add('mo'); });
+    const sad = document.createElementNS(NS, 'path'); sad.setAttribute('class', 'sad');
+    sad.setAttribute('d', k ? 'M29 61Q34 55 39 61' : 'M29 57Q34 52 39 57'); g.appendChild(sad);
+    [26, 42].forEach((x, n) => {
+      const t = document.createElementNS(NS, 'path'); t.setAttribute('class', 'tear' + (n ? ' t2' : ''));
+      t.setAttribute('d', `M${x} 48.5C${x - 1} 50 ${x - 1} 51.2 ${x} 51.6C${x + 1} 51.2 ${x + 1} 50 ${x} 48.5Z`); g.appendChild(t);
+    });
+  });
   live(brandSvg); live(dnSvg);
+  document.querySelectorAll('[data-cry]').forEach(el => {
+    const c = crySrc.cloneNode(true); c.classList.add('cry');
+    c.setAttribute('role', 'img'); c.setAttribute('aria-label', 'Anne-Gaëlle et Damien en larmes, fin des vacances');
+    el.appendChild(c); live(c);
+  });
   let turn = 0;
   setInterval(() => {
     if (document.hidden || still()) return;

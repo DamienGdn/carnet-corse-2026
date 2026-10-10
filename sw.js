@@ -1,4 +1,4 @@
-const CACHE = 'carnet-corse-v78'; // même nom que dans index.html
+const CACHE = 'carnet-corse-v79'; // même nom que dans index.html
 const CORE = ['./', './index.html', './manifest.json', './icon.svg',
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'];
