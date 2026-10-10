@@ -1012,18 +1012,17 @@ const DAYS = [
   rain:[{p:"smm",t:"Si mer trop formée : Église Sainte-Marie-Majeure et ruelles couvertes"}],
   restos:[]},
 
- {id:'j7', walk:'~3 km · 1 h 30', d:'Dimanche 11 octobre', title:'Dernière baignade • Palombaggia • Sartène • Vol Figari → Nantes', meteo:['🌦️','19°C / 11°C','Averses possibles'],
+ {id:'j7', walk:'~3 km · 1 h 30', d:'Dimanche 11 octobre', title:'Dernière baignade • Sartène • Vol Figari → Nantes', meteo:['🌦️','19°C / 11°C','Averses possibles'],
   alert:'✈️ Vol à 20:35 depuis Figari, atterrissage à Nantes à 22:35. Clés du gîte à rendre vers 13:00. Lavage et plein de la voiture avant la restitution (vers 18:30).',
-  stops:['sg','palo','sart','fig'], cover:'palo',
+  stops:['sg','sart','fig'], cover:'sg',
   steps:[
    {t:'08:30', txt:'Petit-déjeuner au gîte + bagages', dur:'1 h'},
    {drive:'🚗 → Santa Giulia : ~15 min'},
    {t:'09:30', end:'11:30', txt:'Santa Giulia — dernière baignade', p:'sg', dur:'2 h', cond:'Baignade si mer calme', more:["Dernière baignade dans le lagon.", "Garder une serviette sèche et des vêtements de rechange dans la voiture."]},
    {t:'11:45', end:'12:45', txt:'Déjeuner au gîte', dur:'1 h'},
    {t:'13:00', txt:'Rendre les clés du gîte'},
-   {drive:'🚗 Santa-Giulia → Palombaggia : ~25 min'},
-   {t:'13:30', end:'15:00', txt:'Palombaggia — dernière baignade & sieste sous les pins', p:'palo', dur:'1 h 30', cond:'Si météo favorable, sinon vieille ville', more:["Dernier après-midi sous les pins. Si temps couvert : vieille ville de Porto-Vecchio pour les derniers achats."]},
-   {drive:'🚗 Palombaggia → Sartène par Figari : ~1 h 10'},
+   {t:'13:15', end:'14:45', txt:'Temps libre', dur:'1 h 30', more:["Derniers achats à Porto-Vecchio si envie, ou dernière balade à Santa Giulia."]},
+   {drive:'🚗 Santa-Giulia → Sartène par Figari : ~1 h 10'},
    {t:'16:15', end:'17:15', txt:'Sartène : petit tour express (place Porta)', p:'sart', dur:'1 h', cond:'Partir à 17:15 au plus tard', more:["Tour rapide de la place Porta et des ruelles autour, se garer au plus près du centre."]},
    {drive:'🚗 Sartène → Aéroport de Figari : ~40 min (35 km)'},
    {t:'18:30', txt:'Lavage de la voiture', dur:'30 min'},
@@ -1053,7 +1052,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v79'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v80'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
