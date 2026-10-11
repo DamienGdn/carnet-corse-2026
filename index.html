@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
+<script>document.documentElement.classList.add('js')</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Le voyage en Corse d’Anne-Gaëlle et Damien</title>
 <meta name="theme-color" content="#14566f">
@@ -479,6 +480,7 @@ footer .sig{display:block;color:var(--primary);font:700 28px var(--hand);margin-
 }
 /* 2. carnet qui s'ouvre + photos qui se posent */
 @media (prefers-reduced-motion:no-preference){
+  .js section.day[id^="j"]:not(.in),.js .polaroid:not(.in),.js .stop figure:not(.in),.js .gallery:not(.in){opacity:0}
   section.pg:not(.in){opacity:0}
   section.pg.in{animation:cc-page .85s cubic-bezier(.2,.8,.25,1) backwards;transform-origin:0 30%}
   @keyframes cc-page{0%{opacity:0;transform:perspective(900px) rotateY(-16deg) translateX(-10px)}60%{opacity:1}100%{opacity:1;transform:perspective(900px) rotateY(0)}}
@@ -1059,7 +1061,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v87'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v88'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -1908,7 +1910,7 @@ if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
   /* --- Compteurs --- */
   const num = '(\\d+(?:[.,]\\d+)?)', toN = x => parseFloat(x.replace(',', '.'));
   // Mesures réelles (compteur de la voiture, Apple Watch) : priment sur les estimations du programme
-  const MESURES = {voitureKm: 210, piqueNiques: Math.max(0, Math.min(7, tripIdx + 1)) /* pique-nique tous les midis */, marcheKm: {j1: 9.56, j2: 14.99, j3: 10.55, j4: 12.64, j5: 13.85, j6: 13.23} /* Apple Watch */};
+  const MESURES = {voitureKm: 450, piqueNiques: Math.max(0, Math.min(7, tripIdx + 1)) /* pique-nique tous les midis */, marcheKm: {j1: 9.56, j2: 14.99, j3: 10.55, j4: 12.64, j5: 13.85, j6: 13.23} /* Apple Watch */};
   const walkKm = doneDays.reduce((a, d) => {
     if (MESURES.marcheKm[d.id] != null) return a + MESURES.marcheKm[d.id];
     if (!d.walk) return a;
