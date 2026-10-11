@@ -815,7 +815,7 @@ html.intro-on #intro.skip{animation:cc-in-skip .2s ease-out forwards}
   </details>
   <details class="fold" id="trajet">
     <summary><span class="sub-t">🗺️ Notre trajet</span><span class="cnt" id="trCnt"></span></summary>
-    <p class="note">Les lieux déjà visités, dans l'ordre, avec une couleur par jour. Touche un jour pour ne voir que lui, ou « Tout ».</p>
+    <p class="note">Les lieux visités (et ceux prévus aujourd'hui), dans l'ordre, avec une couleur par jour. Touche un jour pour ne voir que lui, ou « Tout ».</p>
     <div class="tr-map" id="trMap" role="region" aria-label="Carte du trajet réel"></div>
     <div class="tr-leg" id="trLeg" aria-label="Légende des jours"></div>
     <p class="note" id="trList"></p>
@@ -1066,7 +1066,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v100'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v101'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -2010,8 +2010,10 @@ if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
   }, {passive:true});
 
   /* --- Trajet réel --- */
+  const trSteps = visited.slice();
+  DAYS.forEach((day, i) => { if (i === tripIdx && !day.done) day.steps.forEach(s => { if (!trSteps.some(v => v.s === s)) trSteps.push({i, day, s}); }); });
   const seq = [];
-  visited.forEach(({i, s}) => { if (s.p && P[s.p] && (!seq.length || seq[seq.length - 1].k !== s.p)) seq.push({k:s.p, i}); });
+  trSteps.forEach(({i, s}) => { if (s.p && P[s.p] && (!seq.length || seq[seq.length - 1].k !== s.p)) seq.push({k:s.p, i}); });
   const uniq = new Map();
   seq.forEach(({k, i}) => { if (!uniq.has(k)) uniq.set(k, {k, days:new Set()}); uniq.get(k).days.add(i + 1); });
   $('trCnt').textContent = uniq.size ? uniq.size + ' lieu' + (uniq.size > 1 ? 'x' : '') : 'à venir';
@@ -2027,11 +2029,12 @@ if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
     const layer = L.layerGroup().addTo(map);
     let animated = false;
     const seqOf = day => { const out = [];
-      visited.forEach(({i, s}) => { if ((day == null || i === day) && s.p && P[s.p] && (!out.length || out[out.length - 1].k !== s.p)) out.push({k:s.p, i}); });
+      trSteps.forEach(({i, s}) => { if ((day == null || i === day) && s.p && P[s.p] && (!out.length || out[out.length - 1].k !== s.p)) out.push({k:s.p, i}); });
       return out; };
     function draw(day){
       layer.clearLayers();
       const sq = seqOf(day), ll = sq.map(x => [P[x.k].lat, P[x.k].lon]);
+      $('trList').textContent = (day == null ? 'Étapes : ' : 'Jour ' + (day + 1) + ' : ') + sq.map(x => shortName(P[x.k].name)).join(' → ');
       const un = new Map();
       sq.forEach(({k, i}) => { if (!un.has(k)) un.set(k, {k, days:new Set()}); un.get(k).days.add(i + 1); });
       map.fitBounds(L.latLngBounds(ll), {padding:[44, 44], maxZoom:day == null ? 12 : 14, animate:false});
