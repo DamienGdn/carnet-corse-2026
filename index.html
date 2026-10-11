@@ -1008,6 +1008,7 @@ const DAYS = [
    {drive:'🚗 Santa-Giulia → Bonifacio : ~40 min + stationnement'},
    {t:'10:30', txt:'⛵ Sortie en mer vers les îles Lavezzi', p:'lav', cond:'Heure de départ approximative', more:["Réserve naturelle des Bouches de Bonifacio, granit sculpté et eaux cristallines."]},
    {t:'11:14', end:'12:35', txt:"Marche sur l'île Lavezzi", p:'lav', dur:'1 h 21', more:["✅ 3,02 km, D+ 39 m (Apple Watch)."]},
+   {t:'12:35', end:'13:00', txt:'Snorkeling à la plage de Cala di Chiesa', p:'lav', dur:'25 min'},
    {t:'13:00', end:'14:00', txt:'Pique-nique aux Lavezzi', p:'lav', dur:'1 h'},
    {t:'14:09', end:'15:24', txt:"Marche sur l'île Lavezzi", p:'lav', dur:'1 h 15', more:["✅ 3,34 km, D+ 61 m (Apple Watch)."]},
    {t:'15:24', end:'16:00', txt:"Pause sur l'île Lavezzi", p:'lav', dur:'36 min'},
@@ -1058,7 +1059,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v86'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v87'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
