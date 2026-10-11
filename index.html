@@ -1010,6 +1010,7 @@ const DAYS = [
    {t:'11:14', end:'12:35', txt:"Marche sur l'île Lavezzi", p:'lav', dur:'1 h 21', more:["✅ 3,02 km, D+ 39 m (Apple Watch)."]},
    {t:'13:00', end:'14:00', txt:'Pique-nique aux Lavezzi', p:'lav', dur:'1 h'},
    {t:'14:09', end:'15:24', txt:"Marche sur l'île Lavezzi", p:'lav', dur:'1 h 15', more:["✅ 3,34 km, D+ 61 m (Apple Watch)."]},
+   {t:'15:24', end:'16:30', txt:"Pause sur l'île Lavezzi", p:'lav', dur:'1 h 06'},
    {t:'16:30', end:'17:15', txt:"⛵ Retour en bateau vers le port de Bonifacio", dur:'45 min', cond:'Grosses vagues et creux', more:["Départ de l'île à 16 h 30, traversée agitée au retour. Arrivée au port à 17 h 15."]},
    {drive:'🚗 Bonifacio → Santa-Giulia : ~40 min'},
   ],
@@ -1056,7 +1057,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v84'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v85'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
