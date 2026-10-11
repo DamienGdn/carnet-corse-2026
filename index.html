@@ -957,8 +957,7 @@ const DAYS = [
   alert:'✅ Trou de la Bombe fait (5,33 km en 2 h 46). Orage violent en fin de journée : plage annulée, pause bière sur la route, retour au gîte à 19:50.',
   stops:['bav','trou','sol','cant'], cover:'bav',
   steps:[
-   {t:'09:15', end:'09:50', txt:'Baignade matinale à Santa Giulia avant la rando', p:'sg', dur:'35 min', more:["✅ Fait."]},
-   {t:'10:15', txt:'Départ de Porto-Vecchio'},
+   {t:'10:30', txt:'Départ du gîte (lever tardif, pas de baignade ce matin)'},
    {drive:'🚗 Porto-Vecchio → Col de Bavella via Zonza : ~1 h 15 (50 km)'},
    {t:'11:30', txt:'Arrivée Col de Bavella (parking)', p:'bav', more:["Col à 1 218 m, statue de Notre-Dame-des-Neiges, vue directe sur les aiguilles de granit rouge.", "Parking payant au col, souvent plein en milieu de journée : se garer le long de la route si besoin. Cochons et vaches en liberté : ne pas les nourrir.", "Il fait 6 à 8 °C de moins qu'à Porto-Vecchio : prendre une polaire."]},
    {t:'12:15', end:'15:00', txt:'Montée jusqu\'au Trou de la Bombe (aller-retour)', p:'trou', dur:'2 h 46', img:'photos/j3-rando-bombe.jpg', imgLabel:'🗺️ Carte de la rando', more:["✅ Fait : 5,33 km en 2 h 46, aller et retour par deux sentiers différents (via la Bocca Furesta et la Bocca di Velaco). Trace GPS : départ 12:35 du col, au Trou vers 13:30, pique-nique ~14:05–14:30, retour 15:21 ; D+ 291 m, point haut 1 314 m (fichier GPX : traces/j3-trou-de-la-bombe.gpx).", "🥪 Pique-nique en chemin, sur le parcours de la rando.", "Fin de montée rocheuse sous la crête, au pied de l'arche."]},
@@ -1063,7 +1062,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v107'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v108'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
