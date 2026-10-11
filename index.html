@@ -480,7 +480,7 @@ footer .sig{display:block;color:var(--primary);font:700 28px var(--hand);margin-
 }
 /* 2. carnet qui s'ouvre + photos qui se posent */
 @media (prefers-reduced-motion:no-preference){
-  .js section.day[id^="j"]:not(.in),.js .polaroid:not(.in),.js .stop figure:not(.in),.js .gallery:not(.in){opacity:0}
+  .js section.day[id^="j"]:not(.in),.js .polaroid:not(.in),.js .stop figure:not(.in){opacity:0}
   section.pg:not(.in){opacity:0}
   section.pg.in{animation:cc-page .85s cubic-bezier(.2,.8,.25,1) backwards;transform-origin:0 30%}
   @keyframes cc-page{0%{opacity:0;transform:perspective(900px) rotateY(-16deg) translateX(-10px)}60%{opacity:1}100%{opacity:1;transform:perspective(900px) rotateY(0)}}
@@ -1061,7 +1061,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v88'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v89'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -1709,7 +1709,7 @@ if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
     e.target.classList.add('in'); reveal.unobserve(e.target);
   }), {rootMargin:'0px 0px -8% 0px'});
   document.querySelectorAll('section.day[id^="j"]').forEach(s => { s.classList.add('pg'); reveal.observe(s); });
-  document.querySelectorAll('.polaroid, .stop figure, .gallery').forEach((el, k) => {
+  document.querySelectorAll('.polaroid, .stop figure').forEach((el, k) => {
     el.classList.add('drop'); el.style.setProperty('--dl', (k % 3) * 0.08 + 's'); reveal.observe(el);
   });
 
