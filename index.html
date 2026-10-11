@@ -1063,7 +1063,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v104'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v105'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -1876,7 +1876,7 @@ if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
   /* --- Compteurs --- */
   const num = '(\\d+(?:[.,]\\d+)?)', toN = x => parseFloat(x.replace(',', '.'));
   // Mesures réelles (compteur de la voiture, Apple Watch) : priment sur les estimations du programme
-  const MESURES = {voitureKm: 450, piqueNiques: Math.max(0, Math.min(7, tripIdx + 1)) /* pique-nique tous les midis */, marcheKm: {j1: 9.56, j2: 14.99, j3: 10.55, j4: 12.64, j5: 13.85, j6: 13.23} /* Apple Watch */};
+  const MESURES = {voitureKm: 580, piqueNiques: Math.max(0, Math.min(7, tripIdx + 1)) /* pique-nique tous les midis */, marcheKm: {j1: 9.56, j2: 14.99, j3: 10.55, j4: 12.64, j5: 13.85, j6: 13.23} /* Apple Watch */};
   const walkKm = doneDays.reduce((a, d) => {
     if (MESURES.marcheKm[d.id] != null) return a + MESURES.marcheKm[d.id];
     if (!d.walk) return a;
