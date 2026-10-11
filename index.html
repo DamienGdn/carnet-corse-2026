@@ -388,8 +388,8 @@ footer .sig{display:block;color:var(--primary);font:700 28px var(--hand);margin-
 @keyframes cc-stroll{from{transform:translateX(0)}to{transform:translateX(240px)}}
 .swrow{display:block;margin-top:6px;height:24px;position:relative;overflow:hidden}
 .swrow::before{content:"";position:absolute;left:0;right:0;bottom:2px;border-bottom:2.5px dotted #14566f;opacity:.35}
-.swrow .sw{position:absolute;left:0;bottom:1px;width:30px;height:22px;animation:cc-swim 7s ease-in-out infinite alternate}
-.swrow .sw svg{width:30px;height:22px}
+.swrow .sw{position:absolute;left:0;bottom:1px;width:56px;height:22px;animation:cc-swim 7s ease-in-out infinite alternate}
+.swrow .sw svg{width:56px;height:22px}
 .sw .cw{transform-origin:20px 13px;animation:cc-crawl 1s linear infinite}
 .sw .cw.b{animation-delay:-.5s}
 .sw .kk{transform-origin:8px 13px;animation:cc-kick .25s ease-in-out infinite alternate}
@@ -1054,7 +1054,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v81'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v82'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -1190,10 +1190,11 @@ const WALKER_SVG = '<svg viewBox="0 0 18 22" aria-hidden="true"><g stroke="#1232
 const animEl = (cls, inner) => `<span class="anim ${cls}" aria-hidden="true">${inner}</span>`;
 const isPlane = t => /✈|Décollage|Atterrissage/.test(t);
 const WAVE = y => '<path class="wv" d="M-10 ' + y + 'Q-7.5 ' + (y - 2.2) + ' -5 ' + y + 'T0 ' + y + 'T5 ' + y + 'T10 ' + y + 'T15 ' + y + 'T20 ' + y + 'T25 ' + y + 'T30 ' + y + 'T35 ' + y + 'T40 ' + y + 'V22H-10Z" fill="#bcdde4" fill-opacity=".85" stroke="#14566f" stroke-width="1"/>';
-const SWIM_SVG = '<svg viewBox="0 0 30 22" aria-hidden="true"><g stroke="#12324a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path class="kk" d="M8 13L3 14"/><path d="M8 12.5H20"/><circle cx="23.5" cy="10.5" r="3" fill="#f7cfa6"/><path d="M21 9.5Q23.5 6.8 26.2 9.2" stroke="#6b3a1f" stroke-width="1.5"/><path class="cw" d="M20 13L20 6"/><path class="cw b" d="M20 13L20 6"/></g><g>' + WAVE(14) + '</g></svg>';
-const DIVE_SVG = '<svg viewBox="0 0 30 22" aria-hidden="true"><g>' + WAVE(9) + '</g><g stroke="#12324a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path class="kk" d="M8 16L2 17.5"/><path d="M8 16H20"/><path d="M19 16L22 18.5"/><circle cx="23.5" cy="15" r="3" fill="#f7cfa6"/><path d="M24 13.6H27.2V16.4H24Z" fill="#bcdde4" stroke-width="1.1"/><path d="M22.2 12Q20 10 21 4" stroke-width="1.3"/><path d="M21 4H19.5" stroke="#d62828" stroke-width="1.6"/></g><g fill="none" stroke="#14566f" stroke-width=".8"><circle class="bub" cx="28" cy="13" r="1"/><circle class="bub b" cx="26.5" cy="12" r="1.2"/></g></svg>';
+const WAVE_W = y => { let d = 'M-10 ' + y + 'Q-7.5 ' + (y - 2.2) + ' -5 ' + y; for (let x = 0; x <= 65; x += 5) d += 'T' + x + ' ' + y; return d + 'V22H-10Z'; };
+const SNORKELER = (hair, eye, tip) => '<path d="M8.7 9.5A5.5 5.5 0 0 1 19.3 9.5Q14 6 8.7 9.5Z" fill="' + hair + '"/><circle cx="14" cy="11" r="5.5" fill="#f7cfa6"/><path d="M8.7 9.5A5.5 5.5 0 0 1 19.3 9.5Q14 6 8.7 9.5Z" fill="' + hair + '"/><path d="M9.8 10.6H8.4M18.2 10.6H19.6" stroke-width=".9" fill="none"/><rect x="9.8" y="8.8" width="8.4" height="3.6" rx="1.4" fill="#bcdde4" stroke-width="1"/><circle cx="12.3" cy="10.6" r=".75" fill="' + eye + '" stroke="none"/><circle cx="15.7" cy="10.6" r=".75" fill="' + eye + '" stroke="none"/><path d="M19.2 11Q22.6 10 21.6 3.5" fill="none" stroke-width="1.3"/><path d="M21.6 3.5H20" stroke="' + tip + '" stroke-width="1.9"/>';
+const SNORKEL_SVG = '<svg viewBox="0 0 56 22" aria-hidden="true"><g stroke="#12324a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><g>' + SNORKELER('#6b3a1f', '#5a3416', '#d62828') + '</g><g transform="translate(28 0)">' + SNORKELER('#d4601e', '#2f74c0', '#f2b705') + '</g></g><path class="wv" d="' + WAVE_W(14) + '" fill="#bcdde4" fill-opacity=".85" stroke="#14566f" stroke-width="1"/><g fill="none" stroke="#14566f" stroke-width=".8"><circle class="bub" cx="23.5" cy="13" r="1"/><circle class="bub b" cx="51" cy="12" r="1.1"/></g></svg>';
 const isSwim = (s) => !s.noSwim && /^Plage/i.test((P[s.p] || {}).name || '') || /plage|baignade|snorkeling/i.test(s.txt);
-const swimEl = s => animEl('swrow', '<span class="sw">' + (/snorkeling/i.test(s.txt) ? DIVE_SVG : SWIM_SVG) + '</span>');
+const swimEl = s => animEl('swrow', '<span class="sw">' + SNORKEL_SVG + '</span>');
 const SKIN = '#f7cfa6';
 const pSand = (bit) => {
   const body = '<g stroke-width=".75"><path d="M-8 2.6H8Q8 5.6 5.6 5.6H-5.6Q-8 5.6 -8 2.6Z" fill="#e9b25a"/><path d="M-8 .6Q-5 3.4 -2.5 .6T2.5 .6T8 .6V2.6H-8Z" fill="#6fae3f"/><circle cx="-3.6" cy="1.6" r="1.7" fill="#d62828"/><circle cx="3.6" cy="1.6" r="1.7" fill="#d62828"/><path d="M-8 -.6Q-8.6 -6 0 -6 8.6 -6 8 -.6Z" fill="#f0bd62"/><path d="M-4 -3.6Q0 -5 4 -3.6" stroke="#fff3c4" stroke-width=".9" fill="none"/></g>';
