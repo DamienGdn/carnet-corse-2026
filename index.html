@@ -964,7 +964,7 @@ const DAYS = [
    {t:'15:00', txt:'Retour au col de Bavella'},
    {drive:'🚗 Bavella → route de la côte (Solenzara)'},
    {t:'17:00', txt:'Arrêt au bord de la Solenzara', p:'sol', img:'photos/j3-riviere.jpg', imgLabel:'📸 Photo de l\'arrêt', more:["Vasques de granit et eau limpide, pins et rochers autour, sur la route de Bavella vers la côte."]},
-   {t:'17:30', txt:'⛈️ Orage violent : plage annulée, pause à la Cantina di u Palace', p:'cant', more:["Bière à la Cantina di u Palace (440 Strada di Portivechju, Sainte-Lucie de Porto-Vecchio), le temps de laisser passer l'orage."]},
+   {t:'17:30', txt:'⛈️ Orage violent : plage annulée, pause à la Cantina di u Palace', p:'cant', noSwim:true, more:["Bière à la Cantina di u Palace (440 Strada di Portivechju, Sainte-Lucie de Porto-Vecchio), le temps de laisser passer l'orage."]},
    {t:'19:50', txt:'Retour au gîte'},
   ],
   restos:['Auberge du Col de Bavella']},
@@ -1062,7 +1062,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v108'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v109'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
