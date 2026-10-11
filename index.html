@@ -813,11 +813,6 @@ html.intro-on #intro.skip{animation:cc-in-skip .2s ease-out forwards}
     <summary><span class="sub-t">📸 Nos souvenirs</span><span class="cnt" id="albCnt"></span></summary>
     <div id="album"></div>
   </details>
-  <details class="fold" id="cuisine">
-    <summary><span class="sub-t">🍺 Nos découvertes culinaires</span><span class="cnt" id="cuCnt"></span></summary>
-    <p class="note">Ce qu'on a goûté en Corse, au fil du voyage.</p>
-    <ul class="cu-list" id="cuList"></ul>
-  </details>
   <details class="fold" id="trajet">
     <summary><span class="sub-t">🗺️ Notre trajet</span><span class="cnt" id="trCnt"></span></summary>
     <p class="note">Les lieux déjà visités, dans l'ordre, avec une couleur par jour. Touche un jour pour ne voir que lui, ou « Tout ».</p>
@@ -825,8 +820,6 @@ html.intro-on #intro.skip{animation:cc-in-skip .2s ease-out forwards}
     <div class="tr-leg" id="trLeg" aria-label="Légende des jours"></div>
     <p class="note" id="trList"></p>
   </details>
-  <div id="utiles"></div>
-  <p class="note">Adresses OpenStreetMap ; distances à vol d'oiseau depuis Santa-Giulia. Horaires à vérifier, souvent réduits en octobre.</p>
 </section>
 
 <main class="wrap" id="days"></main>
@@ -1073,7 +1066,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v99'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v100'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -1174,33 +1167,6 @@ const wd = (day) => day.d.split(' ')[0];
 const wdShort = (day) => wd(day).slice(0, 3).toLowerCase() + '.';
 const main = document.getElementById('days');
 
-// ——— Adresses utiles (OpenStreetMap) ———
-const UTILES = [
-  {cat:'🛒 Supermarché', name:'Supermarché Arataggiu', lat:41.56192, lon:9.27350},
-  {cat:'🛒 Supermarché', name:'Spar Pinarellu', lat:41.56660, lon:9.27401},
-  {cat:'🛒 Supermarché', name:'Auchan Supermarché (Vignola)', lat:41.58603, lon:9.28161},
-  {cat:'🛒 Supermarché', name:'Hyper U Porto-Vecchio', lat:41.59787, lon:9.27686},
-  {cat:'🛒 Supermarché', name:'Auchan Poretta', lat:41.60495, lon:9.27880},
-  {cat:'⛽ Station', name:'Total (Strada di Ceccia)', lat:41.57061, lon:9.27328},
-  {cat:'⛽ Station', name:'Vito (Pifano)', lat:41.57847, lon:9.27488},
-  {cat:'⛽ Station', name:'Vito Poretta', lat:41.59828, lon:9.27566},
-  {cat:'⛽ Station', name:'Total Poretta', lat:41.60151, lon:9.27655},
-  {cat:'💊 Pharmacie', name:'Pharmacie Paolini', lat:41.58314, lon:9.26672},
-  {cat:'💊 Pharmacie', name:'Pharmacie de la Marine', lat:41.58866, lon:9.28382},
-  {cat:'💊 Pharmacie', name:'Pharmacie des 4 Chemins', lat:41.59665, lon:9.27619},
-  {cat:'🏥 Urgences', name:"Clinique de l'Ospedale", lat:41.59867, lon:9.27681},
-];
-const GITE = {name:'Gîte — secteur Santa-Giulia (position approx.)', lat:P.sg.lat, lon:P.sg.lon};
-const kmFrom = (p) => Math.hypot((p.lat - GITE.lat) * 111, (p.lon - GITE.lon) * 83).toFixed(1);
-const UGROUPS = [['sup', '🛒 Supermarchés', '🛒 Supermarché'], ['fuel', '⛽ Stations-service', '⛽ Station'], ['sante', '💊 Pharmacies & urgences', '💊 Pharmacie|🏥 Urgences']]
-  .map(([key, title, cats]) => ({key, title, items: UTILES.filter(u => cats.split('|').includes(u.cat))}));
-document.getElementById('utiles').innerHTML = UGROUPS.map(g => `
-  <details class="fold" data-key="${g.key}">
-    <summary><span class="sub-t">${g.title}</span><span class="cnt">${g.items.length}</span></summary>
-    <div class="map" id="map-u-${g.key}"></div>
-    <div class="util-list">${g.items.map((u, j) => `
-      <div class="util"><div><div class="k">${u.cat} · ${kmFrom(u)} km</div><div class="n">${'ABCDEFGHIJ'[j]} · ${esc(u.name)}</div></div><div class="row">${navBtns(u)}</div></div>`).join('')}</div>
-  </details>`).join('');
 
 
 const CAR_SVG = '<svg viewBox="0 0 26 17" aria-hidden="true"><g stroke="#12324a" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M2.5 13.4V10.2Q2.5 8.1 4.6 7.7L6.6 7.4Q7.6 2.5 13 2.3Q18.4 2.5 19.6 7.4L21.8 7.8Q23.6 8.2 23.6 10.3V13.4Z" fill="#d62828"/><path d="M7.7 5.2Q9.1 2.4 13 2.3Q16.9 2.4 18.4 5.2Z" fill="#33302e"/><path d="M7.2 7.4Q7.8 5.3 9.9 5.2H16.2Q18.3 5.3 18.9 7.4Z" fill="#bfe3ee" stroke-width=".8"/><path d="M13 5.2V7.4" stroke-width=".7"/><path d="M3.2 10.3H23" stroke="#f3eee3" stroke-width=".7"/><circle cx="22.4" cy="9" r="1" fill="#fff3c4" stroke-width=".5"/><circle cx="6.6" cy="13.6" r="2.3" fill="#12324a"/><circle cx="19.4" cy="13.6" r="2.3" fill="#12324a"/><circle cx="6.6" cy="13.6" r=".9" fill="#d9d9d9" stroke="none"/><circle cx="19.4" cy="13.6" r=".9" fill="#d9d9d9" stroke="none"/></g></svg>'; // Fiat 500c rouge, capote en toile
@@ -1393,12 +1359,6 @@ const dayItems = (day) => day.stops.map((k, j) => {
   const step = day.steps.find(s => s.p === k);
   return {p:P[k], label:j + 1, info: step ? `${step.t}${step.end ? '–' + step.end : ''} — ${step.txt}` : ''};
 });
-document.querySelectorAll('#utiles details').forEach(det => det.addEventListener('toggle', () => {
-  if (!det.open) return;
-  const key = 'u-' + det.dataset.key, g = UGROUPS.find(x => x.key === det.dataset.key);
-  if (!maps[key]) buildMap(key, [{p:GITE, label:'🏡', info:'Villa Occhiatana, Santa-Giulia'}, ...g.items.map((u, j) => ({p:u, label:'ABCDEFGHIJ'[j], info:u.cat}))], false);
-  else maps[key].map.invalidateSize();
-}));
 
 // ——— Météo dynamique (Open-Meteo, sans clé) ———
 const WMO = c => c === 0 ? ['☀️','Ensoleillé'] : c <= 2 ? ['🌤️','Éclaircies'] : c === 3 ? ['☁️','Couvert'] : c <= 48 ? ['🌫️','Brouillard'] : c <= 57 ? ['🌦️','Bruine'] : c <= 67 ? ['🌧️','Pluie'] : c <= 77 ? ['🌨️','Neige'] : c <= 82 ? ['🌦️','Averses'] : c <= 86 ? ['🌨️','Neige'] : ['⛈️','Orage'];
@@ -1523,19 +1483,6 @@ document.querySelectorAll('.dep input').forEach(inp => {
 });
 
 
-/* ——— Découvertes culinaires ——— */
-const CUISINE = [
-  {nom:'Pietra blonde', type:'Bière corse', ic:'🍺', note:'Goûtée pendant le séjour.'},
-  {nom:'Pietra ambrée', type:'Bière corse à la farine de châtaigne', img:'photos/j4-pietra.jpg', note:'Face à la mer, à la paillote de Palombaggia.'},
-  {nom:'Colomba', type:'Bière blanche corse', ic:'🍺', note:'Goûtée pendant le séjour.'},
-  {nom:'Paolina', type:'À compléter', ic:'🥂', note:'Goûtée pendant le séjour.'},
-  {nom:'Gaufre au chocolat', type:'Douceur de plage', img:'photos/j4-gaufre.jpg', note:'Avec la Pietra, à Palombaggia.'},
-];
-(() => {
-  const ul = document.getElementById('cuList'); if (!ul) return;
-  ul.innerHTML = CUISINE.map(c => `<li class="cu-it">${c.img ? `<img src="${c.img}" alt="${esc(c.nom)}" loading="lazy">` : `<span class="cu-ic" aria-hidden="true">${c.ic || '🍽️'}</span>`}<div><h4>${esc(c.nom)}</h4><div class="cu-k">${esc(c.type)}</div><p>${esc(c.note || '')}</p></div></li>`).join('');
-  const n = document.getElementById('cuCnt'); if (n) n.textContent = CUISINE.length;
-})();
 const mapObs = new IntersectionObserver(entries => entries.forEach(e => {
   if (!e.isIntersecting) return;
   const day = DAYS.find(d => 'map-' + d.id === e.target.id);
