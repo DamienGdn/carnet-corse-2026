@@ -763,8 +763,6 @@ html.intro-on #intro.skip{animation:cc-in-skip .2s ease-out forwards}
     </a>
     <div class="tools">
       <button class="chip" id="todayBtn" aria-label="Mode Aujourd’hui" aria-haspopup="dialog">📅<span class="lbl">Aujourd’hui</span></button>
-      <a class="chip" href="#infos" aria-label="À savoir">⚠️<span class="lbl">À savoir</span></a>
-      <a class="chip" href="#checklist" aria-label="Checklist">🎒<span class="lbl">Checklist</span></a>
       <button class="chip" id="offlineBtn" aria-label="Télécharger pour le hors-ligne">⬇️<span class="lbl" id="offlineLbl">Hors-ligne</span></button>
       <button class="chip" id="themeBtn" aria-label="Basculer le mode sombre">🌙</button>
     </div>
@@ -825,23 +823,6 @@ html.intro-on #intro.skip{animation:cc-in-skip .2s ease-out forwards}
 <main class="wrap" id="days"></main>
 
 <div class="wrap">
-  <section id="infos" class="day">
-    <div class="infohead"><div class="kicker">Avant de partir chaque matin</div><h2>À savoir</h2></div>
-    <div class="infos">
-      <div>🌊 <b>Mer agitée</b> → pas de snorkeling. Vérifier le vent et la houle (drapeaux plage, Windy, Météo-France Marine).</div>
-      <div>⛈️ <b>Orage</b> → éviter les randonnées exposées (Bavella, crêtes) et les cascades après fortes pluies.</div>
-      <div>🥾 <b>Chaussures</b> de randonnée recommandées : granit glissant et sentiers caillouteux.</div>
-      <div>🚗 <b>Stationnement</b> : prévoir 15–20 min de marge (Bonifacio, Palombaggia, Bavella sont payants/limités).</div>
-      <div>⏱️ Les <b>temps de trajet</b> sont indicatifs (routes sinueuses : compter large).</div>
-      <div>📶 Réseau faible en montagne : ouvrir le carnet une fois en Wi-Fi pour le garder en cache.</div>
-    </div>
-  </section>
-
-  <section id="checklist" class="day">
-    <div class="infohead"><div class="kicker">Sac du jour</div><h2>Checklist</h2></div>
-    <div class="check" id="checkbox"></div>
-    <button class="btn btn-g" id="resetCheck">↺ Tout décocher</button>
-  </section>
 </div>
 
 <footer><span class="sig">Bon voyage ☀️</span>Cartes © OpenStreetMap · Photos Wikimedia Commons (licences libres)</footer>
@@ -1066,7 +1047,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v101'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v102'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -1575,15 +1556,9 @@ if (!location.hash && today.getFullYear() === 2026 && today.getMonth() === 9 && 
   addEventListener('load', () => setTimeout(() => { if (!moved) tj.scrollIntoView({behavior:'instant'}); }, 300));
 }
 
-/* ---------- Checklist (mémorisée localement) ---------- */
-const ITEMS = ['🤿 Masque','🫧 Tuba','🦶 Palmes','🥾 Chaussures de randonnée','💧 Eau','🧴 Crème solaire','🏖️ Serviette'];
+/* ---------- Stockage local ---------- */
 const store = { get(k){ try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
                 set(k,v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch {} } };
-const checked = store.get('cc-check') || {};
-const cb = document.getElementById('checkbox');
-cb.innerHTML = ITEMS.map((it, i) => `<label><input type="checkbox" data-i="${i}" ${checked[i] ? 'checked' : ''}><span>${it}</span></label>`).join('');
-cb.addEventListener('change', e => { checked[e.target.dataset.i] = e.target.checked; store.set('cc-check', checked); });
-document.getElementById('resetCheck').onclick = () => { cb.querySelectorAll('input').forEach(i => i.checked = false); store.set('cc-check', {}); };
 
 /* ---------- Mode sombre ---------- */
 const themeBtn = document.getElementById('themeBtn');
