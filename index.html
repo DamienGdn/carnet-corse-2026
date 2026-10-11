@@ -385,7 +385,8 @@ footer .sig{display:block;color:var(--primary);font:700 28px var(--hand);margin-
 @keyframes cc-sway{from{transform:translateY(0)}to{transform:translateY(-.8px)}}
 .wkrow{display:block;margin-top:6px;height:24px;position:relative;overflow:hidden}
 .wkrow::before{content:"";position:absolute;left:0;right:0;bottom:2px;border-bottom:2.5px dotted var(--maquis);opacity:.5}
-.wkrow .wk{position:absolute;left:0;bottom:3px;margin:0;animation:cc-stroll 6s linear infinite alternate}
+.wkrow .wk{position:absolute;left:0;bottom:3px;margin:0;width:38px;animation:cc-stroll 6s linear infinite alternate}
+.wkrow .wk svg{width:38px;height:22px}
 @keyframes cc-stroll{from{transform:translateX(0)}to{transform:translateX(240px)}}
 .swrow{display:block;margin-top:6px;height:24px;position:relative;overflow:hidden}
 .swrow::before{content:"";position:absolute;left:0;right:0;bottom:2px;border-bottom:2.5px dotted #14566f;opacity:.35}
@@ -1061,7 +1062,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v89'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v90'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -1194,6 +1195,8 @@ document.getElementById('utiles').innerHTML = UGROUPS.map(g => `
 const CAR_SVG = '<svg viewBox="0 0 26 17" aria-hidden="true"><g stroke="#12324a" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M2.5 13.4V10.2Q2.5 8.1 4.6 7.7L6.6 7.4Q7.6 2.5 13 2.3Q18.4 2.5 19.6 7.4L21.8 7.8Q23.6 8.2 23.6 10.3V13.4Z" fill="#d62828"/><path d="M7.7 5.2Q9.1 2.4 13 2.3Q16.9 2.4 18.4 5.2Z" fill="#33302e"/><path d="M7.2 7.4Q7.8 5.3 9.9 5.2H16.2Q18.3 5.3 18.9 7.4Z" fill="#bfe3ee" stroke-width=".8"/><path d="M13 5.2V7.4" stroke-width=".7"/><path d="M3.2 10.3H23" stroke="#f3eee3" stroke-width=".7"/><circle cx="22.4" cy="9" r="1" fill="#fff3c4" stroke-width=".5"/><circle cx="6.6" cy="13.6" r="2.3" fill="#12324a"/><circle cx="19.4" cy="13.6" r="2.3" fill="#12324a"/><circle cx="6.6" cy="13.6" r=".9" fill="#d9d9d9" stroke="none"/><circle cx="19.4" cy="13.6" r=".9" fill="#d9d9d9" stroke="none"/></g></svg>'; // Fiat 500c rouge, capote en toile
 const PLANE_SVG = '<svg viewBox="0 0 30 18" aria-hidden="true"><g stroke="#12324a" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"><path d="M3 9Q3 6.5 6 6.5H21Q27 6.5 28 9 27 11.5 21 11.5H6Q3 11.5 3 9Z" fill="#fff"/><path d="M12 7L9 1.5H13L18 7ZM12 11L9 16.5H13L18 11Z" fill="#f7cfa6"/><path d="M3 7.5L1.5 3.5H5L6.5 6.5Z" fill="#d4601e"/><circle cx="22" cy="8.6" r="1" fill="#12324a" stroke="none"/><circle cx="18.5" cy="8.6" r="1" fill="#12324a" stroke="none"/><circle cx="25" cy="8.6" r="1" fill="#12324a" stroke="none"/></g></svg>';
 const WALKER_SVG = '<svg viewBox="0 0 18 22" aria-hidden="true"><g stroke="#12324a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"><path class="lg" d="M9 13V20"/><path class="lg b" d="M9 13V20"/><path d="M9 8V13"/><path class="ar" d="M9 9V14"/><path class="ar b" d="M9 9V14"/><circle cx="9" cy="4.6" r="3" fill="#f7cfa6"/><path d="M6.3 3.6Q9 .8 11.8 3.6" stroke="#6b3a1f" stroke-width="1.5"/></g></svg>';
+const WALKER = (hair, pack, extra) => '<path class="lg" d="M9 13V20"/><path class="lg b" d="M9 13V20"/><path d="M9 8V13"/><path class="ar" d="M9 9V14"/><path class="ar b" d="M9 9V14"/><rect x="4.6" y="7.6" width="3.6" height="5" rx="1.2" fill="' + pack + '" stroke-width="1"/><circle cx="9" cy="4.6" r="3" fill="#f7cfa6"/><path d="M6.3 3.6Q9 .8 11.8 3.6" stroke="' + hair + '" stroke-width="1.5"/>' + extra;
+const WALKERS_SVG = '<svg viewBox="0 0 38 22" aria-hidden="true"><g stroke="#12324a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none">' + WALKER('#6b3a1f', '#c9532f', '<path d="M6.4 3.8Q3.6 4.6 4.2 7.4" stroke="#6b3a1f" stroke-width="1.4"/>') + '<g transform="translate(19 0)">' + WALKER('#d4601e', '#3f8a9e', '<path d="M7.4 6.2Q9 8 10.6 6.2" stroke="#ebe6dc" stroke-width="1.2"/>') + '</g></g></svg>';
 const animEl = (cls, inner) => `<span class="anim ${cls}" aria-hidden="true">${inner}</span>`;
 const isPlane = t => /✈|Décollage|Atterrissage/.test(t);
 const WAVE = y => '<path class="wv" d="M-10 ' + y + 'Q-7.5 ' + (y - 2.2) + ' -5 ' + y + 'T0 ' + y + 'T5 ' + y + 'T10 ' + y + 'T15 ' + y + 'T20 ' + y + 'T25 ' + y + 'T30 ' + y + 'T35 ' + y + 'T40 ' + y + 'V22H-10Z" fill="#bcdde4" fill-opacity=".85" stroke="#14566f" stroke-width="1"/>';
@@ -1231,7 +1234,7 @@ DAYS.forEach((day, i) => {
     return `<li><span class="t"><span data-t="${s.t}">${s.t}</span>${s.end ? `<br><span class="d">→ <span data-t="${s.end}">${s.end}</span></span>` : ''}</span>
       <span>${idx ? `<span class="badge">${idx}</span>` : ''}${esc(s.txt)}
       ${s.dur ? `<br><span class="tag">⏱ ${s.dur}</span>` : ''}${s.cond ? `<span class="tag cond">⚠ ${esc(s.cond)}</span>` : ''}
-      ${isPlane(s.txt) ? animEl('sky ' + (/Décollage/.test(s.txt) ? 'up' : 'down'), '<span class="plane">' + PLANE_SVG + '</span>') : ''}${isPicnic(s.txt) ? picEl() : isHike(s.txt) ? animEl('wkrow', '<span class="wk">' + WALKER_SVG + '</span>') : (isSwim(s) ? swimEl(s) : '')}
+      ${isPlane(s.txt) ? animEl('sky ' + (/Décollage/.test(s.txt) ? 'up' : 'down'), '<span class="plane">' + PLANE_SVG + '</span>') : ''}${isPicnic(s.txt) ? picEl() : isHike(s.txt) ? animEl('wkrow', '<span class="wk">' + WALKERS_SVG + '</span>') : (isSwim(s) ? swimEl(s) : '')}
       ${s.cry ? '<span class="cry-duo" data-cry></span>' : ''}
       ${s.more ? `<ul class="more">${s.more.map(m => `<li>${esc(m)}</li>`).join('')}</ul>` : ''}
       ${s.img ? `<details class="more-d"><summary>${s.imgLabel || '📷 Photo'}</summary><a href="${s.img}" target="_blank" rel="noopener"><img class="track" src="${s.img}" alt="${esc(s.imgLabel || s.txt)}" loading="lazy"></a></details>` : ''}
