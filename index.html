@@ -1024,7 +1024,7 @@ const DAYS = [
   rain:[{p:"smm",t:"Si mer trop formée : Église Sainte-Marie-Majeure et ruelles couvertes"}],
   restos:[]},
 
- {id:'j7', walk:'6,10 km · 8 730 pas (Apple Watch, à 17 h 51)', d:'Dimanche 11 octobre', title:'Dernière baignade • Sartène • Vol Figari → Nantes', meteo:['🌦️','19°C / 11°C','Averses possibles'],
+ {id:'j7', done:true, walk:'6,10 km · 8 730 pas (Apple Watch)', d:'Dimanche 11 octobre', title:'Dernière baignade • Sartène • Vol Figari → Nantes', meteo:['🌦️','19°C / 11°C','Averses possibles'],
   alert:'✈️ Vol à 20:35 depuis Figari, atterrissage à Nantes à 22:35. Clés du gîte à rendre vers 13:00. Lavage et plein de la voiture avant la restitution (vers 18:30).',
   stops:['sg','sart','fig'], cover:'sg',
   steps:[
@@ -1063,7 +1063,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v106'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v107'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
