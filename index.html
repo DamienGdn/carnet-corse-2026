@@ -388,10 +388,10 @@ footer .sig{display:block;color:var(--primary);font:700 28px var(--hand);margin-
 .wkrow .wk{position:absolute;left:0;bottom:3px;margin:0;width:38px;animation:cc-stroll 6s linear infinite alternate}
 .wkrow .wk svg{width:38px;height:22px}
 @keyframes cc-stroll{from{transform:translateX(0)}to{transform:translateX(240px)}}
-.swrow{display:block;margin-top:6px;height:24px;position:relative;overflow:hidden}
+.swrow{display:block;margin-top:6px;height:42px;position:relative;overflow:hidden}
 .swrow::before{content:"";position:absolute;left:0;right:0;bottom:2px;border-bottom:2.5px dotted #14566f;opacity:.35}
-.swrow .sw{position:absolute;left:0;bottom:1px;width:56px;height:22px;animation:cc-swim 7s ease-in-out infinite alternate}
-.swrow .sw svg{width:56px;height:22px}
+.swrow .sw{position:absolute;left:0;bottom:1px;width:100px;height:40px;animation:cc-swim 7s ease-in-out infinite alternate}
+.swrow .sw svg{width:100px;height:40px}
 .sw .cw{transform-origin:20px 13px;animation:cc-crawl 1s linear infinite}
 .sw .cw.b{animation-delay:-.5s}
 .sw .kk{transform-origin:8px 13px;animation:cc-kick .25s ease-in-out infinite alternate}
@@ -481,7 +481,7 @@ footer .sig{display:block;color:var(--primary);font:700 28px var(--hand);margin-
 }
 /* 2. carnet qui s'ouvre + photos qui se posent */
 @media (prefers-reduced-motion:no-preference){
-  .js section.day[id^="j"]:not(.in),.js .polaroid:not(.in),.js .stop figure:not(.in){opacity:0}
+  .js section.day[id^="j"]:not(.in){opacity:0}
   section.pg:not(.in){opacity:0}
   section.pg.in{animation:cc-page .85s cubic-bezier(.2,.8,.25,1) backwards;transform-origin:0 30%}
   @keyframes cc-page{0%{opacity:0;transform:perspective(900px) rotateY(-16deg) translateX(-10px)}60%{opacity:1}100%{opacity:1;transform:perspective(900px) rotateY(0)}}
@@ -1062,7 +1062,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v90'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v91'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -1712,9 +1712,6 @@ if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
     e.target.classList.add('in'); reveal.unobserve(e.target);
   }), {rootMargin:'0px 0px -8% 0px'});
   document.querySelectorAll('section.day[id^="j"]').forEach(s => { s.classList.add('pg'); reveal.observe(s); });
-  document.querySelectorAll('.polaroid, .stop figure').forEach((el, k) => {
-    el.classList.add('drop'); el.style.setProperty('--dl', (k % 3) * 0.08 + 's'); reveal.observe(el);
-  });
 
   /* --- 3. ambiance météo --- */
   const rnd = k => { const x = Math.sin(k * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
