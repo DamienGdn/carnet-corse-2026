@@ -946,7 +946,7 @@ const DAYS = [
    {t:'09:00', end:'11:30', txt:"Visite de la citadelle de Bonifacio", p:'bonc', dur:'2 h 30', more:["✅ Fait : haute-ville, bastion de l'Étendard, ruelles et belvédères."]},
    {t:'11:45', end:'12:45', txt:'Sortie en bateau — falaises et calanques', p:'bat', dur:'1 h', more:["✅ Fait : environ 1 h de mer au pied des falaises, avec vue sur les calanques et les grottes."]},
    {t:'13:00', end:'14:15', txt:'Pique-nique du midi à Bonifacio', dur:'1 h 15'},
-   {t:'14:30', end:'17:00', txt:'Randonnée jusqu\'à la plage de Fazzio', p:'fazz', noSwim:true, dur:'2 h 30', more:["✅ Fait : marche à pied jusqu'à la plage de Fazzio."]},
+   {t:'14:30', end:'17:00', txt:'Randonnée jusqu\'à la plage de Fazzio', p:'fazz', dur:'2 h 30', more:["✅ Fait : marche à pied jusqu'à la plage de Fazzio, avec baignade sur place."]},
    {t:'17:15', txt:'Retour à Porto-Vecchio (~40 min)'},
   ],
   note:'Non fait : Capo Pertusato et plage du Petit Sperone (restent possibles un autre jour, voir J6).',
@@ -1062,7 +1062,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v111'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v112'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
