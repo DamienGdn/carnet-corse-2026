@@ -682,6 +682,8 @@ html.intro-on #intro.skip{animation:cc-in-skip .2s ease-out forwards}
 /* trajet : petits points par jour */
 .tpd{width:14px;height:14px;margin:6px;border-radius:50%;background:var(--c,#a8401f);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.45);animation:tp-pop .5s cubic-bezier(.3,1.6,.5,1) both;animation-delay:var(--d,0s)}
 .tr-leg{display:flex;flex-wrap:wrap;gap:6px;margin:-4px 0 10px}
+.tr-leg button{cursor:pointer;min-height:32px;display:inline-flex;align-items:center;gap:5px;font:700 13px/1 var(--display);padding:4px 11px 4px 8px;border-radius:999px;background:var(--paper);border:1.5px solid var(--hairline);color:var(--ink)}
+.tr-leg button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .tr-leg span{display:inline-flex;align-items:center;gap:5px;font:700 13px/1 var(--display);padding:4px 9px 4px 6px;border-radius:999px;background:var(--paper);border:1.5px solid var(--hairline);color:var(--ink)}
 .tr-leg i{width:11px;height:11px;border-radius:50%;background:var(--c);border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.25)}
 @media (prefers-reduced-motion:reduce){.tpd{animation:none}}
@@ -818,7 +820,7 @@ html.intro-on #intro.skip{animation:cc-in-skip .2s ease-out forwards}
   </details>
   <details class="fold" id="trajet">
     <summary><span class="sub-t">🗺️ Notre trajet</span><span class="cnt" id="trCnt"></span></summary>
-    <p class="note">Les lieux déjà visités, dans l'ordre, avec une couleur par jour.</p>
+    <p class="note">Les lieux déjà visités, dans l'ordre, avec une couleur par jour. Touche un jour pour ne voir que lui, ou « Tout ».</p>
     <div class="tr-map" id="trMap" role="region" aria-label="Carte du trajet réel"></div>
     <div class="tr-leg" id="trLeg" aria-label="Légende des jours"></div>
     <p class="note" id="trList"></p>
@@ -1071,7 +1073,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v98'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v99'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -2069,26 +2071,36 @@ if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
   $('trList').textContent = uniq.size ? 'Étapes : ' + seq.map(x => shortName(P[x.k].name)).join(' → ') : 'Le tracé apparaîtra au fil du voyage.';
   const DAYCOL = ['#14566f', '#a8401f', '#41612f', '#c88a1f', '#7a4f8f', '#2a8a9a', '#6b3a1f'];
   const legDays = [...new Set(seq.map(x => x.i))].sort((a, b) => a - b);
-  $('trLeg').innerHTML = legDays.map(i => `<span style="--c:${DAYCOL[i % 7]}"><i></i>J${i + 1}</span>`).join('');
+  $('trLeg').innerHTML = '<button type="button" class="on" data-d="all" aria-pressed="true">Tout</button>' + legDays.map(i => `<button type="button" data-d="${i}" aria-pressed="false" style="--c:${DAYCOL[i % 7]}"><i></i>J${i + 1}</button>`).join('');
   let trMap = null;
   function buildTrajet(){
     const map = L.map('trMap', {scrollWheelZoom:false, dragging:!L.Browser.mobile, tap:false});
     L.tileLayer(TILE_URL, {maxZoom:19, attribution:'© OpenStreetMap'}).addTo(map);
-    const ll = seq.map(x => [P[x.k].lat, P[x.k].lon]);
-    if (!ll.length) { map.setView([42.1, 9.1], 8); trMap = map; return; }
-    map.fitBounds(L.latLngBounds(ll), {padding:[44, 44], maxZoom:12, animate:false});
-    let n = 0;
-    uniq.forEach(({k, days}) => {
-      const first = Math.min(...days), p = P[k], r = [-7, 5, -3, 8, -5][n % 5];
-      const icon = L.divIcon({className:'', html:`<div class="tpd" style="--c:${DAYCOL[(first - 1) % 7]};--d:${still() ? 0 : 0.4 + n * 0.25}s"></div>`, iconSize:[26, 26], iconAnchor:[13, 13], popupAnchor:[0, -9]});
-      L.marker([p.lat, p.lon], {icon, title:`${shortName(p.name)} (jour ${[...days].join(', ')})`, alt:`Tampon jour ${first} : ${shortName(p.name)}`}).addTo(map)
-        .bindPopup(`<b>📍 ${esc(shortName(p.name))}</b><br>${days.size > 1 ? 'Jours' : 'Jour'} ${[...days].join(', ')}`);
-      n++;
-    });
-    if (ll.length > 1) {
-      const line = L.polyline(ll, {color:'#a8401f', weight:2.5, opacity:.75, dashArray:'1 7', lineCap:'round'}).addTo(map);
+    if (!seq.length) { map.setView([42.1, 9.1], 8); trMap = map; return; }
+    const layer = L.layerGroup().addTo(map);
+    let animated = false;
+    const seqOf = day => { const out = [];
+      visited.forEach(({i, s}) => { if ((day == null || i === day) && s.p && P[s.p] && (!out.length || out[out.length - 1].k !== s.p)) out.push({k:s.p, i}); });
+      return out; };
+    function draw(day){
+      layer.clearLayers();
+      const sq = seqOf(day), ll = sq.map(x => [P[x.k].lat, P[x.k].lon]);
+      const un = new Map();
+      sq.forEach(({k, i}) => { if (!un.has(k)) un.set(k, {k, days:new Set()}); un.get(k).days.add(i + 1); });
+      map.fitBounds(L.latLngBounds(ll), {padding:[44, 44], maxZoom:day == null ? 12 : 14, animate:false});
+      let n = 0;
+      un.forEach(({k, days}) => {
+        const first = Math.min(...days), p = P[k];
+        const icon = L.divIcon({className:'', html:`<div class="tpd" style="--c:${DAYCOL[(first - 1) % 7]};--d:${still() ? 0 : 0.4 + n * 0.25}s"></div>`, iconSize:[26, 26], iconAnchor:[13, 13], popupAnchor:[0, -9]});
+        L.marker([p.lat, p.lon], {icon, title:`${shortName(p.name)} (jour ${[...days].join(', ')})`, alt:`Tampon jour ${first} : ${shortName(p.name)}`}).addTo(layer)
+          .bindPopup(`<b>📍 ${esc(shortName(p.name))}</b><br>${days.size > 1 ? 'Jours' : 'Jour'} ${[...days].join(', ')}`);
+        n++;
+      });
+      if (ll.length < 2) return;
+      const line = L.polyline(ll, {color:'#a8401f', weight:2.5, opacity:.75, dashArray:'1 7', lineCap:'round'}).addTo(layer);
       const path = line.getElement && line.getElement();
-      if (path && !still() && path.getTotalLength) {
+      if (!animated && day == null && path && !still() && path.getTotalLength) {
+        animated = true;
         try {
           const NS = 'http://www.w3.org/2000/svg', svg = path.ownerSVGElement, len = path.getTotalLength();
           const mk = document.createElementNS(NS, 'mask'), mp = document.createElementNS(NS, 'path');
@@ -2104,6 +2116,12 @@ if (store.get('cc-offline')) offlineLbl.textContent = 'Prêt ✓';
         } catch (e) {}
       }
     }
+    draw(null);
+    $('trLeg').addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      $('trLeg').querySelectorAll('button').forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b); });
+      draw(b.dataset.d === 'all' ? null : +b.dataset.d);
+    });
     trMap = map;
   }
   $('trajet').addEventListener('toggle', () => {
