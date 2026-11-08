@@ -8,11 +8,11 @@
     "j2": {"titre": "Mardi 6 · Bonifacio", "texte": "Baignade matinale avant la route. Grand soleil sur Bonifacio : la citadelle perchée sur ses falaises, une heure de bateau au pied des calanques et des grottes, un pique-nique, puis la randonnée jusqu'à la plage de Fazzio. Près de 15 km à pied."},
     "j3": {"titre": "Mercredi 7 · Bavella", "texte": "Baignade avant de partir, puis les aiguilles de Bavella et la montée jusqu'au Trou de la Bombe : 5,3 km en 2 h 46, pique-nique sur le parcours, soleil et nuages. Arrêt au bord de la Solenzara. Un énorme orage le soir : la plage est annulée, on attend à la Cantina di u Palace avec une bière, retour au gîte à 19 h 50."},
     "j4": {"titre": "Jeudi 8 · Santa Giulia et Palombaggia", "texte": "Programme chamboulé par le vent et la pluie en montagne. Baignade du matin, puis une randonnée de 9,4 km autour de Santa Giulia, pique-nique dans le maquis. En fin de journée, Palombaggia sous un ciel d'orage, une Pietra ambrée et une gaufre au chocolat face à la mer."},
-    "j5": {"titre": "Vendredi 9", "texte": "Port de Porto-Vecchio, plage de Saint-Cyprien, pique-nique aux piscines naturelles du Cavu, puis Aléria."},
-    "j6": {"titre": "Samedi 10", "texte": "Lavezzi, Bonifacio et Rondinara (selon la météo)."},
-    "j7": {"titre": "Dimanche 11 · Le retour", "texte": "Dernière baignade, Palombaggia, un tour express à Sartène, et l'envol depuis Figari."}
+    "j5": {"titre": "Vendredi 9 · Bonifacio à pied", "texte": "Mer trop formée : la sortie aux Lavezzi est reportée. Baignade matinale à Santa Giulia, puis Bonifacio à pied : le bastion de l'Étendard, un pique-nique face au cimetière marin avec la Sardaigne à l'horizon, le Gouvernail de la Corse et les marches de l'escalier du Roi d'Aragon, casque sur la tête. En fin de journée, les piscines naturelles du Cavu et le port de Porto-Vecchio. Près de 14 km à pied."},
+    "j6": {"titre": "Samedi 10 · Les îles Lavezzi", "texte": "Baignade matinale, puis enfin le bateau depuis le port de Bonifacio. Deux balades sur l'île Lavezzi, du snorkeling à Cala di Chiesa et un pique-nique au milieu du granit. Retour agité dans les grosses vagues, puis le coucher de soleil dans la haute ville de Bonifacio."},
+    "j7": {"titre": "Dimanche 11 · Le retour", "texte": "Dernière baignade dans le lagon de Santa Giulia, les clés du gîte rendues, un tour express place Porta à Sartène, la Fiat lavée et rendue avec le plein, puis l'envol de Figari à 20 h 35 et l'atterrissage à Nantes à 22 h 35."}
   },
-  "chiffres": "Plus de 47 km à pied, 210 km en Fiat 500c, 5 baignades, un pique-nique chaque midi.",
+  "chiffres": "Près de 81 km à pied, 580 km en Fiat 500c, 8 baignades, un pique-nique chaque midi.",
   "gouts": ["Pietra blonde", "Pietra ambrée à la châtaigne", "Colomba (bière blanche)", "Paolina", "Gaufre au chocolat à Palombaggia"],
   "fin": "Bises de Corse !"
 }
