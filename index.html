@@ -5,6 +5,18 @@
 <script>document.documentElement.classList.add('js')</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Le voyage en Corse d’Anne-Gaëlle et Damien</title>
+<meta name="description" content="Sept jours entre maquis et mer, du 5 au 11 octobre 2026 : le carnet, les photos, le livre et le film.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:site_name" content="Carnet Corse">
+<meta property="og:title" content="Le voyage en Corse d’Anne-Gaëlle et Damien">
+<meta property="og:description" content="Sept jours entre maquis et mer, du 5 au 11 octobre 2026 : le carnet, les photos, le livre et le film.">
+<meta property="og:url" content="https://damiengdn.github.io/carnet-corse-2026/">
+<meta property="og:image" content="https://damiengdn.github.io/carnet-corse-2026/partage.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Les falaises de Bonifacio vues depuis la mer">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#14566f">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Carnet Corse">
@@ -203,6 +215,15 @@ h3.sub::after{content:"";flex:1;border-top:3px dotted var(--hairline)}
 .ph-grid a{display:block;aspect-ratio:1;border-radius:var(--r-sm);overflow:hidden;background:var(--surface-strong)}
 .ph-grid img{width:100%;height:100%;object-fit:cover;display:block}
 .ph-grid .note{grid-column:1/-1;font-size:13px;color:var(--muted);margin:0}
+/* ---- Mode souvenir (après le voyage) : logistique masquée ---- */
+.souv-only{display:none}
+.souv .souv-only{display:inline}.souv .prat{display:none}
+.souv .tl .tip,.souv .tl .tag.dur,.souv .dep,.souv .pd,.souv .ph,.souv .stop .gps,.souv .stop .row{display:none}
+.souv .stops{gap:18px 14px;margin-top:20px}
+@media(max-width:599px){.souv .stops{grid-template-columns:repeat(2,minmax(0,1fr))}.souv .stop h3{font-size:15.5px}.souv .stop .cap{font-size:13px}}
+.stop figure.own{position:relative}
+.stop figure.own::after{content:"notre photo";position:absolute;right:6px;bottom:6px;font:700 15px/1 var(--hand);color:#16313f;background:rgba(255,250,240,.88);padding:3px 7px 4px;border-radius:4px;transform:rotate(-2deg);pointer-events:none}
+.prat-row{display:flex;justify-content:flex-end;margin:18px 0 0}
 .dep{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:0 0 12px;font:700 15px var(--font);color:var(--ink)}
 .dep input{font:700 17px var(--font);min-height:44px;padding:6px 10px;border:2px solid var(--ink);border-radius:var(--r-sm);background:var(--paper);color:var(--ink)}
 .more-d{margin-top:10px;border-top:2px dotted var(--hairline)}
@@ -931,19 +952,28 @@ const P = {
   cim:  {name:'Cimetière marin', lat:41.38672, lon:9.15038, img:wm('Cimetière marin (Bonifacio).jpg'), cap:'Chapelles funéraires face à la mer', d:{"desc":"Chapelles et caveaux à l'extrémité ouest du plateau, face à la mer.","facts":{"duree":"30 min","acces":"À pied depuis la haute-ville","marche":"Env. 10 min depuis la haute-ville","cout":"Gratuit (horaires à vérifier)"},"dontMiss":["La vue sur les falaises et la Sardaigne","Les chapelles funéraires face à la mer"],"tips":["Cimetière en activité : rester respectueux","Se rend à pied depuis la haute-ville (env. 10 min)"]}},
 };
 
+/* ---------- Nos photos pour les lieux (priment sur Wikimedia) ---------- */
+const OWN = {fig:'photos/album/20261005-125049-1.jpg', sg:'photos/album/20261005-151755-1.jpg', salin:'photos/album/20261008-182626-1.jpg',
+  bonc:'photos/album/20261006-142829-1.jpg', bat:'photos/album/20261006-134442-1.jpg', fazz:'photos/album/20261006-161809-1.jpg',
+  etend:'photos/album/20261006-141825-1.jpg', bav:'photos/album/20261007-121909-1.jpg', trou:'photos/album/20261007-153524-1.jpg',
+  pic4:'photos/album/20261008-150823-1.jpg', palo:'photos/album/20261008-172916-1.jpg', smm:'photos/album/20261006-123755-1.jpg',
+  sol:'photos/j3-riviere.jpg', gouv:'photos/j5-gouvernail.jpg', escar:'photos/j5-escalier.jpg'};
+Object.entries(OWN).forEach(([k, f]) => { if (P[k]) P[k].own = f; });
+const imgOf = p => p.own || p.img;
+
 /* ---------- Programme ---------- */
 // steps: {t, end?, txt, p? (clé de lieu), tags?, cond?} ; drive: {drive:'texte'}
 const DAYS = [
  {id:'j1', done:true, walk:'9,56 km · 13 422 pas (Apple Watch)', d:'Lundi 5 octobre', title:'Arrivée Figari • Santa Giulia • Porto-Vecchio', meteo:['🌦️','25°C / 19°C','Averses faibles possibles'],
   stops:['fig','sg','pv'], cover:'sg',
   steps:[
-   {t:'12:30', txt:'Atterrissage à Figari + récupération voiture de location', p:'fig', dur:'45 min', more:["Comptoirs des loueurs dans le hall, voitures sur le parking en face du terminal.", "Photographier la voiture (rayures, jantes) avant de partir et noter le niveau d'essence.", "Route : N198 direction Porto-Vecchio, ~30 min sans difficulté."]},
+   {t:'12:30', txt:'Atterrissage à Figari + récupération voiture de location', p:'fig', dur:'45 min', more:["💡 Comptoirs des loueurs dans le hall, voitures sur le parking en face du terminal.", "💡 Photographier la voiture (rayures, jantes) avant de partir et noter le niveau d'essence.", "💡 Route : N198 direction Porto-Vecchio, ~30 min sans difficulté."]},
    {drive:'🚗 Figari → Porto-Vecchio : ~30 min (25 km)'},
    {t:'13:45', end:'14:30', txt:'Pique-nique du midi', dur:'45 min'},
-   {t:'14:30', end:'15:30', txt:'Installation au gîte (Villa Occhiatana, Santa-Giulia) + courses', dur:'1 h', more:["Adresse : Villa Occhiatana, Santa-Giulia, 20137 Porto-Vecchio.", "Grandes surfaces à l'entrée de Porto-Vecchio : faire le plein d'eau, crème solaire et de quoi pique-niquer pour les journées rando.", "Prévoir des sacs isothermes pour les pique-niques du J3 et du J4."]},
-   {t:'15:45', end:'17:15', txt:'Santa Giulia — première baignade', p:'sg', dur:'1 h 30', cond:'Snorkeling si mer calme', more:["Lagon très peu profond, eau souvent plus chaude qu'ailleurs : idéal pour une première baignade.", "Snorkeling : longer les rochers aux deux extrémités de la plage, plus de poissons qu'au centre (sable).", "Soleil couché vers 19:05 : rester jusqu'au bout pour la lumière sur la baie."]},
+   {t:'14:30', end:'15:30', txt:'Installation au gîte (Villa Occhiatana, Santa-Giulia) + courses', dur:'1 h', more:["💡 Adresse : Villa Occhiatana, Santa-Giulia, 20137 Porto-Vecchio.", "💡 Grandes surfaces à l'entrée de Porto-Vecchio : faire le plein d'eau, crème solaire et de quoi pique-niquer pour les journées rando.", "💡 Prévoir des sacs isothermes pour les pique-niques du J3 et du J4."]},
+   {t:'15:45', end:'17:15', txt:'Santa Giulia — première baignade', p:'sg', dur:'1 h 30', conseil:'Snorkeling si mer calme', more:["Lagon très peu profond, eau souvent plus chaude qu'ailleurs : idéal pour une première baignade.", "💡 Snorkeling : longer les rochers aux deux extrémités de la plage, plus de poissons qu'au centre (sable).", "💡 Soleil couché vers 19:05 : rester jusqu'au bout pour la lumière sur la baie."]},
    {drive:'🚗 Santa Giulia → Porto-Vecchio : ~15 min (8 km)'},
-   {t:'17:30', end:'18:45', txt:'Vieille ville et citadelle de Porto-Vecchio', p:'pv', dur:'1 h 15', more:["Se garer en bas (port de plaisance) puis monter à pied par les escaliers (~10 min), ou au parking de la haute-ville.", "À voir : porte génoise, bastion de France, belvédère sur le golfe et les salines, église Saint-Jean-Baptiste.", "Rue Borgo et place de la République : boutiques de produits corses (charcuterie, miel, couteaux)."]},
+   {t:'17:30', end:'18:45', txt:'Vieille ville et citadelle de Porto-Vecchio', p:'pv', dur:'1 h 15', more:["💡 Se garer en bas (port de plaisance) puis monter à pied par les escaliers (~10 min), ou au parking de la haute-ville.", "💡 À voir : porte génoise, bastion de France, belvédère sur le golfe et les salines, église Saint-Jean-Baptiste.", "💡 Rue Borgo et place de la République : boutiques de produits corses (charcuterie, miel, couteaux)."]},
    {t:'20:00', txt:'Dîner'},
   ],
   rain:[{p:"egl",t:"Vieille ville : ruelles, église, boutiques et cafés"},{p:"salin",t:"Balade sur les salines (si simple bruine)"}],
@@ -971,7 +1001,7 @@ const DAYS = [
   steps:[
    {t:'10:30', txt:'Départ du gîte (lever tardif)'},
    {drive:'🚗 Porto-Vecchio → Col de Bavella via Zonza : ~1 h 15 (50 km)'},
-   {t:'11:30', txt:'Arrivée Col de Bavella (parking)', p:'bav', more:["Col à 1 218 m, statue de Notre-Dame-des-Neiges, vue directe sur les aiguilles de granit rouge.", "Parking payant au col, souvent plein en milieu de journée : se garer le long de la route si besoin. Cochons et vaches en liberté : ne pas les nourrir.", "Il fait 6 à 8 °C de moins qu'à Porto-Vecchio : prendre une polaire."]},
+   {t:'11:30', txt:'Arrivée Col de Bavella (parking)', p:'bav', more:["Col à 1 218 m, statue de Notre-Dame-des-Neiges, vue directe sur les aiguilles de granit rouge.", "💡 Parking payant au col, souvent plein en milieu de journée : se garer le long de la route si besoin. Cochons et vaches en liberté : ne pas les nourrir.", "💡 Il fait 6 à 8 °C de moins qu'à Porto-Vecchio : prendre une polaire."]},
    {t:'12:15', end:'15:00', txt:'Montée jusqu\'au Trou de la Bombe (aller-retour)', p:'trou', dur:'2 h 46', img:'photos/j3-rando-bombe.jpg', imgLabel:'🗺️ Carte de la rando', more:["✅ Fait : 5,33 km en 2 h 46, aller et retour par deux sentiers différents (via la Bocca Furesta et la Bocca di Velaco). Trace GPS : départ 12:35 du col, au Trou vers 13:30, pique-nique ~14:05–14:30, retour 15:21 ; D+ 291 m, point haut 1 314 m (fichier GPX : traces/j3-trou-de-la-bombe.gpx).", "🥪 Pique-nique en chemin, sur le parcours de la rando.", "Fin de montée rocheuse sous la crête, au pied de l'arche."]},
    {t:'15:00', txt:'Retour au col de Bavella'},
    {drive:'🚗 Bavella → route de la côte (Solenzara)'},
@@ -986,7 +1016,7 @@ const DAYS = [
   stops:['sg','pic4','palo'],
   steps:[
    {t:'10:45', end:'11:30', txt:'Baignade du matin à Santa Giulia avant la rando', p:'sg', dur:'45 min', more:["✅ Fait."]},
-   {t:'11:53', end:'12:48', txt:'Départ de la randonnée autour de Santa Giulia', p:'sg', noSwim:true, dur:'1 h', img:'photos/j4-trace-rando.jpg', imgLabel:'🗺️ Trace Apple Watch de la rando', more:["✅ Fait : 9,36 km en 3 h 56 (11:54 → 16:17), D+ 337 m d'après l'Apple Watch.", "Itinéraire Visorando : 8,2 km, D+ 188 m, départ N 41.530294° / E 9.283452° — visorando.com/randonnee-109519658"]},
+   {t:'11:53', end:'12:48', txt:'Départ de la randonnée autour de Santa Giulia', p:'sg', noSwim:true, dur:'1 h', img:'photos/j4-trace-rando.jpg', imgLabel:'🗺️ Trace Apple Watch de la rando', more:["✅ Fait : 9,36 km en 3 h 56 (11:54 → 16:17), D+ 337 m d'après l'Apple Watch.", "💡 Itinéraire Visorando : 8,2 km, D+ 188 m, départ N 41.530294° / E 9.283452° — visorando.com/randonnee-109519658"]},
    {t:'12:48', end:'13:18', txt:'Pique-nique en chemin, au sud de la baie', p:'pic4', dur:'30 min', img:'photos/j4-pique-nique.jpg', imgLabel:'📸 Photo de notre pause', more:["Pause pique-nique pendant la rando, dans le maquis (N 41.521573°, E 9.267235°)."]},
    {t:'13:18', end:'16:16', txt:'Suite de la randonnée et retour', p:'sg', noSwim:true, dur:'3 h', more:["Montée jusqu'au point haut (193 m), pause vers 14:20–14:35, puis retour par le bord de mer (trace GPS Visorando : 8,2 km, D+ 188 m)."]},
    {drive:'🚗 Santa-Giulia → Palombaggia : ~20 min'},
@@ -1041,15 +1071,15 @@ const DAYS = [
   steps:[
    {t:'08:30', txt:'Petit-déjeuner au gîte + bagages', dur:'1 h'},
    {drive:'🚗 → Santa Giulia : ~15 min'},
-   {t:'09:30', end:'11:30', txt:'Santa Giulia — dernière baignade', p:'sg', dur:'2 h', cond:'Baignade si mer calme', more:["Dernière baignade dans le lagon.", "Garder une serviette sèche et des vêtements de rechange dans la voiture."]},
+   {t:'09:30', end:'11:30', txt:'Santa Giulia — dernière baignade', p:'sg', dur:'2 h', conseil:'Baignade si mer calme', more:["Dernière baignade dans le lagon.", "💡 Garder une serviette sèche et des vêtements de rechange dans la voiture."]},
    {t:'11:45', end:'12:45', txt:'Déjeuner au gîte', dur:'1 h'},
    {t:'13:00', txt:'Rendre les clés du gîte'},
-   {t:'13:15', end:'14:45', txt:'Temps libre', dur:'1 h 30', more:["Derniers achats à Porto-Vecchio si envie, ou dernière balade à Santa Giulia."]},
+   {t:'13:15', end:'14:45', txt:'Temps libre', dur:'1 h 30', more:["💡 Derniers achats à Porto-Vecchio si envie, ou dernière balade à Santa Giulia."]},
    {drive:'🚗 Santa-Giulia → Sartène par Figari : ~1 h 10'},
-   {t:'16:15', end:'17:15', txt:'Sartène : petit tour express (place Porta)', p:'sart', dur:'1 h', cond:'Partir à 17:15 au plus tard', more:["Tour rapide de la place Porta et des ruelles autour, se garer au plus près du centre."]},
+   {t:'16:15', end:'17:15', txt:'Sartène : petit tour express (place Porta)', p:'sart', dur:'1 h', conseil:'Partir à 17:15 au plus tard', more:["💡 Tour rapide de la place Porta et des ruelles autour, se garer au plus près du centre."]},
    {drive:'🚗 Sartène → Aéroport de Figari : ~40 min (35 km)'},
    {t:'18:30', txt:'Lavage de la voiture', dur:'30 min'},
-   {t:'19:00', end:'19:30', txt:"Plein d'essence puis restitution de la voiture", p:'fig', dur:'30 min', more:["Le loueur facture le carburant manquant : plein avant de rendre la voiture."]},
+   {t:'19:00', end:'19:30', txt:"Plein d'essence puis restitution de la voiture", p:'fig', dur:'30 min', more:["💡 Le loueur facture le carburant manquant : plein avant de rendre la voiture."]},
    {t:'19:30', end:'20:00', txt:'Enregistrement à l\'aéroport de Figari', p:'fig', dur:'30 min'},
    {t:'20:35', txt:'Décollage Figari → Nantes ✈️'},
    {t:'22:35', txt:'Atterrissage à Nantes 🛬 — fin des vacances', cry:true},
@@ -1074,7 +1104,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v115'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v116'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -1153,7 +1183,7 @@ const RESTO = {
 
 /* ---------- Rendu ---------- */
 const galleryImg = (p, cls) =>
-  `<img class="${cls}" src="${p.img}" alt="${esc(p.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="imgFail(this)" data-cap="${esc(p.cap)}">`;
+  `<img class="${cls}" src="${imgOf(p)}" alt="${esc(p.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="imgFail(this)" data-cap="${esc(p.cap)}">`;
 const FACT_ICO = {duree:'⏱',moment:'🌅',acces:'🚗',marche:'🥾',cout:'💶',niveau:'📈',services:'🚻'};
 const FACT_LBL = {duree:'Sur place',moment:'Meilleur moment',acces:'Accès',marche:'Marche',cout:'Coût',niveau:'Niveau',services:'Équipements'};
 function detailHtml(p){
@@ -1162,13 +1192,13 @@ function detailHtml(p){
   const key = ['duree','marche','niveau'].filter(k => f[k]);
   const rest = Object.keys(FACT_ICO).filter(k => f[k] && !key.includes(k));
   const list = (t, a) => a && a.length ? `<h4>${t}</h4><ul>${a.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>` : '';
-  return `<div class="facts">${key.map(k=>`<span class="tag">${FACT_ICO[k]} ${esc(f[k])}</span>`).join('')}</div>
+  return `<div class="pd"><div class="facts">${key.map(k=>`<span class="tag">${FACT_ICO[k]} ${esc(f[k])}</span>`).join('')}</div>
   ${d.warn ? `<div class="warnline">⚠ ${esc(d.warn)}</div>` : ''}
   <details class="more-d"><summary>Plus de détails</summary>
     <p class="desc">${esc(d.desc)}</p>
     ${rest.length ? `<dl class="kv">${rest.map(k=>`<div><dt>${FACT_ICO[k]} ${FACT_LBL[k]}</dt><dd>${esc(f[k])}</dd></div>`).join('')}</dl>` : ''}
     ${list('À ne pas manquer', d.dontMiss)}${list('Conseils', d.tips)}
-  </details>`;
+  </details></div>`;
 }
 const nav = document.getElementById('daynav');
 const wd = (day) => day.d.split(' ')[0];
@@ -1209,6 +1239,17 @@ const isPicnic = t => /pique-?nique|picnic/i.test(t);
 const picEl = () => animEl('picrow', PICNIC_SVG);
 const isHike = t => /^(Randonnée|Marche)/.test(t);
 
+// Notes d'étape : 💡 = conseil pratique (masqué en mode souvenir), « ✅ Fait : » = préfixe masqué en mode souvenir
+const moreLi = m => {
+  if (/^💡/.test(m)) return `<li class="tip">${esc(m)}</li>`;
+  const ok = /^✅\s*(Fait\b\s*:?\s*)?/u.exec(m);
+  let rest = ok ? m.slice(ok[0].length) : m;
+  if (ok && !rest.replace(/[.\s]/g, '')) return `<li class="tip">${esc(m)}</li>`;
+  if (ok) rest = rest.charAt(0).toUpperCase() + rest.slice(1);
+  rest = esc(rest).replace(/\s*Heure à confirmer\.?/, ' <span class="tip">Heure à confirmer.</span>');
+  return `<li>${ok ? `<span class="tip">${esc(ok[0].trim())} </span>` : ''}${rest}</li>`;
+};
+
 const seenImg = new Set();
 DAYS.forEach((day, i) => {
   const n = i + 1;
@@ -1220,17 +1261,17 @@ DAYS.forEach((day, i) => {
     const idx = s.p ? order.indexOf(s.p) + 1 : 0;
     return `<li><span class="t"><span data-t="${s.t}">${s.t}</span>${s.end ? `<br><span class="d">→ <span data-t="${s.end}">${s.end}</span></span>` : ''}</span>
       <span>${idx ? `<span class="badge">${idx}</span>` : ''}${esc(s.txt)}
-      ${s.dur ? `<br><span class="tag">⏱ ${s.dur}</span>` : ''}${s.cond ? `<span class="tag cond">⚠ ${esc(s.cond)}</span>` : ''}
+      ${s.dur ? `<br><span class="tag dur">⏱ ${s.dur}</span>` : ''}${s.cond ? `<span class="tag cond">⚠ ${esc(s.cond)}</span>` : ''}${s.conseil ? `<span class="tag cond tip">⚠ ${esc(s.conseil)}</span>` : ''}
       ${isPlane(s.txt) ? animEl('sky ' + (/Décollage/.test(s.txt) ? 'up' : 'down'), '<span class="plane">' + PLANE_SVG + '</span>') : ''}${isPicnic(s.txt) ? picEl() : isBoat(s.txt) ? animEl('btrow', '<span class="bt">' + BOAT_SVG + '</span>') : isHike(s.txt) ? animEl('wkrow', '<span class="wk">' + WALKERS_SVG + '</span>') : (isSwim(s) ? swimEl(s) : '')}
       ${s.cry ? '<span class="cry-duo" data-cry></span>' : ''}
-      ${s.more ? `<ul class="more">${s.more.map(m => `<li>${esc(m)}</li>`).join('')}</ul>` : ''}
+      ${s.more ? `<ul class="more">${s.more.map(moreLi).join('')}</ul>` : ''}
       ${s.img ? `<details class="more-d"><summary>${s.imgLabel || '📷 Photo'}</summary><a href="${s.img}" target="_blank" rel="noopener"><img class="track" src="${s.img}" alt="${esc(s.imgLabel || s.txt)}" loading="lazy"></a></details>` : ''}
       ${s.p ? phHtml(s.p) : ''}</span></li>`;
   }).join('');
 
   const stopsHtml = order.map((k, j) => { const p = P[k]; return `
     <article class="stop">
-      <figure><img src="${p.img}" alt="${esc(p.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="imgFail(this)" data-cap="${esc(p.cap)}"></figure>
+      <figure${p.own ? ' class="own"' : ''}><img src="${imgOf(p)}" alt="${esc(p.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="imgFail(this)" data-cap="${esc(p.cap)}"></figure>
       <div class="body">
         <h3><span class="badge">${j+1}</span>${esc(p.name)}</h3>
         <div class="cap">${esc(p.cap)}</div>
@@ -1254,9 +1295,9 @@ DAYS.forEach((day, i) => {
   }).join('');
 
   const cover = P[day.cover || order[order.length - 1]];
-  const pool = [...new Set([...order, ...(day.rain || []).map(r => r.p)])].map(k => P[k]).filter(p => p !== cover && p.img);
-  const side = [...pool.filter(p => !seenImg.has(p.img)), ...pool.filter(p => seenImg.has(p.img))].slice(0, 2);
-  [cover, ...side].forEach(p => seenImg.add(p.img));
+  const pool = [...new Set([...order, ...(day.rain || []).map(r => r.p)])].map(k => P[k]).filter(p => p !== cover && imgOf(p));
+  const side = [...pool.filter(p => !seenImg.has(imgOf(p))), ...pool.filter(p => seenImg.has(imgOf(p)))].slice(0, 2);
+  [cover, ...side].forEach(p => seenImg.add(imgOf(p)));
   main.insertAdjacentHTML('beforeend', `
   <section class="day" id="${day.id}">
     <div class="gallery">
@@ -1279,7 +1320,7 @@ DAYS.forEach((day, i) => {
           <button data-act="fit" title="Recentrer" aria-label="Recentrer">🎯</button>
         </div>
       </div>
-      <div><h3 class="sub">Programme</h3>${/^Départ/.test(day.steps[0].txt) ? `<label class="dep">🕗 Heure de départ <input type="time" step="900" value="${day.steps[0].t}" data-day="${day.id}" data-base="${day.steps[0].t}"></label>` : ''}<ul class="tl"><li class="trcar" role="presentation" aria-hidden="true">${CAR_SVG}</li>${stepsHtml}</ul></div>
+      <div><h3 class="sub"><span class="prat">Programme</span><span class="souv-only">Notre journée</span></h3>${/^Départ/.test(day.steps[0].txt) ? `<label class="dep">🕗 Heure de départ <input type="time" step="900" value="${day.steps[0].t}" data-day="${day.id}" data-base="${day.steps[0].t}"></label>` : ''}<ul class="tl"><li class="trcar" role="presentation" aria-hidden="true">${CAR_SVG}</li>${stepsHtml}</ul></div>
     </div>
     <div class="stops">${stopsHtml}</div>
     ${day.rain && !day.done ? `<details class="rain" data-day="${day.id}">
@@ -1294,7 +1335,7 @@ DAYS.forEach((day, i) => {
       </div>
       <div class="stops">${day.rain.map((r, j) => { const p = P[r.p]; return `
         <article class="stop">
-          <figure><img src="${p.img || fallbackImg(p.name)}" alt="${esc(p.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="imgFail(this)" data-cap="${esc(p.cap)}"></figure>
+          <figure><img src="${imgOf(p) || fallbackImg(p.name)}" alt="${esc(p.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="imgFail(this)" data-cap="${esc(p.cap)}"></figure>
           <div class="body">
             <h3><span class="badge alt">${'ABCDE'[j]}</span>${esc(p.name)}</h3>
             <div>${esc(r.t)}</div>
@@ -1582,7 +1623,19 @@ if (tripOver) {
   orb.setAttribute('aria-label', 'Ouvrir nos souvenirs');
   orb.innerHTML = '<span><small>et voilà&nbsp;!</small>souvenirs</span>';
   document.getElementById('todayBtn').hidden = true;
+  document.getElementById('offlineBtn').hidden = true;
   document.getElementById('meteo').hidden = true;
+  // Mode souvenir : infos pratiques (conseils, durées, GPS, itinéraires) masquées, réaffichables
+  let prat = false; try { prat = localStorage.getItem('cc-prat') === '1'; } catch (e) {}
+  document.getElementById('days').insertAdjacentHTML('afterbegin', '<div class="prat-row"><button type="button" class="chip" id="pratBtn"></button></div>');
+  const pratBtn = document.getElementById('pratBtn');
+  const setPrat = on => {
+    document.documentElement.classList.toggle('souv', !on);
+    pratBtn.setAttribute('aria-pressed', on);
+    pratBtn.textContent = on ? '🧳 Masquer les infos pratiques' : '🧳 Afficher les infos pratiques';
+  };
+  setPrat(prat);
+  pratBtn.addEventListener('click', () => { prat = !prat; setPrat(prat); try { localStorage.setItem('cc-prat', prat ? '1' : '0'); } catch (e) {} });
 }
 if (!location.hash && today.getFullYear() === 2026 && today.getMonth() === 9 && today.getDate() >= 5 && today.getDate() <= 11) {
   const tj = document.getElementById('j' + (today.getDate() - 4));
