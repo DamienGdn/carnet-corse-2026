@@ -16,7 +16,7 @@ Pour mettre le livre à jour :
    node outils/livre-print.mjs --pdf
    ```
 
-La commande réécrit `livre-print.html`, puis imprime `livre.pdf` (25 pages A4
+La commande réécrit `livre-print.html`, puis imprime `livre.pdf` (33 pages A4
 paysage) avec Chromium. Sans `--pdf`, seul le HTML est régénéré.
 
 Pour le PDF, les photos sont réduites à la volée (200 ppi à la taille affichée,
