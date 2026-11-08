@@ -45,7 +45,9 @@
 *{box-sizing:border-box}
 body{margin:0;background:var(--canvas) var(--grain);color:var(--ink);font:500 16px/1.55 var(--font);-webkit-text-size-adjust:100%;
   padding:max(16px,env(safe-area-inset-top)) 16px max(24px,env(safe-area-inset-bottom))}
-:focus-visible{outline:3px solid var(--ocre);outline-offset:3px}
+:focus-visible{outline:3px solid #8f5d0e;outline-offset:3px}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) :focus-visible{outline-color:#e3b04f}}
+:root[data-theme=dark] :focus-visible{outline-color:#e3b04f}
 .wrap{max-width:900px;margin:0 auto}
 .top{display:flex;justify-content:space-between;gap:8px;margin-bottom:18px}
 .chip{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 14px;border-radius:14px 14px 14px 4px;background:var(--paper);
@@ -84,6 +86,7 @@ footer{text-align:center;color:var(--muted);font:700 20px var(--hand);margin-top
     <p class="sub">Porto-Vecchio · 5 → 11 octobre 2026</p>
   </header>
 
+  <main>
   <figure class="pol" style="margin-left:auto;margin-right:auto">
     <video controls playsinline preload="metadata" poster="video/affiche.jpg" aria-label="Film du voyage en Corse, 2 minutes 17, avec musique">
       <source src="video/film-corse.mp4" type="video/mp4">
@@ -98,6 +101,8 @@ footer{text-align:center;color:var(--muted);font:700 20px var(--hand);margin-top
     <a class="btn alt" href="livre-print.html">🖨️ Version imprimable</a>
   </div>
   <p class="note">MP4 · 54 Mo — de préférence en Wi-Fi.</p>
+  <p class="note">Le film fait défiler 49 photos du voyage en musique, sans paroles. Les mêmes souvenirs, racontés en texte : <a href="livre.html">le livre photo</a>.</p>
+  </main>
 
   <footer>Bises de Corse ! · Anne-Gaëlle &amp; Damien</footer>
 </div>

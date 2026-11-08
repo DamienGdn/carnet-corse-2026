@@ -49,7 +49,9 @@
 html,body{height:100%;margin:0}
 body{background:var(--desk) var(--grain);color:var(--ink);font:500 16px/1.55 var(--font);-webkit-text-size-adjust:100%;overflow:hidden;display:flex;flex-direction:column}
 a{color:var(--sea)}
-:focus-visible{outline:3px solid var(--ocre);outline-offset:2px}
+:focus-visible{outline:3px solid #8f5d0e;outline-offset:2px}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) :focus-visible{outline-color:#e3b04f}}
+:root[data-theme=dark] :focus-visible{outline-color:#e3b04f}
 button{font:inherit;color:inherit;cursor:pointer}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
@@ -528,8 +530,11 @@ function setPage(n,quiet){
     if(i===n)e.setAttribute('aria-current','page');else e.removeAttribute('aria-current');
   });
   const pe=pages[n].el;pe.querySelector('.pin').scrollTop=0;
-  $('#count').textContent=(n+1)+' / '+pages.length;
-  $('#prev').disabled=n===0;$('#next').disabled=n===pages.length-1;
+  $('#count').innerHTML=(n+1)+' / '+pages.length+(pages[n].toc?'<span class="sr"> · '+pages[n].toc.replace(/[<&]/g,'')+'</span>':'');
+  // Si le bouton qui a le focus devient inactif, le focus passe à l'autre flèche (sinon il tombe sur <body>)
+  const prev=$('#prev'),next=$('#next'),had=document.activeElement;
+  prev.disabled=n===0;next.disabled=n===pages.length-1;
+  if(had===prev&&prev.disabled)next.focus();else if(had===next&&next.disabled)prev.focus();
   document.title=(pages[n].toc?pages[n].toc+' · ':'')+'Le livre du voyage';
   try{history.replaceState(null,'','#p'+(n+1))}catch(e){}
   countUp(pe);

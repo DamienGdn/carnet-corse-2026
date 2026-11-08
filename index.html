@@ -35,7 +35,7 @@
   --ink:#16313f; --body:#2f4651; --muted:#566468;
   --hairline:#c9b88f; --hairline-soft:#e3d6b5; --canvas:#f7efdc; --paper:#fffaf0; --surface-soft:#efe4c8; --surface-strong:#eadcbb;
   --maquis:#41612f; --maquis-soft:#dfe8cc; --ocre:#c88a1f; --ocre-soft:#f3dca0;
-  --warn:#a8401f; --on-primary:#ffffff;
+  --warn:#a8401f; --on-primary:#ffffff; --ocre-ink:#8f5d0e; --focus:#8f5d0e;
   --shadow:0 1px 0 rgba(22,49,63,.08),0 3px 10px rgba(80,55,20,.16);
   --r-sm:10px; --r-md:16px; --r-lg:22px; --r-xl:32px;
   --font:Nunito,"Avenir Next",system-ui,sans-serif;
@@ -48,7 +48,7 @@
   --ink:#f4ead2; --body:#d9d0b8; --muted:#b0a98f;
   --hairline:#5a5a48; --hairline-soft:#37403a; --canvas:#172228; --paper:#1f2d33; --surface-soft:#1d2a2f; --surface-strong:#2a3a40;
   --maquis:#a9cf88; --maquis-soft:#2b3b27; --ocre:#e3b04f; --ocre-soft:#4a3d1a;
-  --warn:#f0a58c; --on-primary:#1a1208;
+  --warn:#f0a58c; --on-primary:#1a1208; --ocre-ink:#e3b04f; --focus:#e3b04f;
   --shadow:0 1px 0 rgba(255,255,255,.05),0 3px 12px rgba(0,0,0,.5);
 }
 *{box-sizing:border-box}
@@ -59,7 +59,8 @@ html{overflow-x:clip}
 body{margin:0;background:var(--canvas) var(--grain);color:var(--ink);font:500 16px/1.55 var(--font);-webkit-text-size-adjust:100%;overflow-x:clip}
 h1,h2,h3,h4{margin:0;font-family:var(--display);font-weight:600;line-height:1.2;color:var(--ink)}
 a{color:var(--sea)}
-:focus-visible{outline:3px solid var(--ocre);outline-offset:2px}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.lb :focus-visible{outline-color:#e3b04f}
 .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
 @media(max-width:743px){.wrap{padding:0 16px}}
 
@@ -85,7 +86,7 @@ a{color:var(--sea)}
 .tagl:nth-child(1){transform:rotate(-1.2deg)}.tagl:nth-child(2){transform:rotate(1deg)}.tagl:nth-child(3){transform:rotate(-.6deg)}
 .tagl .lab{font:700 20px/1 var(--hand);color:var(--primary)}
 .tagl .val{font-size:14px;font-weight:700;color:var(--ink)}
-.stamp{margin-left:auto;display:flex;align-items:center;justify-content:center;width:96px;height:96px;border-radius:50%;border:3px double var(--primary);color:var(--primary);text-align:center;font:600 10px/1.1 var(--display);text-transform:uppercase;letter-spacing:.5px;text-decoration:none;transform:rotate(-12deg);background:radial-gradient(circle,transparent 60%,rgba(168,64,31,.08) 61%)}
+.stamp{margin-left:auto;display:flex;align-items:center;justify-content:center;width:96px;height:96px;border-radius:50%;border:3px double var(--primary);color:var(--primary);text-align:center;font:600 12px/1.1 var(--display);text-transform:uppercase;letter-spacing:.5px;text-decoration:none;transform:rotate(-12deg);background:radial-gradient(circle,transparent 60%,rgba(168,64,31,.08) 61%)}
 .stamp:active{transform:rotate(-12deg) scale(.94)}
 .stamp small{display:block;font:700 19px/.95 var(--hand);text-transform:none;letter-spacing:0}
 .gite{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin:22px 0 0;padding:14px 16px;background:var(--maquis-soft);border-radius:var(--r-md);border:2px solid var(--maquis)}
@@ -327,7 +328,7 @@ h3.sub::after{content:"";flex:1;border-top:3px dotted var(--hairline)}
 .stitch{--c:var(--primary);position:relative;aspect-ratio:1;border-radius:50%;background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:2.5px dashed var(--c);box-shadow:var(--shadow);transform:rotate(var(--r,-2deg));padding:0 4px;min-width:0}
 .stitch::before{content:"";position:absolute;inset:5px;border-radius:50%;border:1.5px dotted var(--c);opacity:.65;pointer-events:none}
 .stitch:nth-child(2){--c:var(--sea);--r:2deg}.stitch:nth-child(3){--c:var(--maquis);--r:-1deg}
-.stitch:nth-child(4){--c:var(--ocre);--r:1.5deg}.stitch:nth-child(5){--c:var(--sea);--r:-2.5deg}.stitch:nth-child(6){--c:var(--primary);--r:1deg}
+.stitch:nth-child(4){--c:var(--ocre);--r:1.5deg}.stitch:nth-child(4) .bl{color:var(--ocre-ink)}.stitch:nth-child(5){--c:var(--sea);--r:-2.5deg}.stitch:nth-child(6){--c:var(--primary);--r:1deg}
 .stitch .bi{font-size:21px;line-height:1}
 .stitch .bn{font:600 26px/1.05 var(--display);color:var(--ink);font-variant-numeric:tabular-nums}
 .stitch .bl{font:700 16px/1 var(--hand);color:var(--c);max-width:100%}
@@ -344,7 +345,7 @@ h3.sub::after{content:"";flex:1;border-top:3px dotted var(--hairline)}
 .pol:focus-visible{outline:3px solid var(--primary);outline-offset:3px}
 .al-im{display:block;position:relative}
 .al-play{position:absolute;left:50%;top:50%;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:rgba(255,250,240,.9);color:#16313f;font:normal 18px/44px var(--font);text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.4);pointer-events:none}
-.al-n{font:700 15px var(--font);color:#566468;margin-left:6px}
+.al-n{font:700 15px var(--font);color:var(--muted);margin-left:6px}
 .al-dbtn{margin-left:8px}.al-dbtn[hidden]{display:none}
 .al-load{text-align:center;color:#566468;margin:14px 0}
 .lb video{max-width:100%;max-height:80dvh;border-radius:4px;border:8px solid #fffaf0;background:#000}
@@ -501,7 +502,7 @@ footer .sig{display:block;color:var(--primary);font:700 28px var(--hand);margin-
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
 
 /* ===== v35 : vie du carnet ===== */
-@media(max-width:400px){.brand svg{width:90px}.tools{gap:4px}.chip{min-width:42px;padding:0 8px}.topbar{gap:6px}}
+@media(max-width:400px){.brand svg{width:90px}.tools{gap:4px}.chip{min-width:44px;padding:0 8px}.topbar{gap:6px}}
 .sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 /* 1. trajet dessiné au défilement */
 @property --p{syntax:'<number>';inherits:true;initial-value:0}
@@ -712,7 +713,7 @@ html.intro-on #intro.skip{animation:cc-in-skip .2s ease-out forwards}
 /* trajet : petits points par jour */
 .tpd{width:14px;height:14px;margin:6px;border-radius:50%;background:var(--c,#a8401f);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.45);animation:tp-pop .5s cubic-bezier(.3,1.6,.5,1) both;animation-delay:var(--d,0s)}
 .tr-leg{display:flex;flex-wrap:wrap;gap:6px;margin:-4px 0 10px}
-.tr-leg button{cursor:pointer;min-height:32px;display:inline-flex;align-items:center;gap:5px;font:700 13px/1 var(--display);padding:4px 11px 4px 8px;border-radius:999px;background:var(--paper);border:1.5px solid var(--hairline);color:var(--ink)}
+.tr-leg button{cursor:pointer;min-height:44px;display:inline-flex;align-items:center;gap:5px;font:700 13px/1 var(--display);padding:4px 11px 4px 8px;border-radius:999px;background:var(--paper);border:1.5px solid var(--hairline);color:var(--ink)}
 .tr-leg button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .tr-leg span{display:inline-flex;align-items:center;gap:5px;font:700 13px/1 var(--display);padding:4px 9px 4px 6px;border-radius:999px;background:var(--paper);border:1.5px solid var(--hairline);color:var(--ink)}
 .tr-leg i{width:11px;height:11px;border-radius:50%;background:var(--c);border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.25)}
@@ -805,7 +806,7 @@ html.intro-on #intro.skip{animation:cc-in-skip .2s ease-out forwards}
     <div class="tools">
       <button class="chip" id="todayBtn" aria-label="Mode Aujourd’hui" aria-haspopup="dialog">📅<span class="lbl">Aujourd’hui</span></button>
       <button class="chip" id="offlineBtn" aria-label="Télécharger pour le hors-ligne">⬇️<span class="lbl" id="offlineLbl">Hors-ligne</span></button>
-      <button class="chip" id="themeBtn" aria-label="Basculer le mode sombre">🌙</button>
+      <button class="chip" id="themeBtn" aria-label="Mode sombre" aria-pressed="false">🌙</button>
       <button class="chip" id="sndBtn" type="button" aria-pressed="false" aria-label="Bruitages désactivés : toucher pour activer">🔇</button>
     </div>
   </div>
@@ -817,7 +818,7 @@ html.intro-on #intro.skip{animation:cc-in-skip .2s ease-out forwards}
       <div class="tagl"><div class="lab">Destination</div><div class="val">Porto-Vecchio · Figari</div></div>
       <div class="tagl"><div class="lab">Dates</div><div class="val">5 → 11 oct. 2026</div></div>
       <div class="tagl"><div class="lab">Séjour</div><div class="val">7 jours · gîte à Santa Giulia</div></div>
-      <a class="stamp" id="todayOrb" href="#j1" aria-label="Aller au jour en cours"><span><small>c’est parti&nbsp;!</small>aujourd’hui</span></a>
+      <a class="stamp" id="todayOrb" href="#j1" aria-label="C’est parti, aujourd’hui : aller au jour en cours"><span><small>c’est parti&nbsp;!</small>aujourd’hui</span></a>
     </div>
     <div class="gite">
       <div><div class="lab">🏡 Notre gîte</div><div class="val">Villa Occhiatana, Santa-Giulia, 20137 Porto-Vecchio</div></div>
@@ -835,6 +836,7 @@ html.intro-on #intro.skip{animation:cc-in-skip .2s ease-out forwards}
 
 <nav class="daynav" aria-label="Jours"><div class="dn-in"><a class="dn-logo" href="#top" aria-label="Haut de page"><img src="logo.svg" alt="" width="52" height="32"></a><div class="wrap" id="daynav"></div></div></nav>
 
+<main id="contenu">
 <section class="wrap extra">
   <details class="fold" id="meteo">
     <summary><span class="sub-t">🌤️ Météo en direct</span><span class="cnt">heure par heure</span></summary>
@@ -850,18 +852,19 @@ html.intro-on #intro.skip{animation:cc-in-skip .2s ease-out forwards}
   </section>
   <details class="fold" id="souvenirs">
     <summary><span class="sub-t">📸 Nos souvenirs</span><span class="cnt" id="albCnt"></span></summary>
-    <div id="album"></div>
+    <h2 class="sr-only">Nos souvenirs</h2><div id="album"></div>
   </details>
   <details class="fold" id="trajet">
     <summary><span class="sub-t">🗺️ Notre trajet</span><span class="cnt" id="trCnt"></span></summary>
     <p class="note">Les lieux visités (et ceux prévus aujourd'hui), dans l'ordre, avec une couleur par jour. Touche un jour pour ne voir que lui, ou « Tout ».</p>
     <div class="tr-map" id="trMap" role="region" aria-label="Carte du trajet réel"></div>
-    <div class="tr-leg" id="trLeg" aria-label="Légende des jours"></div>
+    <div class="tr-leg" id="trLeg" role="group" aria-label="Légende des jours"></div>
     <p class="note" id="trList"></p>
   </details>
 </section>
 
-<main class="wrap" id="days"></main>
+<div class="wrap" id="days"></div>
+</main>
 
 <div class="wrap">
 </div>
@@ -1104,7 +1107,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v116'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v117'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
@@ -1183,7 +1186,7 @@ const RESTO = {
 
 /* ---------- Rendu ---------- */
 const galleryImg = (p, cls) =>
-  `<img class="${cls}" src="${imgOf(p)}" alt="${esc(p.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="imgFail(this)" data-cap="${esc(p.cap)}">`;
+  `<img class="${cls}" tabindex="0" role="button" aria-label="Agrandir la photo : ${esc(p.name)}" src="${imgOf(p)}" alt="${esc(p.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="imgFail(this)" data-cap="${esc(p.cap)}">`;
 const FACT_ICO = {duree:'⏱',moment:'🌅',acces:'🚗',marche:'🥾',cout:'💶',niveau:'📈',services:'🚻'};
 const FACT_LBL = {duree:'Sur place',moment:'Meilleur moment',acces:'Accès',marche:'Marche',cout:'Coût',niveau:'Niveau',services:'Équipements'};
 function detailHtml(p){
@@ -1271,7 +1274,7 @@ DAYS.forEach((day, i) => {
 
   const stopsHtml = order.map((k, j) => { const p = P[k]; return `
     <article class="stop">
-      <figure${p.own ? ' class="own"' : ''}><img src="${imgOf(p)}" alt="${esc(p.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="imgFail(this)" data-cap="${esc(p.cap)}"></figure>
+      <figure${p.own ? ' class="own"' : ''}><img tabindex="0" role="button" aria-label="Agrandir la photo : ${esc(p.name)}" src="${imgOf(p)}" alt="${esc(p.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="imgFail(this)" data-cap="${esc(p.cap)}"></figure>
       <div class="body">
         <h3><span class="badge">${j+1}</span>${esc(p.name)}</h3>
         <div class="cap">${esc(p.cap)}</div>
@@ -1505,7 +1508,7 @@ async function fillPh(det){
   grid.innerHTML = '<p class="note">Chargement…</p>';
   try {
     const imgs = await photosOf(det.dataset.p);
-    grid.innerHTML = imgs.length ? imgs.map(i => `<a href="${i.descriptionurl}" target="_blank" rel="noopener"><img src="${i.thumburl}" alt="" loading="lazy" referrerpolicy="no-referrer"></a>`).join('')
+    grid.innerHTML = imgs.length ? imgs.map(i => `<a href="${i.descriptionurl}" target="_blank" rel="noopener" aria-label="Photo Wikimedia Commons : auteur et licence (nouvel onglet)"><img src="${i.thumburl}" alt="" loading="lazy" referrerpolicy="no-referrer"></a>`).join('')
       + '<p class="note">Photos Wikimedia Commons prises à proximité · touchez pour l’auteur et la licence.</p>'
       : '<p class="note">Aucune photo géolocalisée trouvée à proximité.</p>';
   } catch (e) { grid.innerHTML = '<p class="note">Photos indisponibles (hors ligne ?) · refermez et rouvrez pour réessayer.</p>'; delete grid.dataset.done; }
@@ -1590,12 +1593,16 @@ document.addEventListener('keydown', e => {
 
 /* ---------- Lightbox ---------- */
 const lb = document.getElementById('lb'), lbImg = document.getElementById('lbImg'), lbCap = document.getElementById('lbCap');
-document.addEventListener('click', e => {
+const openLbImg = e => {
   const img = e.target.closest('.stop img, .gallery img'); if (!img) return;
+  if (e.type === 'keydown') { if (e.key !== 'Enter' && e.key !== ' ') return; e.preventDefault(); }
   lbImg.src = img.src; lbImg.alt = img.alt;
   lbCap.textContent = img.alt + ' — ' + img.dataset.cap;
   lb.classList.add('open');
-});
+  lbReturn = img; document.getElementById('lbClose').focus();
+};
+document.addEventListener('click', openLbImg);
+document.addEventListener('keydown', openLbImg);
 let lbReturn = null;
 function closeLb(){ const v = document.getElementById('lbVid'); if (v) { v.pause(); v.removeAttribute('src'); v.hidden = true; lbImg.hidden = false; } lb.classList.remove('open', 'album'); if (lbReturn) { lbReturn.focus({preventScroll:true}); lbReturn = null; } }
 lb.addEventListener('click', e => { if (e.target !== lbImg && e.target.id !== 'lbVid') closeLb(); });
@@ -1620,7 +1627,7 @@ const tripOver = today >= new Date(2026, 9, 12);
 if (tripOver) {
   const orb = document.getElementById('todayOrb');
   orb.href = '#souvenirs'; orb.dataset.after = '1';
-  orb.setAttribute('aria-label', 'Ouvrir nos souvenirs');
+  orb.setAttribute('aria-label', 'Et voilà, souvenirs : ouvrir l’album');
   orb.innerHTML = '<span><small>et voilà&nbsp;!</small>souvenirs</span>';
   document.getElementById('todayBtn').hidden = true;
   document.getElementById('offlineBtn').hidden = true;
@@ -1667,7 +1674,7 @@ const store = { get(k){ try { return JSON.parse(localStorage.getItem(k)); } catc
 
 /* ---------- Mode sombre ---------- */
 const themeBtn = document.getElementById('themeBtn');
-function setTheme(t){ document.documentElement.dataset.theme = t; themeBtn.textContent = t === 'dark' ? '☀️' : '🌙'; store.set('cc-theme', t); }
+function setTheme(t){ document.documentElement.dataset.theme = t; themeBtn.textContent = t === 'dark' ? '☀️' : '🌙'; themeBtn.setAttribute('aria-pressed', t === 'dark'); store.set('cc-theme', t); }
 setTheme(store.get('cc-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
 themeBtn.onclick = () => setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
 
