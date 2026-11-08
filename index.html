@@ -131,6 +131,15 @@ section.day:last-of-type{border-bottom:0}
 [data-theme="dark"] .pill{color:#1a1208}
 .dayhead{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin:24px 0 8px}
 .dayhead h2{font-size:clamp(26px,7vw,36px);line-height:1.1}
+/* Ordinateur : météo et pictos toujours à droite du titre, même long */
+@media(min-width:744px){.dayhead{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:end;column-gap:16px}}
+/* Ordinateur : hero sur deux colonnes, carte du vol à droite */
+@media(min-width:960px){
+  .hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);column-gap:44px;align-items:start}
+  .hero>*{grid-column:1}
+  .hero>.polaroid{grid-column:2;grid-row:1 / span 6;align-self:center;margin:18px 6px 6px}
+  .hero>.route{grid-column:1 / -1}
+}
 .dayhead .when{color:var(--primary);font:700 22px/1.2 var(--hand);margin-top:6px}
 .meteo{display:flex;align-items:center;gap:12px;border:2px solid var(--ocre);background:var(--ocre-soft);border-radius:var(--r-md);padding:8px 14px;transform:rotate(1deg);color:#3a2a08}
 .meteo .ico{font-size:28px;line-height:1}
@@ -332,6 +341,7 @@ h3.sub::after{content:"";flex:1;border-top:3px dotted var(--hairline)}
 .stitch .bi{font-size:21px;line-height:1}
 .stitch .bn{font:600 26px/1.05 var(--display);color:var(--ink);font-variant-numeric:tabular-nums}
 .stitch .bl{font:700 16px/1 var(--hand);color:var(--c);max-width:100%}
+@media(min-width:744px){.stitches{grid-template-columns:repeat(6,minmax(0,1fr));gap:14px;max-width:980px}.stitch .bn{font-size:30px}.stitch .bl{font-size:18px}}
 .album-day h3{font:700 22px var(--hand);color:var(--primary);margin:14px 0 2px}
 .pols{display:flex;flex-wrap:wrap;gap:20px 14px;padding:12px 2px 6px}
 .pol{appearance:none;font:inherit;border:0;margin:0;cursor:pointer;position:relative;width:calc(50% - 7px);min-width:0;background:#fffaf0;color:#16313f;padding:8px 8px 9px;text-align:center;box-shadow:0 1px 0 rgba(0,0,0,.06),0 6px 14px rgba(40,25,5,.28);transform:rotate(var(--rot,-2deg));transition:transform .2s}
@@ -1047,7 +1057,7 @@ const DAYS = [
   rain:[{p:"smm",t:"Église Sainte-Marie-Majeure et ruelles couvertes"},{p:"cana",t:"Dégustation au Clos Canarelli (Figari, sur le retour)"}],
   restos:['La Minute Moule Bonifacio','La Bohème Bonifacio','Del Ferro Bonifacio']},
 
- {id:'j6', done:true, walk:'13,23 km · 20 320 pas (Apple Watch) · 2 balades aux Lavezzi', d:'Samedi 10 octobre', title:'Sortie en mer vers les îles Lavezzi depuis Bonifacio', meteo:['🌤️','22°C / 15°C','Mer et vent à revérifier la veille'],
+ {id:'j6', done:true, walk:'13,23 km · 20 320 pas (Apple Watch) · 2 balades aux Lavezzi', d:'Samedi 10 octobre', title:'Sortie en mer vers les îles Lavezzi depuis Bonifacio', meteo:['🌤️','22°C / 15°C','Éclaircies, mer agitée au retour'],
   alert:'⛵ Sortie en mer aux Lavezzi : deux balades sur l\'île, pique-nique vers 13 h, départ de l\'île à 16 h 30 et retour au port à 17 h 15 (grosses vagues).',
   stops:['sg','bport','lav'],
   steps:[
@@ -1107,7 +1117,7 @@ function fallbackImg(name){
 window.imgFail = (img) => { img.onerror = null; img.src = fallbackImg(img.alt); };
 
 const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CACHE = 'carnet-corse-v118'; // même nom que dans sw.js
+const CACHE = 'carnet-corse-v119'; // même nom que dans sw.js
 
 const RESTO = {
  "L'Ardoise Porto-Vecchio": {
