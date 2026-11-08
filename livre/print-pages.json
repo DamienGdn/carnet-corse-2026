@@ -1,0 +1,106 @@
+{
+ "_lisezmoi": "Mise en page du livre imprimable (livre-print.html / livre.pdf). Les textes et les chiffres viennent de livre/recit.json ; ici seulement l'ordre des pages et le choix des photos (fichiers de photos/album/ + légendes). Un jour sans 'pages' devient une page « à suivre ». Reconstruire : node outils/livre-print.mjs --pdf",
+ "pages": [
+  {"type": "couverture", "surtitre": "Livre photo · octobre 2026", "photo": {"f": "20261006-142829-1.jpg", "c": "14:28 · Citadelle de Bonifacio"}},
+  {"type": "trajet", "titre": "Notre trajet", "texte": "Base à Porto-Vecchio, villa Occhiatana. De l'aéroport de Figari aux falaises de Bonifacio, des aiguilles de Bavella aux plages de la côte est, jusqu'aux îles Lavezzi, en Fiat 500c rouge.", "chips": ["Fiat", "à pied"], "carte": "livre/print-carte.html"},
+  {"type": "jour", "jour": "j1", "pages": [
+    {"type": "ouverture", "photo": {"f": "20261005-125224-1.jpg", "c": "12:52 · Aéroport de Figari"}},
+    {"type": "g4", "photos": [
+      {"f": "20261005-101550-1.jpg", "c": "10:15 · Aéroport de Nantes"},
+      {"f": "20261005-110706-1.jpg", "c": "11:07 · En vol"},
+      {"f": "20261005-114846-1.jpg", "c": "11:48"},
+      {"f": "20261005-115317-1.jpg", "c": "11:53"}
+    ]},
+    {"type": "polaroids", "photos": [
+      {"f": "20261005-120232-1.jpg", "c": "12:02"},
+      {"f": "20261005-122353-1.jpg", "c": "12:23"},
+      {"f": "20261005-122458-1.jpg", "c": "12:24"}
+    ]},
+    {"type": "g6", "photos": [
+      {"f": "20261005-122552-1.jpg", "c": "12:25"},
+      {"f": "20261005-125024-1.jpg", "c": "12:50"},
+      {"f": "20261005-125049-1.jpg", "c": "12:50 · Aéroport de Figari"},
+      {"f": "20261005-142831-1.jpg", "c": "14:28 · Plage de Santa Giulia"},
+      {"f": "20261005-151755-1.jpg", "c": "15:17 · Plage de Santa Giulia"},
+      {"f": "20261005-214130-1.jpg", "c": "21:41 · Plage de Santa Giulia"}
+    ]}
+  ]},
+  {"type": "jour", "jour": "j2", "pages": [
+    {"type": "ouverture", "photo": {"f": "20261006-123551-1.jpg", "c": "12:35 · Sainte-Marie-Majeure"}},
+    {"type": "g4", "photos": [
+      {"f": "20261006-105712-1.jpg", "c": "10:57 · Aquarium de Bonifacio"},
+      {"f": "20261006-120721-1.jpg", "c": "12:07 · Bastion de l'Étendard"},
+      {"f": "20261006-124211-1.jpg", "c": "12:42 · Bastion de l'Étendard"},
+      {"f": "20261006-132300-1.jpg", "c": "13:23 · Aquarium de Bonifacio"}
+    ]},
+    {"type": "polaroids", "photos": [
+      {"f": "20261006-134044-1.jpg", "c": "13:40 · Sainte-Marie-Majeure"},
+      {"f": "20261006-134353-1.jpg", "c": "13:43 · Cimetière marin"},
+      {"f": "20261006-134917-1.jpg", "c": "13:49 · Bonifacio"}
+    ]},
+    {"type": "g3", "photos": [
+      {"f": "20261006-135611-1.jpg", "c": "13:56 · Plage de Fazzio"},
+      {"f": "20261006-140244-1.jpg", "c": "14:02 · Plage de Fazzio"},
+      {"f": "20261006-140730-1.jpg", "c": "14:07 · Cimetière marin"}
+    ]},
+    {"type": "g6", "photos": [
+      {"f": "20261006-141344-1.jpg", "c": "14:13 · Sainte-Marie-Majeure"},
+      {"f": "20261006-141758-1.jpg", "c": "14:17 · Bastion de l'Étendard"},
+      {"f": "20261006-142042-1.jpg", "c": "14:20 · Cimetière marin"},
+      {"f": "20261006-142829-1.jpg", "c": "14:28 · Citadelle de Bonifacio"},
+      {"f": "20261006-161809-1.jpg", "c": "16:18 · Plage de Fazzio"},
+      {"f": "20261006-181647-1.jpg", "c": "18:16 · Aquarium de Bonifacio"}
+    ]}
+  ]},
+  {"type": "jour", "jour": "j3", "pages": [
+    {"type": "ouverture", "photo": {"f": "20261007-151344-1.jpg", "c": "15:13 · Trou de la Bombe"}},
+    {"type": "g4", "photos": [
+      {"f": "20261007-122359-1.jpg", "c": "12:23 · Trou de la Bombe"},
+      {"f": "20261007-124041-1.jpg", "c": "12:40 · Trou de la Bombe"},
+      {"f": "20261007-132505-1.jpg", "c": "13:25 · Massif de Bavella"},
+      {"f": "20261007-133738-1.jpg", "c": "13:37 · Massif de Bavella"}
+    ]},
+    {"type": "polaroids", "photos": [
+      {"f": "20261007-134030-1.jpg", "c": "13:40 · Massif de Bavella"},
+      {"f": "20261007-140133-1.jpg", "c": "14:01 · Massif de Bavella"},
+      {"f": "20261007-152308-1.jpg", "c": "15:23 · Col de Bavella"}
+    ]},
+    {"type": "g6", "photos": [
+      {"f": "20261007-161401-1.jpg", "c": "16:14"},
+      {"f": "20261007-162831-1.jpg", "c": "16:28 · La Solenzara"},
+      {"f": "20261007-163111-1.jpg", "c": "16:31 · La Solenzara"},
+      {"f": "20261007-163243-1.jpg", "c": "16:32 · La Solenzara"},
+      {"f": "20261007-180555-1.jpg", "c": "18:05"},
+      {"f": "20261007-211154-1.jpg", "c": "21:11 · Plage de Santa Giulia"}
+    ]}
+  ]},
+  {"type": "jour", "jour": "j4", "pages": [
+    {"type": "ouverture", "photo": {"f": "20261008-135047-1.jpg", "c": "13:50 · Pique-nique, baie de Santa Giulia"}},
+    {"type": "g4", "photos": [
+      {"f": "20261008-121459-1.jpg", "c": "12:14 · Plage de Santa Giulia"},
+      {"f": "20261008-121709-1.jpg", "c": "12:17 · Plage de Santa Giulia"},
+      {"f": "20261008-000000-1.jpg", "c": ""},
+      {"f": "20261008-103443-1.jpg", "c": "10:34 · Plage de Santa Giulia"}
+    ]},
+    {"type": "polaroids", "photos": [
+      {"f": "20261008-121822-1.jpg", "c": "12:18 · Plage de Santa Giulia"},
+      {"f": "20261008-123830-1.jpg", "c": "12:38 · Pique-nique, baie de Santa Giulia"},
+      {"f": "20261008-125036-1.jpg", "c": "12:50 · Pique-nique, baie de Santa Giulia"}
+    ]},
+    {"type": "g6", "photos": [
+      {"f": "20261008-150823-1.jpg", "c": "15:08 · Pique-nique, baie de Santa Giulia"},
+      {"f": "20261008-155344-1.jpg", "c": "15:53 · Plage de Santa Giulia"},
+      {"f": "20261008-173007-1.jpg", "c": "17:30 · Plage de Palombaggia"},
+      {"f": "20261008-182100-1.jpg", "c": "18:21"},
+      {"f": "20261008-182608-1.jpg", "c": "18:26 · Église Saint-Jean-Baptiste"},
+      {"f": "20261008-215223-1.jpg", "c": "21:52"}
+    ]}
+  ]},
+  {"type": "jour", "jour": "j5", "pages": []},
+  {"type": "jour", "jour": "j6", "pages": []},
+  {"type": "jour", "jour": "j7", "pages": []},
+  {"type": "gouts", "titre": "Ce qu'on a goûté"},
+  {"type": "chiffres", "titre": "En chiffres"},
+  {"type": "dos"}
+ ]
+}
