@@ -346,9 +346,12 @@ button{font:inherit;color:inherit;cursor:pointer}
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const PLACES = {fig:'Aéroport de Figari',sg:'Plage de Santa Giulia',bonc:'Citadelle de Bonifacio',aqua:'Aquarium de Bonifacio',smm:'Sainte-Marie-Majeure, Bonifacio',
   etend:"Bastion de l'Étendard, Bonifacio",cim:'Cimetière marin, Bonifacio',fazz:'Plage de Fazzio',trou:'Trou de la Bombe',bav:'Col de Bavella',
-  sol:'La Solenzara',palo:'Palombaggia',pic4:'Pique-nique, Santa Giulia',egl:'Église Saint-Jean-Baptiste, Porto-Vecchio',salin:'Salines de Porto-Vecchio'};
+  sol:'La Solenzara',palo:'Palombaggia',pic4:'Pique-nique, Santa Giulia',egl:'Église Saint-Jean-Baptiste, Porto-Vecchio',salin:'Salines de Porto-Vecchio',
+  pv:'Porto-Vecchio',pvport:'Port de Porto-Vecchio',bat:'En bateau, Bonifacio',bport:'Port de Bonifacio',gouv:'Gouvernail de la Corse, Bonifacio',
+  escar:"Escalier du Roi d'Aragon, Bonifacio",cavu:'Piscines naturelles du Cavu',lav:'Îles Lavezzi',sart:'Sartène',preh:'Sartène'};
 const COVER='20261006-141411-1.jpg';
-const HEROES={avant:null,j1:'20261005-151733-1.jpg',j2:'20261006-142641-1.jpg',j3:'20261007-132445-1.jpg',j4:'20261008-182626-1.jpg'};
+const HEROES={avant:null,j1:'20261005-151733-1.jpg',j2:'20261006-142641-1.jpg',j3:'20261007-132445-1.jpg',j4:'20261008-182626-1.jpg',
+  j5:'20261009-142600-1.jpg',j6:'20261010-114920-1.jpg',j7:'20261011-134451-1.jpg'};
 const TASTE_PHOTO='20261008-215223-1.jpg';
 const $=s=>document.querySelector(s);
 const book=$('#book');
@@ -357,7 +360,7 @@ let album=[], recit=null, pages=[], cur=0, dayItems={};
 
 const ts=p=>{const m=p.f.match(/^(\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})(\d{2})/);return m?Date.UTC(+m[1],m[2]-1,+m[3],+m[4],+m[5],+m[6])/1000:0};
 /* Lieu approché (GPS) quand l'album n'a pas de clé : rayon prudent, sinon rien */
-const AREAS=[['Aéroport de Nantes',47.157,-1.608,2],['Bonifacio',41.388,9.16,3],['Massif de Bavella',41.79,9.228,3],['La Solenzara',41.834,9.31,3]];
+const AREAS=[['Aéroport de Nantes',47.157,-1.608,2],['En mer, Bouches de Bonifacio',41.36,9.225,3],['Bonifacio',41.388,9.16,3],['Massif de Bavella',41.79,9.228,3],['La Solenzara',41.834,9.31,3]];
 const near=p=>{if(p.lat==null)return'';for(const[n,la,lo,r]of AREAS){if(Math.hypot(p.lat-la,(p.lon-lo)*.75)*111<=r)return n}return p.lat>42.1&&p.jour==='j1'?'En vol':''};
 const name=p=>p.lieu&&PLACES[p.lieu]||near(p);
 const alt=p=>(name(p)||'Souvenir de Corse')+(p.heure?' à '+p.heure.replace(':','h'):'')+(p.video?' (vidéo)':'');
@@ -431,7 +434,8 @@ function build(){
     const hf=HEROES[d]&&byF[HEROES[d]];
     const hero=hf||all.find(p=>p.w>p.h&&!p.video)||all[0];
     const n=Math.min(18,Math.max(12,Math.round(all.length/2.5)));
-    let sel=select(all.filter(p=>p!==hero),n-1);
+    const tops=all.filter(p=>p.top&&p!==hero);
+    let sel=select(tops.length>=8?tops:all.filter(p=>p!==hero),n-1);
     const more=all.length>sel.length+1;
     const [dayName,dayTag]=info.titre.split(' · ');
     const heroH=`<figure class="ph pol hero" style="--i:0;--ar:${(hero.w/hero.h).toFixed(3)}"><button class="pb" data-f="${hero.f}" aria-label="Agrandir : ${alt(hero)}"><img src="${A_IMG(hero.f)}" alt="${alt(hero)}" width="${hero.w}" height="${hero.h}" loading="lazy"></button><figcaption>${cap(hero)}</figcaption></figure>`;
@@ -484,10 +488,11 @@ function mapPage(){
   for(let i=0;i<pts.length;i++){const c=pts[i],n=pts[(i+1)%pts.length],m=mid(c,n);d+=`Q${c[0]} ${c[1]} ${m[0].toFixed(1)} ${m[1].toFixed(1)}`}
   d+='Z';
   const has=ks=>album.filter(p=>ks.includes(p.lieu)).length;
-  const stops=[{k:'Figari',la:41.5006,lo:9.0978,ks:['fig'],s:'w',tag:'arrivée'},{k:'Porto-Vecchio',la:41.5917,lo:9.2803,ks:['egl','salin'],s:'w'},{k:'Santa Giulia',la:41.5313,lo:9.2739,ks:['sg','pic4'],s:'w'},
-    {k:'Bonifacio',la:41.3878,lo:9.1595,ks:['bonc','aqua','smm','etend','cim','fazz'],s:'e'},{k:'Bavella',la:41.794,lo:9.2275,ks:['trou','bav'],s:'w'},{k:'Solenzara',la:41.834,lo:9.319,ks:['sol'],s:'e'},{k:'Palombaggia',la:41.5639,lo:9.3358,ks:['palo'],s:'e'}]
+  const stops=[{k:'Figari',la:41.5006,lo:9.0978,ks:['fig'],s:'w',tag:'arrivée'},{k:'Porto-Vecchio',la:41.5917,lo:9.2803,ks:['egl','salin','pv','pvport'],s:'w'},{k:'Santa Giulia',la:41.5313,lo:9.2739,ks:['sg','pic4'],s:'w'},
+    {k:'Bonifacio',la:41.3878,lo:9.1595,ks:['bonc','aqua','smm','etend','cim','fazz','bat','bport','gouv','escar','pert'],s:'e'},{k:'Bavella',la:41.794,lo:9.2275,ks:['trou','bav'],s:'w'},{k:'Solenzara',la:41.834,lo:9.319,ks:['sol'],s:'e'},{k:'Palombaggia',la:41.5639,lo:9.3358,ks:['palo'],s:'e'},
+    {k:'Cavu',la:41.7177,lo:9.3044,ks:['cavu'],s:'e'},{k:'Lavezzi',la:41.3359,lo:9.2586,ks:['lav'],s:'e'},{k:'Sartène',la:41.621,lo:8.9723,ks:['sart','preh'],s:'w'}]
     .filter(s=>has(s.ks)).map(s=>({...s,x:+X(s.lo),y:+Y(s.la),c:has(s.ks)}));
-  const order=['Figari','Porto-Vecchio','Santa Giulia','Bonifacio','Bavella','Solenzara','Palombaggia'];
+  const order=['Figari','Porto-Vecchio','Santa Giulia','Bonifacio','Bavella','Solenzara','Palombaggia','Cavu','Lavezzi','Sartène'];
   stops.sort((a,b)=>order.indexOf(a.k)-order.indexOf(b.k));
   const route=stops.map((s,i)=>(i?'L':'M')+s.x+' '+s.y).join('');
   let waves='';for(let i=0;i<9;i++){const x=240+(i%3)*34,y=20+i*34;waves+=`<path class="wave" d="M${x} ${y}q6 -6 12 0t12 0"/>`}
