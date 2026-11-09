@@ -29,7 +29,7 @@ const S = {
   album: [], logo: '', cartes: {},
   cle: '0', slot: null,  // page et emplacement photo sélectionnés
   histo: [], futur: [],
-  filtre: null,
+  filtre: null, coeur: false,
 };
 const snapshot = () => JSON.stringify({ mise: S.mise, recit: S.recit });
 
@@ -359,10 +359,14 @@ function dessinerPhotos() {
     const nb = k === 'tout' ? photos.length : photos.filter((a) => a.jour === k).length;
     return nb ? `<button data-filtre="${k}" aria-pressed="${S.filtre === k}">${n} <small>(${nb})</small></button>` : '';
   }).join('');
-  const liste = photos.filter((a) => S.filtre === 'tout' || a.jour === S.filtre);
-  $('grille').innerHTML = liste.map((a) => `<button data-f="${esc(a.f)}" aria-label="Photo ${esc(a.heure || a.f)}${utilisees.has(a.f) ? ' (déjà dans le livre)' : ''}"><img src="photos/album/thumbs/${esc(a.th)}" alt="" loading="lazy"><span>${esc(a.heure || '')}</span>${utilisees.has(a.f) ? '<b class="deja">déjà</b>' : ''}</button>`).join('');
+  if (photos.some((a) => a.top)) $('filtres').insertAdjacentHTML('beforeend', `<button data-coeur aria-pressed="${S.coeur}">❤ Coups de cœur</button>`);
+  const liste = photos.filter((a) => (S.filtre === 'tout' || a.jour === S.filtre) && (!S.coeur || a.top));
+  $('grille').innerHTML = liste.map((a) => `<button data-f="${esc(a.f)}" aria-label="Photo ${esc(a.heure || a.f)}${utilisees.has(a.f) ? ' (déjà dans le livre)' : ''}"><img src="photos/album/thumbs/${esc(a.th)}" alt="" loading="lazy"><span>${a.top ? '❤ ' : ''}${esc(a.heure || '')}</span>${utilisees.has(a.f) ? '<b class="deja">déjà</b>' : ''}</button>`).join('');
 }
-$('filtres').addEventListener('click', (e) => { const b = e.target.closest('[data-filtre]'); if (b) { S.filtre = b.dataset.filtre; dessinerPhotos(); } });
+$('filtres').addEventListener('click', (e) => {
+  if (e.target.closest('[data-coeur]')) { S.coeur = !S.coeur; dessinerPhotos(); return; }
+  const b = e.target.closest('[data-filtre]'); if (b) { S.filtre = b.dataset.filtre; dessinerPhotos(); }
+});
 $('grille').addEventListener('click', (e) => {
   const b = e.target.closest('[data-f]'); if (!b) return;
   const a = S.album.find((x) => x.f === b.dataset.f), emp = emplacements(S.cle)[S.slot ?? 0];
