@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Éditeur du livre · Carnet Corse</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Fredoka:wght@500;600&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#a8401f;--sea:#14566f;--ink:#16313f;--body:#2f4651;--muted:#566468;--hairline:#c9b88f;--canvas:#f7efdc;--paper:#fffaf0;
+  --ocre:#c88a1f;--focus:#8f5d0e;--ok:#41612f;--warn:#b85c00;--bad:#b3261e;--font:Nunito,system-ui,sans-serif;--display:Fredoka,Nunito,sans-serif;--hand:Caveat,cursive}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--canvas);color:var(--ink);font:500 15px/1.45 var(--font);display:grid;grid-template-rows:auto 1fr;overflow:hidden}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+button,input,select,textarea{font:inherit;color:inherit}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:40px;padding:0 12px;border-radius:12px 12px 12px 4px;border:2px solid var(--ink);
+  background:var(--paper);box-shadow:2px 2px 0 var(--ink);font-weight:700;cursor:pointer;text-decoration:none;color:var(--ink);white-space:nowrap}
+.btn:active{transform:translate(2px,2px);box-shadow:none}
+.btn[disabled]{opacity:.4;cursor:default;transform:none;box-shadow:2px 2px 0 var(--ink)}
+.btn.hot{background:var(--primary);color:#fff}
+.btn.sm{min-height:34px;padding:0 9px;font-size:13.5px;box-shadow:1.5px 1.5px 0 var(--ink)}
+.btn.ic{min-width:34px;padding:0}
+
+/* barre du haut */
+header{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 12px;border-bottom:2px dashed var(--hairline);background:var(--canvas)}
+header h1{font:600 20px var(--display);margin:0 8px 0 0;color:var(--sea)}
+header .etat{font:700 18px var(--hand);color:var(--muted);margin-right:auto}
+header .etat.mod{color:var(--primary)}
+
+/* trois colonnes */
+.app{display:grid;grid-template-columns:260px minmax(0,1fr) 330px;min-height:0}
+.liste,.insp{overflow:auto;padding:10px;background:#f3e8cf}
+.liste{border-right:2px dashed var(--hairline)}.insp{border-left:2px dashed var(--hairline)}
+.centre{display:grid;grid-template-rows:auto 1fr;min-height:0}
+.centre .nav{display:flex;align-items:center;gap:8px;padding:8px 12px;font-weight:700}
+.centre .nav .t{flex:1;text-align:center;font:600 16px var(--display)}
+#apercu{width:100%;height:100%;border:0;background:#cfc6b0}
+
+/* liste des pages */
+.grp{margin:0 0 10px}
+.grp h2{font:600 14px var(--display);margin:8px 2px 4px;display:flex;align-items:center;gap:6px;color:var(--sea)}
+.grp h2 span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.it{display:flex;align-items:center;gap:4px;padding:4px 4px 4px 8px;border-radius:10px;border:2px solid transparent;cursor:pointer;background:var(--paper);margin:3px 0}
+.it:hover{border-color:var(--hairline)}
+.it.on{border-color:var(--sea);background:#e3f0f3}
+.it .n{font:700 12px var(--font);color:var(--muted);width:22px}
+.it .l{flex:1;min-width:0;font-weight:700;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.it .acts{display:flex;gap:2px;opacity:.85}
+.it .acts button{border:0;background:none;cursor:pointer;width:26px;height:26px;border-radius:6px;font-size:13px}
+.it .acts button:hover{background:#e8dcc0}
+.ajout{display:flex;gap:6px;margin:4px 0 0 8px}
+.ajout select{flex:1;min-height:32px;border:2px solid var(--hairline);border-radius:8px;background:var(--paper);font-size:13px}
+
+/* inspecteur */
+.insp section{background:var(--paper);border:2px solid var(--hairline);border-radius:14px;padding:10px 12px;margin:0 0 10px}
+.insp h3{font:600 15px var(--display);margin:0 0 8px;color:var(--sea)}
+.insp label{display:block;font-weight:800;font-size:13px;margin:8px 0 3px}
+.insp input[type=text],.insp textarea,.insp select{width:100%;border:2px solid var(--hairline);border-radius:8px;padding:6px 8px;background:#fff}
+.insp textarea{min-height:110px;resize:vertical}
+.insp input[type=range]{width:100%}
+.insp .row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.insp .aide{color:var(--muted);font-size:12.5px;margin:4px 0 0}
+.fonds{display:flex;flex-wrap:wrap;gap:6px}
+.fonds button{width:34px;height:34px;border-radius:50%;border:2px solid #0003;cursor:pointer;position:relative}
+.fonds button[aria-pressed=true]{outline:3px solid var(--sea);outline-offset:2px}
+.fonds input[type=color]{width:34px;height:34px;border:0;padding:0;background:none;cursor:pointer}
+.vign{display:flex;gap:10px;align-items:center}
+.vign img{width:96px;height:72px;object-fit:cover;border-radius:6px;background:#e5d9b8}
+.ppi{font-weight:800;font-size:13px;padding:2px 8px;border-radius:6px;display:inline-block}
+.ppi.ok{background:#dfe8cc;color:var(--ok)}.ppi.moy{background:#f9e3bf;color:var(--warn)}.ppi.bas{background:#f6d0cc;color:var(--bad)}
+.vide{color:var(--muted);text-align:center;padding:20px 8px}
+
+/* boîtes de dialogue */
+dialog{border:2px solid var(--ink);border-radius:16px;background:var(--paper);color:var(--ink);padding:0;max-width:min(980px,96vw);width:100%;box-shadow:4px 4px 0 var(--ink)}
+dialog::backdrop{background:#16313f99}
+dialog .tete{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:2px dashed var(--hairline)}
+dialog .tete h2{font:600 18px var(--display);margin:0;flex:1}
+dialog .corps{padding:12px 14px;max-height:72vh;overflow:auto}
+.filtres{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}
+.filtres button{border:2px solid var(--hairline);background:#fff;border-radius:999px;padding:4px 12px;font-weight:700;cursor:pointer;min-height:34px}
+.filtres button[aria-pressed=true]{background:var(--sea);border-color:var(--sea);color:#fff}
+.grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.grille button{border:2px solid transparent;padding:0;background:none;cursor:pointer;border-radius:8px;overflow:hidden;position:relative}
+.grille button:hover,.grille button:focus-visible{border-color:var(--sea)}
+.grille img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:#e5d9b8}
+.grille span{position:absolute;left:4px;bottom:4px;background:#fffaf0e6;font:700 12px var(--font);padding:1px 6px;border-radius:5px}
+.grille .deja{position:absolute;top:4px;right:4px;background:var(--sea);color:#fff;font:800 11px var(--font);padding:1px 6px;border-radius:5px}
+.etapes{padding-left:20px}.etapes li{margin:4px 0}
+code{background:#efe4c8;padding:1px 5px;border-radius:4px}
+.banniere{background:#f9e3bf;border-bottom:2px solid var(--ocre);padding:8px 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-weight:700}
+.banniere[hidden]{display:none}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-weight:700;z-index:50;max-width:90vw}
+@media(max-width:1000px){body{overflow:auto}.app{grid-template-columns:1fr;grid-auto-rows:auto}.liste,.insp{max-height:none;border:0}.centre{height:75vh}}
+</style>
+</head>
+<body>
+<header>
+  <a class="btn sm" href="livre-print.html" title="Retour au livre imprimable">←</a>
+  <h1>Éditeur du livre</h1>
+  <span class="etat" id="etat" role="status">chargement…</span>
+  <button class="btn sm ic" id="annuler" title="Annuler (Ctrl+Z)" aria-label="Annuler" disabled>↶</button>
+  <button class="btn sm ic" id="refaire" title="Rétablir (Ctrl+Maj+Z)" aria-label="Rétablir" disabled>↷</button>
+  <button class="btn sm" id="toutVoir">👁 Tout le livre</button>
+  <button class="btn sm" id="pdf">🖨️ PDF imprimerie</button>
+  <button class="btn sm" id="plus" aria-haspopup="dialog">⋯ Fichier</button>
+  <button class="btn sm hot" id="publier">⬆ Publier</button>
+</header>
+<div style="display:grid;grid-template-rows:auto 1fr;min-height:0">
+  <div class="banniere" id="banniere" hidden></div>
+  <div class="app">
+    <nav class="liste" id="liste" aria-label="Pages du livre"></nav>
+    <main class="centre">
+      <div class="nav"><button class="btn sm ic" id="prec" aria-label="Page précédente">←</button><span class="t" id="titrePage"></span><button class="btn sm ic" id="suiv" aria-label="Page suivante">→</button></div>
+      <iframe id="apercu" title="Aperçu de la page"></iframe>
+    </main>
+    <aside class="insp" id="insp" aria-label="Réglages"></aside>
+  </div>
+</div>
+
+<dialog id="dlgPhotos" aria-labelledby="dlgPhotosT">
+  <div class="tete"><h2 id="dlgPhotosT">Choisir une photo</h2><button class="btn sm" data-ferme>Fermer</button></div>
+  <div class="corps"><div class="filtres" id="filtres"></div><div class="grille" id="grille"></div></div>
+</dialog>
+
+<dialog id="dlgFichier" aria-labelledby="dlgFichierT">
+  <div class="tete"><h2 id="dlgFichierT">Fichier</h2><button class="btn sm" data-ferme>Fermer</button></div>
+  <div class="corps">
+    <p>Le brouillon est enregistré automatiquement dans ce navigateur. Pour le transférer sur un autre appareil, ou en garder une copie :</p>
+    <div class="row" style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" id="exporter">⬇ Exporter le brouillon (.json)</button>
+      <label class="btn" for="importer" style="margin:0">⬆ Importer un brouillon</label><input type="file" id="importer" accept=".json,application/json" class="sr">
+      <button class="btn" id="revenir">↺ Revenir à la version publiée</button>
+    </div>
+    <h3 style="font:600 16px var(--display);margin:18px 0 6px">Clé GitHub</h3>
+    <p id="cleEtat"></p>
+    <button class="btn sm" id="oublierCle">Oublier la clé sur cet appareil</button>
+  </div>
+</dialog>
+
+<dialog id="dlgPublier" aria-labelledby="dlgPublierT">
+  <div class="tete"><h2 id="dlgPublierT">Publier le livre</h2><button class="btn sm" data-ferme>Fermer</button></div>
+  <div class="corps" id="publierCorps"></div>
+</dialog>
+
+<script type="module" src="livre/editeur.mjs"></script>
+</body>
+</html>
