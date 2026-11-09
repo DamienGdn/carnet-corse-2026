@@ -1,0 +1,62 @@
+# Construit et publie le site sur GitHub Pages à chaque push sur main.
+# Le livre imprimable et ses PDF sont générés ici (livre/print-pages.json + livre/recit.json),
+# donc l'éditeur (editeur.html) n'a qu'à publier ces deux fichiers JSON.
+# Prérequis (une fois) : Settings > Pages > Build and deployment > Source = « GitHub Actions ».
+name: Site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  construire:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Outils (Playwright + Chromium, Pillow, pypdf)
+        run: |
+          npm install -g playwright@1.49.1
+          npx -y playwright@1.49.1 install --with-deps chromium
+          pip install pillow pypdf
+
+      - name: Livre imprimable et PDF (écran + imprimerie)
+        run: node outils/livre-print.mjs --pdf --imprimerie --traits
+
+      - name: Dossier du site
+        run: |
+          mkdir _site
+          rsync -a --exclude='.git' --exclude='.github' --exclude='outils' --exclude='_site' --exclude='.livre-*' ./ _site/
+          ls -la _site | head -40
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  publier:
+    needs: construire
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploiement.outputs.page_url }}
+    steps:
+      - id: deploiement
+        uses: actions/deploy-pages@v4
